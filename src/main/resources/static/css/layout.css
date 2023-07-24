@@ -1,0 +1,36 @@
+:root {
+  --title-font-size: 20px;
+  --middle-font-size: 15px;
+  --small-font-size: 13px;
+  --main-border-gray: 1px solid #C0C0C0;
+  --main-border-color: #C0C0C0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+a:active {
+  color: black;
+}
+
+header {
+  border: var(--main-border-gray);
+  border-top: none;
+  border-bottom: none;
+  width: 1200px;
+  height: 80px;
+  margin: 0 auto;
+}
+
+main {
+  width: 1200px;
+  margin: 0 auto;
+  border: var(--main-border-gray);
+}
