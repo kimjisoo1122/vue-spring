@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+  <html
+    lang="ko"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{common/layout.html}">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>공지사항 관리</title>
+    <link rel="stylesheet" th:href="@{/css/notice/noticeList.css}">
+    <link rel="stylesheet" th:href="@{/css/fragment/searchCondition.css}">
+  </head>
+
+  <body>
+
+  <header layout:fragment="header" class="notice-header-container">
+    <h1 class="notice-header-title">공지사항 관리</h1>
+  </header>
+
+    <main layout:fragment="main" class="notice-main-container">
+      <div class="search-condition-container" th:replace="~{fragment/searchCondition}"></div>
+    </main>
+
+
+  </body>
+</html>

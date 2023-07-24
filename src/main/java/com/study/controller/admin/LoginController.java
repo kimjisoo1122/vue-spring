@@ -29,6 +29,6 @@ public class LoginController {
             model.addAttribute("errorMsg", "아이디 또는 비밀번호가 맞지 않습니다.");
         }
 
-        return "login";
+        return "common/login";
     }
 }

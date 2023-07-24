@@ -27,10 +27,12 @@ header {
   width: 1200px;
   height: 80px;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 main {
   width: 1200px;
   margin: 0 auto;
   border: var(--main-border-gray);
+  box-sizing: border-box;
 }

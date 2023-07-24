@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+  <html
+    lang="ko"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{common/layout.html}">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>관리페이지</title>
+    <link rel="stylesheet" th:href="@{/css/common/home.css}">
+  </head>
+
+  <body>
+
+    <header layout:fragment="header" class="index-header-container"  >
+
+      <div th:text="|${#authentication.name}님 안녕하세요|" class="index-header-name" ></div>
+      <a th:href="@{/admin/logout}" th:text="로그아웃" class="index-header-logout" ></a>
+
+    </header>
+
+    <main layout:fragment="main" class="index-main-container" >
+
+      <section class="index-section-container">
+
+        <ul class="index-section-list-container">
+          <li class="index-section-list">
+            <a th:href="|/admin/notice|">공지사항 관리</a>
+          </li>
+          <li class="index-section-list">
+            <a href="">자유 게시판 관리</a>
+          </li>
+          <li class="index-section-list">
+            <a href="">갤러리 게시판 관리</a>
+          </li>
+          <li class="index-section-list">
+            <a href="">문의 게시판 관리</a>
+          </li>
+        </ul>
+
+      </section>
+
+      <div class="index-article-container">
+
+        <!-- 공지사항 -->
+        <article class="index-notice-container">
+          <div class="index-notice-title">공지사항</div>
+          <div class="index-notice-header">
+            <div class="index-notice-header-no">번호</div>
+            <div class="index-notice-header-type">분류</div>
+            <div class="index-notice-header-title">제목</div>
+          </div>
+          <div class="index-notice-list-container">
+            <div class="index-notice-list-no">번호</div>
+            <div class="index-notice-list-type">분류</div>
+            <div class="index-notice-list-title-container">
+              <a class="index-notice-list-title" href="#">제목</a>
+              <span class="index-notice-list-new">new</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- 자유 게시판 -->
+        <article class="index-free-container">
+          <div class="index-free-title">자유 게시판</div>
+          <div class="index-free-header">
+            <div class="index-free-header-no">번호</div>
+            <div class="index-free-header-type">분류</div>
+            <div class="index-free-header-title">제목</div>
+          </div>
+          <div class="index-free-list-container">
+            <div class="index-free-list-no">번호</div>
+            <div class="index-free-list-type">분류</div>
+            <div class="index-free-list-title-container">
+              <a class="index-free-list-title" href="#">제목</a>
+              <span class="index-free-list-new">new</span>
+              <span class="index-free-list-secret">비밀</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- 갤러리 -->
+        <article class="index-gallery-container">
+          <div class="index-gallery-title">갤러리</div>
+          <div class="index-gallery-header">
+            <div class="index-gallery-header-no">번호</div>
+            <div class="index-gallery-header-type">분류</div>
+            <div class="index-gallery-header-title"></div>
+          </div>
+          <div class="index-gallery-list-container">
+            <div class="index-gallery-list-no">번호</div>
+            <div class="index-gallery-list-type">분류</div>
+            <div class="index-gallery-list-img-container">
+              <div class="index-gallery-list-img">
+                <a class="index-gallery-list-link" href="">
+                  <img class="index-gallery-list-thumbnail" src="#" alt="갤러리 썸네일">
+                </a>
+              </div>
+              <span class="index-gallery-list-size">+4</span>
+              <span class="index-gallery-list-new">new</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- 문의 게시판 -->
+        <article class="index-qna-container">
+          <div class="index-qna-title">문의 게시판</div>
+          <div class="index-qna-header">
+            <div class="index-qna-header-no">번호</div>
+            <div class="index-qna-header-title">제목</div>
+          </div>
+          <div class="index-qna-list-container">
+            <div class="index-qna-list-no">번호</div>
+            <div class="index-qna-list-title-container">
+              <a class="index-qna-list-title" href="#">제목</a>
+              <span class="index-qna-list-new">new</span>
+              <span class="index-qna-list-secret">비밀</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+    </main>
+
+  </body>
+
+</html>
