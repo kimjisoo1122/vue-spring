@@ -1,0 +1,98 @@
+main {
+  border-top: none;
+}
+
+.form-header-title {
+  margin: 0;
+  padding: 20px;
+  font-size: var(--title-font-size);
+}
+
+.form-main-container {
+  padding: 20px;
+}
+
+.from-required-star {
+  color: red;
+}
+
+.form-main-type-container, .form-main-title-container,
+.form-main-content-container, .form-main-file-container,
+.form-main-noti-container, .form-main-btn-container {
+  display: flex;
+  border-top: var(--main-border-gray);
+}
+
+
+.form-type-name, .form-title-name,
+.form-content-name, .form-file-name,
+.form-noti-name {
+  flex-basis: 15%;
+  background-color: bisque;
+  padding: 15px 10px;
+  font-size: var(--middle-font-size);
+  display: flex;
+  align-items: center;
+}
+
+.form-type-input-container, .form-title-input-container,
+.form-content-input-container, .form-file-input-container,
+.form-noti-input-container {
+  flex-basis: 85%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.form-content-input-container {
+  height: 220px;
+}
+
+
+.form-type-select {
+  width: 150px;
+  height: 30px;
+  padding: 0 5px;
+}
+
+.form-title-input {
+  width: 95%;
+  height: 30px;
+  padding: 0 5px;
+  box-sizing: border-box;
+}
+
+.form-content-textarea {
+  resize: none;
+  width: 95%;
+  padding: 5px;
+  min-height: 200px;
+  box-sizing: border-box;
+}
+
+.form-noti-check {
+  height: 18px;
+  width: 18px;
+}
+
+.form-main-btn-container {
+  padding-top: 20px;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+.form-main-btn-container button {
+
+}
+
+.form-btn-list {
+  background-color: #C0C0C0;
+}
+
+.form-btn-delete {
+  background-color: tomato;
+}
+
+

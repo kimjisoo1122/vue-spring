@@ -22,10 +22,10 @@ public class CustomUserDetails implements UserDetails {
         this.userName = userDto.getUserName();
         this.userPw = userDto.getUserPw();
 
-        setAuthoritiesByUserAuth(userDto.getUserAuth());
+        setAuthorities(userDto.getUserAuth());
     }
 
-    public void setAuthoritiesByUserAuth(UserAuth userAuth) {
+    public void setAuthorities(UserAuth userAuth) {
         if (userAuth == UserAuth.ADMIN) {
             authorities.add(new SimpleGrantedAuthority(UserAuth.ADMIN.getValue()));
         }

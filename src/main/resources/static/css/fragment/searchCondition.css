@@ -39,7 +39,7 @@ input, select {
 
 .search-keyword-btn {
   width: 100px;
-  background-color: #333;
+  background-color: var(--main-color-blue);
   color: white;
   cursor: pointer;
   margin-left: 10px;

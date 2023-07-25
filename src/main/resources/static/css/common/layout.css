@@ -4,6 +4,7 @@
   --small-font-size: 13px;
   --main-border-gray: 1px solid #C0C0C0;
   --main-border-color: #C0C0C0;
+  --main-color-blue: #0090F9;
 }
 
 body {
@@ -20,18 +21,28 @@ a:active {
   color: black;
 }
 
+button {
+  padding: 3px 10px;
+  border: none;
+  font-size: var(--small-font-size);
+  cursor: pointer;
+  background-color: var(--main-color-blue);
+  color: white;
+  border-radius: 3px;
+}
+
 header {
   border: var(--main-border-gray);
   border-top: none;
   border-bottom: none;
-  width: 1200px;
+  width: 1100px;
   height: 80px;
   margin: 0 auto;
   box-sizing: border-box;
 }
 
 main {
-  width: 1200px;
+  width: 1100px;
   margin: 0 auto;
   border: var(--main-border-gray);
   box-sizing: border-box;

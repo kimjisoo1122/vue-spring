@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .and()
                 .logout()
                     .logoutUrl("/admin/logout")
-                    .logoutSuccessUrl("/")
+                    .logoutSuccessUrl("/admin")
                     .invalidateHttpSession(true)
                 .and()
                 .csrf().disable();

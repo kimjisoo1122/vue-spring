@@ -1,3 +1,7 @@
+header, main {
+  border: none;
+}
+
 .login-container {
   display: flex;
   flex-direction: column;
