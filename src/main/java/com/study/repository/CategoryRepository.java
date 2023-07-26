@@ -16,6 +16,11 @@ public class CategoryRepository {
 
     private final CategoryMapper categoryMapper;
 
+    /**
+     * 상위카테고리로 카테고리를 조회합니다.
+     * @param parentId 상위카테고리
+     * @return List<CategoryDto>
+     */
     public List<CategoryDto> selectByParentId(Long parentId) {
         return categoryMapper.selectByParentId(parentId);
     };

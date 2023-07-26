@@ -10,7 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
- * 스프링 시큐리티를 설정하는 Config 입니다.
+ * 스프링 시큐리티를 설정하는 Config
  */
 @Configuration
 @EnableWebSecurity
@@ -19,7 +19,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/admin**")
+                .anyRequest()
                     .hasRole("ADMIN") // 모든 요청을 관리자권한이 존재해야한다.
                 .and()
                 .formLogin()
@@ -27,6 +27,7 @@ public class SecurityConfig {
                     .usernameParameter("userId")
                     .successHandler(new CustomSuccessHandler())
                     .failureHandler(new CustomFailureHandler())
+                    .permitAll()
                 .and()
                 .logout()
                     .logoutUrl("/admin/logout")

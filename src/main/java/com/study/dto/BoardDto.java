@@ -25,9 +25,6 @@ public class BoardDto {
     private LocalDateTime createDate; // 생성일시
     private LocalDateTime updateDate; // 수정일시
 
-    /* 공지사항 */
-    private boolean checkAlarm; // 알림글 여부
-
     /* 문의 게시판 */
     private String boardSecret; // 비밀글 여부
 }

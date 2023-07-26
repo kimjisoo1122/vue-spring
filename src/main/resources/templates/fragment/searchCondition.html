@@ -1,9 +1,12 @@
 <div class="search-condition-container" th:fragment="searchCondition">
 
-  <form class="search-form" th:object="${condition}">
+  <form th:object="${condition}"
+        class="search-form"
+        onsubmit="return validateDate()">
 
     <div class="search-first-container">
 
+      <!-- fromDate, toDate -->
       <div class="search-date-container">
         <span class="search-date-register">등록일시</span>
         <input th:field="*{fromDate}"
@@ -11,10 +14,11 @@
                type="date">
         <span class="search-date-between"> ~ </span>
         <input th:field="*{toDate}"
-               class="search-date"
+               class="search-date-to"
                type="date">
       </div>
 
+      <!-- searchCategory -->
       <div class="search-keyword-container">
         <select th:field="*{searchCategory}" class="search-keyword-select"  >
           <option value="">전체 분류</option>
@@ -26,6 +30,7 @@
           </optgroup>
         </select>
 
+        <!-- search -->
         <input th:field="*{search}"
                class="search-keyword-input"
                type="text"
@@ -37,8 +42,9 @@
 
     <div class="search-second-container">
 
+      <!-- limit -->
       <div class="search-limit-container">
-        <select th:field="*{limit}">
+        <select th:field="*{limit}" onchange="submitSearch()">
           <option value="10">10</option>
           <option value="20">20</option>
           <option value="30">30</option>
@@ -48,14 +54,20 @@
         <span class="search-limit-text">개씩 보기</span>
       </div>
 
+      <!-- orderCondition, order -->
       <div class="search-order-container">
         <span class="search-order-title">정렬</span>
-        <select th:field="*{orderCondition}" class="search-ordercondition-select">
+        <select th:field="*{orderCondition}"
+                class="search-ordercondition-select"
+                onchange="submitSearch()">
           <option value="">분류</option>
           <option value="title">제목</option>
           <option value="viewCnt">조회수</option>
         </select>
-        <select th:field="*{order}" class="search-order-select">
+
+        <select th:field="*{order}"
+                class="search-order-select"
+                onchange="submitSearch()">
           <option value="desc">내림차순</option>
           <option value="asc">오름차순</option>
         </select>

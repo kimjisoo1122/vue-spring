@@ -4,13 +4,12 @@ import com.study.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+/**
+ * 사용자 서비스
+ */
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
-
-//    public UserDto findUserById(String userId) {
-//        return userRepository.selectUserById(userId);
-//    }
 }

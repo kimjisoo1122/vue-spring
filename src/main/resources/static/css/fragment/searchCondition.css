@@ -63,3 +63,7 @@ input, select {
 .search-ordercondition-select, .search-order-select {
   width: 100px;
 }
+
+.search-date-error {
+  border: 1px solid red;
+}

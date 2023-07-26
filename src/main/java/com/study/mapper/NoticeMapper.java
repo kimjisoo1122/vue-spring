@@ -15,5 +15,7 @@ public interface NoticeMapper {
 
     List<BoardDto> selectNoticeAlarm(int limit);
 
-    BoardForm selectNoticeByBoardId(Long boardId);
+    BoardForm selectNoticeFormByBoardId(Long boardId);
+
+    void deleteNoticeAlarm(Long boardId);
 }

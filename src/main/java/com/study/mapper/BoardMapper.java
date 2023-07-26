@@ -12,4 +12,10 @@ public interface BoardMapper {
     void insertBoard(BoardDto board);
 
     List<BoardDto> selectByCondition(BoardSearchCondition condition);
+
+    void increaseViewCnt(Long boardId);
+
+    void updateBoard(BoardDto boardDto);
+
+    void deleteBoard(Long boardId);
 }

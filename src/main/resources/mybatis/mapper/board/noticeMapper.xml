@@ -25,10 +25,11 @@
             JOIN board b ON b.board_id = a.board_id
             JOIN user u ON b.user_id = u.user_id
             JOIN category c ON b.category_id = c.category_id
+        ORDER BY b.create_date DESC
     </select>
 
-    <!-- 게시글번호로 공지사항을 조회합니다. -->
-    <select id="selectNoticeByBoardId"
+    <!-- 게시글번호로 공지사항 폼데이터를 조회합니다. -->
+    <select id="selectNoticeFormByBoardId"
             parameterType="long"
             resultType="boardForm">
         SELECT
@@ -38,30 +39,11 @@
         WHERE board_id = #{boardId}
     </select>
 
-<!--    &lt;!&ndash; 게시글 검색조건 &ndash;&gt;-->
-<!--    <sql id="whereSearchCondition">-->
-<!--        <where>-->
-<!--            <choose>-->
-<!--                &lt;!&ndash; 검색기간이 존재하지 않으면 지난 1년을 기본으로 조회합니다. &ndash;&gt;-->
-<!--                <when test="(fromDate != null &amp;&amp; fromDate !='') || (toDate != null &amp;&amp; toDate !='')">-->
-<!--                    DATE_FORMAT(n.create_date, '%Y-%m-%d') BETWEEN #{fromDate} AND #{toDate}-->
-<!--                </when>-->
-<!--                <otherwise>-->
-<!--                    DATE_FORMAT(n.create_date, '%Y-%m-%d')-->
-<!--                    BETWEEN DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 YEAR),'%Y-%m-%d')-->
-<!--                    AND DATE_FORMAT(NOW(),'%Y-%m-%d')-->
-<!--                </otherwise>-->
-<!--            </choose>-->
-<!--            <if test="searchCategory != null &amp;&amp; searchCategory != ''">-->
-<!--                AND n.category_id = #{searchCategory}-->
-<!--            </if>-->
-<!--            <if test="search != null &amp;&amp; search != ''">-->
-<!--                AND-->
-<!--                (n.title LIKE CONCAT('%', #{search}, '%')-->
-<!--                OR-->
-<!--                n.content LIKE CONCAT('%', #{search}, '%'))-->
-<!--            </if>-->
-<!--        </where>-->
-<!--    </sql>-->
-
+    <!-- 공지사항 알림을 지웁니다. -->
+    <delete id="deleteNoticeAlarm"
+            parameterType="long">
+        DELETE
+        FROM notice_alarm
+        WHERE board_id = #{boardId}
+    </delete>
 </mapper>

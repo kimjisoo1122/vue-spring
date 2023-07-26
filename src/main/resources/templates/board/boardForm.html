@@ -9,11 +9,13 @@
     <meta charset="UTF-8">
     <title th:text="${form.boardType.getTitle()}"></title>
     <link rel="stylesheet" th:href="@{/css/board/boardForm.css}">
+    <script th:src="@{/js/board/boardForm.js}"></script>
   </head>
 
   <body>
 
     <header layout:fragment="header">
+      <!-- 타이틀 -->
       <h1 th:text="${form.boardType.getTitle()}" class="form-header-title"></h1>
     </header>
 
@@ -21,52 +23,77 @@
 
       <div class="form-main-container">
 
-        <form th:method="post" th:object="${form}">
+        <form th:method="post"
+              th:object="${form}"
+              onsubmit="return validateForm()"
+              class="board-form">
 
           <div class="form-main-type-container">
+            <!-- 카테고리 -->
             <div class="form-type-name">
               분류
               <span class="from-required-star">*</span>
             </div>
-            <div class="form-type-input-container">
-              <select th:field="*{categoryId}" class="form-type-select">
+            <div class="form-category-input-container">
+              <select th:field="*{categoryId}" class="form-category-select">
                 <option th:each="category : ${categoryList}"
                         th:value="${category.categoryId}"
                         th:text="${category.categoryName}">
                 </option>
               </select>
+              <span th:errors="*{categoryId}" class="field-error"></span>
             </div>
           </div>
 
+          <!-- 제목 -->
           <div class="form-main-title-container">
             <div class="form-title-name">
               제목
               <span class="from-required-star">*</span>
             </div>
             <div class="form-title-input-container">
-              <input th:field="*{boardTitle}" type="text" class="form-title-input">
+              <input th:field="*{boardTitle}"
+                     th:errorclass="input-error"
+                     onchange="validateTitle()"
+                     type="text" class="form-title-input">
+              <span class="form-title-error field-error"></span>
+              <span th:errors="*{boardTitle}" class="form-title-error field-error"></span>
             </div>
+
           </div>
 
+          <!-- 내용 -->
           <div class="form-main-content-container">
             <div class="form-content-name">
               내용
               <span class="from-required-star">*</span>
             </div>
             <div class="form-content-input-container">
-              <textarea th:field="*{boardContent}" class="form-content-textarea" ></textarea>
+              <textarea th:field="*{boardContent}"
+                        th:errorclass="input-error"
+                        onchange="validateContent()"
+                        class="form-content-textarea" ></textarea>
+              <span class="form-content-error field-error"></span>
+              <span th:errors="*{boardContent}" class="field-error"></span>
             </div>
           </div>
 
+          <!-- 첨부 -->
           <div th:if="${form.hasFileInput()}" class="form-main-file-container">
             <div class="form-file-name">
               첨부
             </div>
             <div class="form-file-input-container">
-              <input type="file" name="files" class="form-file-input">
+              <input type="file"
+                     name="files"
+                     onchange="validateFile()"
+                     class="form-file-input">
+              <span class="form-file-error field-error">파일에러</span>
             </div>
+
           </div>
 
+          <!-- 알림글 체크 -->
           <div th:if="${form.hasAlarmInput()}"
                class="form-main-noti-container">
             <div class="form-noti-name">
@@ -77,12 +104,22 @@
             </div>
           </div>
 
+          <!-- 폼 버튼 -->
           <div class="form-main-btn-container">
-            <button type="submit" class="form-btn-submit">등록 / 수정</button>
-            <a th:href="|/admin/${form.boardType.getValue()}|">
+            <button th:text="${form.getFormType().getValue()}"
+                    type="submit"
+                    class="form-btn-submit">
+            </button>
+            <a th:href="|/admin/${form.boardType.getValue()}${condition.getQueryParam()}|">
               <button type="button" class="form-btn-list">목록</button>
             </a>
-            <button type="button" class="form-btn-delete">삭제</button>
+            <button th:if="${form.getFormType().name() != 'REGISTER'}"
+                    data-th-action="|${#httpServletRequest.getRequestURI()}/delete/${condition.getQueryParam()}|"
+                    onclick="deleteBoard(this.getAttribute('action'))"
+                    type="button"
+                    class="form-btn-delete">
+              삭제
+            </button>
           </div>
 
         </form>

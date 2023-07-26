@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * 스프링 시큐리티 인증객체
+ */
 public class CustomUserDetails implements UserDetails {
 
     private final String userId;

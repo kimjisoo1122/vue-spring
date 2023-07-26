@@ -37,17 +37,73 @@
         FROM board b
             JOIN category c ON c.category_id = b.category_id
         <include refid="whereSearchCondition"/>
-        ORDER BY
+
+        <!-- ORDER BY -->
+        <trim prefix="ORDER BY" suffix=" ">
             <choose>
-                <when test="orderCondition != null &amp;&amp; orderCondition != ''">
-                    CONCAT('b.', #{orderCondition}, ' ', #{order})
+                <when test="orderCondition == 'title'">
+                    b.board_title
+                </when>
+                <when test="orderCondition == 'viewCnt'">
+                    b.view_cnt
                 </when>
                 <otherwise>
-                    b.create_date DESC
+                    b.create_date
                 </otherwise>
             </choose>
+            <choose>
+                <when test="order == 'asc'">
+                    asc
+                </when>
+                <otherwise>
+                    desc
+                </otherwise>
+            </choose>
+        </trim>
+
         LIMIT #{limit} OFFSET #{offset}
     </select>
+
+    <!-- 게시글의 조회수를 1 증가시킵니다. -->
+    <update id="increaseViewCnt"
+            parameterType="long">
+        UPDATE board
+        SET view_cnt = view_cnt + 1
+        WHERE board_id = #{boardId}
+    </update>
+    
+    <!-- 게시글을 업데이트 합니다.-->
+    <update id="updateBoard"
+            parameterType="boardDto">
+        UPDATE board
+            <set>
+                <if test="categoryId != null">
+                    category_id = #{categoryId},
+                </if>
+                <if test="boardType != null and boardType != ''">
+                    board_type = #{boardType},
+                </if>
+                <if test="boardTitle != null and boardTitle != ''">
+                    board_title = #{boardTitle},
+                </if>
+                <if test="boardContent != null and boardContent != ''">
+                    board_content = #{boardContent},
+                </if>
+                <if test="boardSecret != null and boardSecret != ''">
+                    board_secret = #{boardSecret},
+                </if>
+                update_date = now()
+            </set>
+        WHERE board_id = #{boardId}
+    </update>
+
+    <delete id="deleteBoard"
+            parameterType="long">
+        DELETE
+        FROM board
+        WHERE board_id = #{boardId}
+    </delete>
+
 
     <!-- 게시글 목록 -->
     <sql id="selectBoard">

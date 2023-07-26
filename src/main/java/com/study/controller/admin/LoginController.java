@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 
+/**
+ * 로그인 컨트롤러
+ */
 @Controller
 @RequestMapping("/admin/login")
 public class LoginController {

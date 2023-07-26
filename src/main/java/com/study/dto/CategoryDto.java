@@ -8,18 +8,7 @@ import lombok.Data;
 @Data
 public class CategoryDto {
 
-    /**
-     * 카테고리 번호
-     */
-    private Long categoryId;
-
-    /**
-     * 카테고리 이름
-     */
-    private String categoryName;
-
-    /**
-     * 상의카테고리 번호
-     */
-    private Long parentId;
+    private Long categoryId; // 카테고리 번호
+    private String categoryName; // 카테고리 이름
+    private Long parentId; // 상위카테고리 번호
 }

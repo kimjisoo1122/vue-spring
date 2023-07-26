@@ -4,13 +4,13 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
- * 사용자 권한 ENUM
+ * 폼 타입 ENUM
  */
 @Getter
 @RequiredArgsConstructor
-public enum UserAuth {
-    USER("ROLE_USER"),
-    ADMIN("ROLE_ADMIN");
+public enum FormType {
+    REGISTER("등록"),
+    UPDATE("수정");
 
     private final String value;
 }

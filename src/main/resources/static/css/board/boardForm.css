@@ -35,14 +35,15 @@ main {
   align-items: center;
 }
 
-.form-type-input-container, .form-title-input-container,
+.form-category-input-container, .form-title-input-container,
 .form-content-input-container, .form-file-input-container,
 .form-noti-input-container {
   flex-basis: 85%;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin-left: 10px;
+  margin: 5px 0 5px 10px;
+  flex-wrap: wrap;
 }
 
 .form-content-input-container {
@@ -50,7 +51,7 @@ main {
 }
 
 
-.form-type-select {
+.form-category-select {
   width: 150px;
   height: 30px;
   padding: 0 5px;
@@ -91,6 +92,17 @@ main {
   background-color: white;
   color: black;
   border: 1px solid black;
+}
+
+.input-error {
+  border: 1px solid red;
+  outline: red;
+}
+
+.field-error {
+  font-size: var(--small-font-size);
+  color: red;
+  flex-basis: 100%;
 }
 
 

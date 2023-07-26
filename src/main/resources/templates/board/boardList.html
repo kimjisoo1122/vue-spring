@@ -10,11 +10,13 @@
     <title th:text="${boardType.getTitle()}"></title>
     <link rel="stylesheet" th:href="@{/css/board/boardList.css}">
     <link rel="stylesheet" th:href="@{/css/fragment/searchCondition.css}">
+    <script th:src="@{/js/fragment/searchCondition.js}"></script>
   </head>
 
   <body>
 
     <header layout:fragment="header">
+      <!-- 타이틀 -->
       <h1 th:text="${boardType.getTitle()}" class="boardlist-header-title"></h1>
     </header>
 
@@ -24,7 +26,7 @@
 
       <!-- 글 등록 -->
       <div class="boardlist-register-container">
-        <a th:href="|${#httpServletRequest.getRequestURI()}/register|">
+        <a th:href="|${#httpServletRequest.getRequestURI()}/register${condition.getQueryParam()}|">
           <button class="boardlist-register-btn">글 등록</button>
         </a>
       </div>
@@ -49,7 +51,7 @@
           <div th:text="${board.getBoardId()}" class="board-id"></div>
           <div th:text="${board.getCategoryName()}" class="board-category"></div>
           <a th:text="${board.getBoardTitle()}"
-             th:href="@{|${#httpServletRequest.getRequestURI()}/${board.getBoardId()}${condition.getQueryParamString()}|}"
+             th:href="@{|${#httpServletRequest.getRequestURI()}/${board.getBoardId()}${condition.getQueryParam()}|}"
              class="board-title">
           </a>
           <div th:text="${board.getViewCnt()}" class="board-view"></div>
