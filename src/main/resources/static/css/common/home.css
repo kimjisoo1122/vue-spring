@@ -15,7 +15,7 @@
 
 .index-section-container {
   flex-basis: 15%;
-  border-right: 1px solid var(--main-border-color);
+  border-right: 1px solid var(--main-color-border);
 }
 
 .index-section-list-container {
@@ -52,7 +52,7 @@
 
 .index-notice-title, .index-free-title,
 .index-gallery-title, .index-qna-title {
-  border-bottom: 1px solid var(--main-border-color);
+  border-bottom: 1px solid var(--main-color-border);
   padding: 2px 0;
   font-weight: bold;
 }
@@ -61,7 +61,7 @@
 .index-gallery-header, .index-qna-header {
   display: flex;
   padding: 2px 0;
-  border-bottom: 1px solid var(--main-border-color);
+  border-bottom: 1px solid var(--main-color-border);
   font-weight: bold;
 }
 
@@ -84,7 +84,7 @@
 .index-qna-list-container {
   display: flex;
   padding: 2px 0;
-  border-bottom: 1px solid var(--main-border-color)
+  border-bottom: 1px solid var(--main-color-border)
 }
 
 .index-notice-list-no, .index-free-list-no,
@@ -107,7 +107,7 @@
 .index-gallery-list-container {
   display: flex;
   height: 70px;
-  border-bottom: 1px solid var(--main-border-color);
+  border-bottom: 1px solid var(--main-color-border);
 }
 
 .index-gallery-list-no {

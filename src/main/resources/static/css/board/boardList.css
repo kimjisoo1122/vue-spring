@@ -18,3 +18,50 @@ main {
   justify-content: flex-end;
   align-items: flex-end;
 }
+
+.boardlist-container {
+  font-size: var(--middle-font-size);
+}
+
+.boardlist-header {
+  margin-top: 10px;
+  font-weight: bold;
+  border-top: 1px solid var(--main-color-border);
+  border-bottom: 1px solid #333333;
+}
+
+.board {
+  border-bottom: 1px solid var(--main-color-border);
+}
+
+.boardlist-header, .board {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  text-align: center;
+}
+
+.boardlist-header .board-title {
+  text-align: center;
+}
+
+.board-id, .board-category, .board-view {
+  flex-basis: 5%;
+}
+
+.board-title {
+  flex-basis: 50%;
+  text-align: left;
+}
+
+.board-create-date {
+  flex-basis: 15%;
+}
+
+.board-user {
+  flex-basis: 10%;
+}
+
+.board-notice-alarm {
+  background: #F0F6FA;
+}

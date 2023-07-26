@@ -5,7 +5,7 @@
     <!-- 상위카테고리의 자식카테고리를 조회합니다. -->
     <select id="selectByParentId"
             parameterType="long"
-            resultType="CategoryDto">
+            resultType="categoryDto">
         SELECT category_id,
                category_name,
                parent_id

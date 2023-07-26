@@ -7,21 +7,21 @@
 
   <head>
     <meta charset="UTF-8">
-    <title th:text="${headTitle}"></title>
+    <title th:text="${form.boardType.getTitle()}"></title>
     <link rel="stylesheet" th:href="@{/css/board/boardForm.css}">
   </head>
 
   <body>
 
     <header layout:fragment="header">
-      <h1 th:text="${title}" class="form-header-title"></h1>
+      <h1 th:text="${form.boardType.getTitle()}" class="form-header-title"></h1>
     </header>
 
     <main layout:fragment="main">
 
       <div class="form-main-container">
 
-        <form th:method="post">
+        <form th:method="post" th:object="${form}">
 
           <div class="form-main-type-container">
             <div class="form-type-name">
@@ -29,7 +29,7 @@
               <span class="from-required-star">*</span>
             </div>
             <div class="form-type-input-container">
-              <select name="categoryId" class="form-type-select">
+              <select th:field="*{categoryId}" class="form-type-select">
                 <option th:each="category : ${categoryList}"
                         th:value="${category.categoryId}"
                         th:text="${category.categoryName}">
@@ -44,7 +44,7 @@
               <span class="from-required-star">*</span>
             </div>
             <div class="form-title-input-container">
-              <input type="text" name="title" class="form-title-input">
+              <input th:field="*{boardTitle}" type="text" class="form-title-input">
             </div>
           </div>
 
@@ -54,11 +54,11 @@
               <span class="from-required-star">*</span>
             </div>
             <div class="form-content-input-container">
-              <textarea name="content" class="form-content-textarea" ></textarea>
+              <textarea th:field="*{boardContent}" class="form-content-textarea" ></textarea>
             </div>
           </div>
 
-          <div class="form-main-file-container">
+          <div th:if="${form.hasFileInput()}" class="form-main-file-container">
             <div class="form-file-name">
               첨부
             </div>
@@ -67,21 +67,22 @@
             </div>
           </div>
 
-          <div class="form-main-noti-container">
+          <div th:if="${form.hasAlarmInput()}"
+               class="form-main-noti-container">
             <div class="form-noti-name">
               알림글
             </div>
             <div class="form-noti-input-container">
-              <input type="checkbox" name="secret" class="form-noti-check">
+              <input th:field="*{checkAlarm}" type="checkbox" class="form-noti-check">
             </div>
           </div>
 
           <div class="form-main-btn-container">
-            <button class="form-btn-submit">등록 / 수정</button>
-            <a th:href="|/admin/${boardType}|">
-              <button class="form-btn-list">목록</button>
+            <button type="submit" class="form-btn-submit">등록 / 수정</button>
+            <a th:href="|/admin/${form.boardType.getValue()}|">
+              <button type="button" class="form-btn-list">목록</button>
             </a>
-            <button class="form-btn-delete">삭제</button>
+            <button type="button" class="form-btn-delete">삭제</button>
           </div>
 
         </form>

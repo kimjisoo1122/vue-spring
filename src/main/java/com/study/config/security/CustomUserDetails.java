@@ -1,6 +1,6 @@
 package com.study.config.security;
 
-import com.study.dto.UserAuth;
+import com.study.enums.UserAuth;
 import com.study.dto.UserDto;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

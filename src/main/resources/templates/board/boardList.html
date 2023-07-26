@@ -7,7 +7,7 @@
 
   <head>
     <meta charset="UTF-8">
-    <title th:text="${headTitle}"></title>
+    <title th:text="${boardType.getTitle()}"></title>
     <link rel="stylesheet" th:href="@{/css/board/boardList.css}">
     <link rel="stylesheet" th:href="@{/css/fragment/searchCondition.css}">
   </head>
@@ -15,31 +15,46 @@
   <body>
 
     <header layout:fragment="header">
-      <h1 th:text="${title}" class="boardlist-header-title"></h1>
+      <h1 th:text="${boardType.getTitle()}" class="boardlist-header-title"></h1>
     </header>
 
     <main layout:fragment="main" >
+      <!-- 검색조건 -->
       <div class="search-condition-container" th:replace="~{fragment/searchCondition}"></div>
 
+      <!-- 글 등록 -->
       <div class="boardlist-register-container">
-        <a th:href="|${#httpServletRequest.getRequestURI()}/register?categoryId=1|">
+        <a th:href="|${#httpServletRequest.getRequestURI()}/register|">
           <button class="boardlist-register-btn">글 등록</button>
         </a>
       </div>
+
+      <!-- 게시글 목록 -->
       <div class="boardlist-container">
 
+        <!-- 게시글 헤더 -->
         <div class="boardlist-header">
-          <div>제목</div>
-          <div>분류</div>
-          <div>제목</div>
-          <div>작성자</div>
-          <div>조회수</div>
-          <div>생성일시</div>
-          <div>수정일시</div>
+          <div class="board-id">번호</div>
+          <div class="board-category">분류</div>
+          <div class="board-title">제목</div>
+          <div class="board-view">조회</div>
+          <div class="board-create-date">생성일시</div>
+          <div class="board-user">등록자</div>
         </div>
 
-        <div class="notice-list">
-
+        <!-- 게시글 -->
+        <div th:each="board : ${boardList}"
+             th:classappend="${board.getCategoryName() == '알림' ? 'board-notice-alarm' : ''}"
+             class="board">
+          <div th:text="${board.getBoardId()}" class="board-id"></div>
+          <div th:text="${board.getCategoryName()}" class="board-category"></div>
+          <a th:text="${board.getBoardTitle()}"
+             th:href="@{|${#httpServletRequest.getRequestURI()}/${board.getBoardId()}${condition.getQueryParamString()}|}"
+             class="board-title">
+          </a>
+          <div th:text="${board.getViewCnt()}" class="board-view"></div>
+          <div th:text="${#temporals.format(board.getCreateDate(), 'yyyy-MM-dd HH:mm')}" class="board-create-date"/>
+          <div th:text="${board.getUserName()}" class="board-user"></div>
         </div>
       </div>
 

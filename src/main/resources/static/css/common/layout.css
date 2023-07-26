@@ -2,9 +2,12 @@
   --title-font-size: 20px;
   --middle-font-size: 15px;
   --small-font-size: 13px;
+
   --main-border-gray: 1px solid #C0C0C0;
-  --main-border-color: #C0C0C0;
+
+  --main-color-border: #C0C0C0;
   --main-color-blue: #0090F9;
+  --sub-color-blue: #F0F6FA;
 }
 
 body {

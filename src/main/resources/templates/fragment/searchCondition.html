@@ -1,36 +1,34 @@
 <div class="search-condition-container" th:fragment="searchCondition">
 
-  <form class="search-form" th:method="get">
+  <form class="search-form" th:object="${condition}">
 
     <div class="search-first-container">
 
       <div class="search-date-container">
         <span class="search-date-register">등록일시</span>
-        <input class="search-date-from"
-               type="date"
-               name="fromDate">
+        <input th:field="*{fromDate}"
+               class="search-date-from"
+               type="date">
         <span class="search-date-between"> ~ </span>
-        <input class="search-date"
-               type="date"
-               name="toDate">
+        <input th:field="*{toDate}"
+               class="search-date"
+               type="date">
       </div>
 
       <div class="search-keyword-container">
-        <select class="search-keyword-select" name="searchCategory" >
+        <select th:field="*{searchCategory}" class="search-keyword-select"  >
           <option value="">전체 분류</option>
-          <optgroup th:label="${categoryMap.key}"
-                    th:each="categoryMap : ${categories}">
-            <option th:each="category : ${categoryMap.getValue()}"
-                    th:value="${category.getCategoryId()}"
-                    th:selected="${category.getCategoryId()} == ${condition.getSearchCategory()}"
-                    th:text="${category.getCategoryName()}">
-            </option>
+          <option th:each="category : ${categoryList}"
+                  th:value="${category.getCategoryId}"
+                  th:selected="${category.getCategoryId()} == ${condition.getSearchCategory()}"
+                  th:text="${category.getCategoryName()}">
+          </option>
           </optgroup>
         </select>
 
-        <input class="search-keyword-input"
+        <input th:field="*{search}"
+               class="search-keyword-input"
                type="text"
-               name="search"
                placeholder="제목 OR 내용">
         <button class="search-keyword-btn" type="submit">검색</button>
       </div>
@@ -40,7 +38,7 @@
     <div class="search-second-container">
 
       <div class="search-limit-container">
-        <select name="limit">
+        <select th:field="*{limit}">
           <option value="10">10</option>
           <option value="20">20</option>
           <option value="30">30</option>
@@ -52,12 +50,12 @@
 
       <div class="search-order-container">
         <span class="search-order-title">정렬</span>
-        <select name="orderType" class="search-ordertype-select">
-          <option value="selectCategory">분류</option>
+        <select th:field="*{orderCondition}" class="search-ordercondition-select">
+          <option value="">분류</option>
           <option value="title">제목</option>
           <option value="viewCnt">조회수</option>
         </select>
-        <select name="order" class="search-order-select">
+        <select th:field="*{order}" class="search-order-select">
           <option value="desc">내림차순</option>
           <option value="asc">오름차순</option>
         </select>

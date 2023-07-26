@@ -1,6 +1,6 @@
 package com.study.service;
 
-import com.study.dto.UserAuth;
+import com.study.enums.UserAuth;
 import com.study.dto.UserDto;
 import com.study.mapper.UserMapper;
 import org.junit.jupiter.api.Test;

@@ -1,5 +1,6 @@
 package com.study.dto;
 
+import com.study.enums.UserAuth;
 import lombok.Data;
 
 import java.time.LocalDateTime;

@@ -28,7 +28,7 @@ main {
 .form-content-name, .form-file-name,
 .form-noti-name {
   flex-basis: 15%;
-  background-color: bisque;
+  background-color: var(--sub-color-blue);
   padding: 15px 10px;
   font-size: var(--middle-font-size);
   display: flex;
@@ -83,16 +83,14 @@ main {
   gap: 15px;
 }
 
-.form-main-btn-container button {
-
-}
-
 .form-btn-list {
   background-color: #C0C0C0;
 }
 
 .form-btn-delete {
-  background-color: tomato;
+  background-color: white;
+  color: black;
+  border: 1px solid black;
 }
 
 

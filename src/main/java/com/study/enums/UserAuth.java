@@ -1,4 +1,4 @@
-package com.study.dto;
+package com.study.enums;
 
 import lombok.Getter;
 
