@@ -36,6 +36,16 @@ public class BoardRepository {
     }
 
     /**
+     * 조건으로 게시글을 갯수를 조회합니다.
+     * @param condition 검색조건
+     * @return totalCnt 게시글 총 갯수
+     */
+    public int countByCondition(BoardSearchCondition condition) {
+        return boardMapper.countByCondition(condition);
+    }
+
+
+    /**
      * 게시글번호로 게시글폼을 조회합니다.
      * @param boardId 게시글 번호
      * @return BoardForm

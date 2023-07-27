@@ -52,6 +52,28 @@ main {
 .board-title {
   flex-basis: 50%;
   text-align: left;
+  display: flex;
+  box-sizing: border-box;
+}
+
+.board-title-link {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 480px;
+  margin-right: 5px;
+}
+
+.board-free-title {
+  display: flex;
+  align-items: center;
+}
+
+.board-hasFile {
+  display: inline-block;
+  padding-top: 3px;
+  padding-left: 5px;
 }
 
 .board-create-date {
@@ -64,4 +86,41 @@ main {
 
 .board-notice-alarm {
   background: #F0F6FA;
+}
+
+
+.paging-container {
+  margin-top: 20px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+
+.paging-container a {
+  color: black;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.paging-prev, .paging-next, .paging-prev-total, .paging-next-total {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 2px;
+}
+
+
+.paging-prev-total-container,.paging-prev-container,
+.paging-next-container, .paging-next-total-container {
+  width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.paging-index-container {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
 }

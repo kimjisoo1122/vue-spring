@@ -5,6 +5,9 @@ import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
+/**
+ * 'reply' 테이블 매퍼
+ */
 @Mapper
 public interface ReplyMapper {
 

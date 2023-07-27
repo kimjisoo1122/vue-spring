@@ -7,10 +7,10 @@ import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 
 /**
- * 자유게시판 매퍼
+ * 갤러리 게시판 매퍼
  */
 @Mapper
-public interface FreeMapper {
+public interface GalleryMapper {
 
-    List<BoardDto> selectFreeListByCondition(BoardSearchCondition condition);
+    List<BoardDto> selectByCondition(BoardSearchCondition condition);
 }

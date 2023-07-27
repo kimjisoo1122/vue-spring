@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.mapper.board.GalleryMapper">
+
+    <!--갤러리디테일에서 가장 순서가 빠른 썸네일,
+    게시글이 포함한 갤러리 갯수를 포함한 갤러리게시글 정보를 조회합니다.-->
+    <select id="selectByCondition"
+            parameterType="boardSearchCondition"
+            resultType="boardDto">
+        SELECT
+            c.category_name,
+            g.gallery_thumb_path,
+            (SELECT COUNT(*) FROM gallery_detail g WHERE b.board_id = g.board_id) AS gallery_cnt,
+            <include refid="com.study.mapper.board.BoardMapper.selectBoard"/>
+        FROM board b
+            JOIN category c ON c.category_id = b.category_id
+            JOIN (SELECT
+                      board_id,
+                      MIN(gallery_order) AS min_order
+                  FROM gallery_detail
+                  GROUP BY board_id) gd ON b.board_id = gd.board_id
+            JOIN gallery_detail g ON b.board_id = g.board_id AND g.gallery_order = min_order
+
+        <include refid="com.study.mapper.board.BoardMapper.whereSearchCondition"/>
+
+        <include refid="com.study.mapper.board.BoardMapper.orderBoard"/>
+
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+</mapper>

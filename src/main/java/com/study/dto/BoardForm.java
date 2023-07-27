@@ -79,6 +79,13 @@ public class BoardForm {
     }
 
     /**
+     * @return 자유게시판의 수정폼일 경우 댓글을 사용할 수 있습니다.
+     */
+    public boolean hasReply() {
+        return formType == FormType.UPDATE && boardType == BoardType.FREE;
+    }
+
+    /**
      * @return 파일인풋이 존재하는 자유게시판, 갤러리게시판인 경우 multipart/form-data
      * 그 외의 게시판은 application/x-www-form-urlencoded
      */

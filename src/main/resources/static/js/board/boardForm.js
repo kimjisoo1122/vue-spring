@@ -195,3 +195,84 @@ function createFileInputBox(idx) {
 
   return fileInputBox;
 }
+
+/**
+ * 게시글의 댓글을 등록합니다.
+ * @param boardId 게시글 번호
+ */
+function registerReply(boardId) {
+  const inputElm = document.querySelector('.reply-register-input');
+  const replyContent = inputElm.value;
+
+  const xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      if (xhr.status === 201) {
+        const {data: {reply}} = JSON.parse(xhr.responseText);
+        const containerElm = document.querySelector('.reply-list-container');
+
+        const replyElm =
+            `
+            <div class="reply">
+              <div class="reply-writer">${reply.userName}</div>
+              <div class="reply-date">${formatDate(reply.createDate)}</div>
+              <div class="reply-content">${reply.replyContent}</div>
+            </div>
+            `
+
+        containerElm.insertAdjacentHTML('beforeend', replyElm);
+      } else {
+        console.error(xhr.responseText);
+      }
+      inputElm.value = '';
+    }
+  }
+
+  xhr.open('POST', '/api/reply', true);
+  xhr.setRequestHeader("Content-Type", "application/json")
+
+  const registerReplyDto = {
+    boardId: boardId,
+    replyContent: replyContent,
+  }
+
+  xhr.send(JSON.stringify(registerReplyDto));
+}
+
+/**
+ * 게시글의 댓글을 삭제합니다.
+ * @param thisElm
+ */
+function deleteReply(thisElm) {
+  if (!confirm('댓글을 삭제하시겠습니까?')) {
+    return false;
+  }
+
+  const xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      if (xhr.status === 204) {
+        thisElm.parentElement.remove();
+      } else {
+        console.error(xhr.responseText);
+      }
+    }
+  }
+
+  const replyId = thisElm.getAttribute('replyId');
+
+  xhr.open('DELETE', `/api/reply/${replyId}`, true);
+  xhr.setRequestHeader("Content-Type", "application/json")
+
+  xhr.send();
+}
+
+/**
+ * 자바 LocalDateTime 형식의 문자열을 yyyy.MM.dd HH:mm 포맷으로 변경
+ * @param date
+ * @returns yyyy.MM.dd HH:mm 포맷
+ */
+function formatDate(date) {
+  return date.replace('T', ' ').replaceAll('-', '.').slice(0, -3);
+}
+

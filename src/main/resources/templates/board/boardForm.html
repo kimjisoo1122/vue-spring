@@ -160,6 +160,13 @@
             <input type="hidden" name="formType" th:value="${form.getFormType()}">
           </div>
 
+          <!-- 자유게시판 수정폼 댓글  -->
+          <div th:if="${form.hasReply()}"
+               th:replace="~{fragment/reply}"
+               class="reply-container">
+          </div>
+
+
           <!-- 폼 버튼 -->
           <div class="form-main-btn-container">
             <!-- 등록/수정 -->
@@ -186,6 +193,8 @@
         </form>
 
       </div>
+
+
 
     </main>
 

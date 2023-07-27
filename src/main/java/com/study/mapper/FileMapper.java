@@ -5,6 +5,9 @@ import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
+/**
+ * 'file' 테이블 매퍼
+ */
 @Mapper
 public interface FileMapper {
 

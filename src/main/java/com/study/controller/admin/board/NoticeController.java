@@ -5,6 +5,7 @@ import com.study.dto.BoardSearchCondition;
 import com.study.enums.BoardType;
 import com.study.enums.Category;
 import com.study.enums.FormType;
+import com.study.page.PageHandler;
 import com.study.repository.board.BoardRepository;
 import com.study.repository.CategoryRepository;
 import com.study.repository.board.NoticeRepository;
@@ -54,9 +55,11 @@ public class NoticeController {
 
         condition.setBoardTypeAndPagination(BoardType.NOTICE, page, limit);
 
-        model.addAttribute("boardList", noticeService.findNoticeList(condition));
         model.addAttribute("categoryList",
                 categoryRepository.selectByParentId(Category.NOTICE));
+        model.addAttribute("boardList", noticeService.findNoticeList(condition));
+        model.addAttribute("pageHandler",
+                new PageHandler(page, boardRepository.countByCondition(condition), limit));
 
         return BoardUtil.LIST_PATH;
     }

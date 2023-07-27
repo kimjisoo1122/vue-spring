@@ -1,0 +1,28 @@
+<div th:if="${form.hasReply()}" th:fragment="reply" class="reply-container" >
+  <!-- 댓글목록 -->
+  <div class="reply-list-container">
+    <div class="reply" th:each="reply : ${form.getReplyList()}">
+      <div class="reply-writer" th:text="${reply.getUserName()}"></div>
+      <div class="reply-date" th:text="${#temporals.format(reply.getCreateDate(), 'yyyy-MM-dd HH:mm')}"></div>
+      <button data-th-replyId="${reply.getReplyId()}"
+              onclick="deleteReply(this)"
+              type="button"
+              class="reply-delete">삭제</button>
+      <div class="reply-content" th:text="${reply.getReplyContent()}"></div>
+    </div>
+  </div>
+
+  <!-- 댓글등록 -->
+  <div class="reply-register-container">
+    <input type="text"
+           name="content"
+           class="reply-register-input"
+           placeholder="댓글을 입력해 주세요.">
+    <button
+      type="button"
+      data-th-boardId="${form.getBoardId()}"
+      class="reply-register-button"
+      onclick="registerReply(this.getAttribute('boardId'))">등록
+    </button>
+  </div>
+</div>

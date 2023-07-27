@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 
 /**
- * 'notice' 테이블 매퍼 입니다.
+ * 공지사항 매퍼
  */
 @Mapper
 public interface NoticeMapper {

@@ -43,6 +43,17 @@
         LIMIT #{limit} OFFSET #{offset}
     </select>
 
+    <!-- 게시글 조건에 따라 카운트를 조회합니다. -->
+    <select id="countByCondition"
+            parameterType="boardSearchCondition"
+            resultType="int">
+        SELECT COUNT(*)
+        FROM board b
+        <include refid="whereSearchCondition"/>
+    </select>
+
+
+
     <!-- 게시글번호로 폼 DTO를 조회합니다. -->
     <select id="selectForm"
             parameterType="long"

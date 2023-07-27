@@ -33,6 +33,10 @@ public class BoardDto {
     private boolean hasFile; // 첨부파일 여부
     private int replyCnt; // 댓글 갯수
 
+    /* 갤러리 게시판 */
+    private String galleryThumbPath; // 갤러리 썸네일 경로
+    private int galleryCnt; // 갤러리 갯수
+
     /* 문의 게시판 */
     private String boardSecret; // 비밀글 여부
 }

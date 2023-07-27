@@ -49,17 +49,31 @@
         <div th:each="board : ${boardList}"
              th:classappend="${board.getCategoryName() == '알림' ? 'board-notice-alarm' : ''}"
              class="board">
+
           <div th:text="${board.getBoardId()}" class="board-id"></div>
           <div th:text="${board.getCategoryName()}" class="board-category"></div>
-          <a th:text="${board.getBoardTitle()}"
-             th:href="@{|${#httpServletRequest.getRequestURI()}/${board.getBoardId()}${condition.getQueryParam()}|}"
-             class="board-title">
-          </a>
+          <div class="board-title">
+            <a th:text="${board.getBoardTitle()}"
+               th:href="@{|${#httpServletRequest.getRequestURI()}/${board.getBoardId()}${condition.getQueryParam()}|}"
+               class="board-title-link">
+            </a>
+
+            <!-- 자유게시판 제목(댓글수, 파일) -->
+            <div th:if="${board.getBoardType().name() == 'FREE'}" class="board-free-title">
+              <span th:if="${board.getReplyCnt() != 0}" th:text="|(${board.getReplyCnt()})|"></span>
+              <i th:if="${board.hasFile}" class="far fa-file board-hasFile"></i>
+            </div>
+
+          </div>
+
           <div th:text="${board.getViewCnt()}" class="board-view"></div>
           <div th:text="${#temporals.format(board.getCreateDate(), 'yyyy-MM-dd HH:mm')}" class="board-create-date"/>
           <div th:text="${board.getUserName()}" class="board-user"></div>
         </div>
       </div>
+
+      <!-- 페이징처리 -->
+      <div th:replace="~{fragment/pagination}" class="paging-container"></div>
 
     </main>
 
