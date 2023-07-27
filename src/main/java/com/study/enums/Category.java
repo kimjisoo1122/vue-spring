@@ -1,7 +1,7 @@
 package com.study.enums;
 
 /**
- * 카테고리 상수 클래스
+ * 상위카테고리 상수클래스
  */
 public final class Category {
     public static final Long NOTICE = 1L;

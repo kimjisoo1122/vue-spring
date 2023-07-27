@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.study.mapper.NoticeMapper">
+<mapper namespace="com.study.mapper.board.NoticeMapper">
 
     <!-- 공지글 알림을 등록합니다. -->
     <insert id="insertNoticeAlarm"
@@ -16,7 +16,7 @@
             parameterType="int"
             resultType="boardDto">
         SELECT
-            <include refid="com.study.mapper.BoardMapper.selectBoard"/>
+            <include refid="com.study.mapper.board.BoardMapper.selectBoard"/>
             ,'알림' AS category_name
         FROM (SELECT board_id
               FROM notice_alarm
@@ -29,11 +29,11 @@
     </select>
 
     <!-- 게시글번호로 공지사항 폼데이터를 조회합니다. -->
-    <select id="selectNoticeFormByBoardId"
+    <select id="selectNoticeForm"
             parameterType="long"
             resultType="boardForm">
         SELECT
-        <include refid="com.study.mapper.BoardMapper.selectBoard"/>
+        <include refid="com.study.mapper.board.BoardMapper.selectBoard"/>
         ,EXISTS (SELECT 1 FROM notice_alarm n WHERE n.board_id = b.board_id) AS checkAlarm
         FROM board b
         WHERE board_id = #{boardId}

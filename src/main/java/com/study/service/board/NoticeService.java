@@ -1,10 +1,11 @@
-package com.study.service;
+package com.study.service.board;
 
 import com.study.dto.BoardDto;
 import com.study.dto.BoardForm;
 import com.study.dto.BoardSearchCondition;
-import com.study.repository.BoardRepository;
-import com.study.repository.NoticeRepository;
+import com.study.repository.board.BoardRepository;
+import com.study.repository.board.NoticeRepository;
+import com.study.util.BoardUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,15 +29,15 @@ public class NoticeService {
      */
     public Long register(BoardForm form) {
 
-        BoardDto registerNotice = createRegisterNotice(form);
-        boardRepository.insertBoard(registerNotice);
+        BoardDto registerNotice = BoardUtil.createRegisterBoard(form);
+        boardRepository.insert(registerNotice);
 
         if (form.isCheckAlarm()) {
             noticeRepository.insertNoticeAlarm(registerNotice.getBoardId());
         }
 
         return registerNotice.getBoardId();
-    };
+    }
 
     /**
      * 알림글로 등록된 공지사항을 최신순으로 limit만큼 조회합니다.
@@ -61,7 +62,7 @@ public class NoticeService {
      * @param form 공지사항 수정폼
      */
     public void update(BoardForm form) {
-        BoardDto updateNotice = createUpdateNotice(form);
+        BoardDto updateNotice = BoardUtil.createUpdateBoard(form);
 
         // 알림글여부에 따라 알림글을 추가, 삭제 합니다.
         if (form.isCheckAlarm()) {
@@ -70,7 +71,7 @@ public class NoticeService {
             noticeRepository.deleteNoticeAlarm(updateNotice.getBoardId());
         }
 
-        boardRepository.updateBoard(updateNotice);
+        boardRepository.update(updateNotice);
     }
 
     /**
@@ -78,38 +79,6 @@ public class NoticeService {
      * @param boardId 공지사항 번호
      */
     public void delete(Long boardId) {
-        boardRepository.deleteBoard(boardId);
-    }
-
-    /**
-     * 공지사항 수정용 DTO를 생성합니다
-     * @param form 공지사항 수정폼
-     * @return BoardDto
-     */
-    private BoardDto createUpdateNotice(BoardForm form) {
-        BoardDto updateBoard = new BoardDto();
-        updateBoard.setBoardId(form.getBoardId());
-        updateBoard.setCategoryId(form.getCategoryId());
-        updateBoard.setBoardTitle(form.getBoardTitle());
-        updateBoard.setBoardContent(form.getBoardContent());
-
-        return updateBoard;
-    }
-
-    /**
-     * 공지사항 등록용 DTO를 생성합니다
-     * @param form 공지사항 등록폼
-     * @return BoardDto
-     */
-    private BoardDto createRegisterNotice(BoardForm form) {
-        BoardDto noticeBoard = new BoardDto();
-        noticeBoard.setBoardType(form.getBoardType());
-        noticeBoard.setCategoryId(form.getCategoryId());
-        noticeBoard.setBoardTitle(form.getBoardTitle());
-        noticeBoard.setBoardContent(form.getBoardContent());
-        noticeBoard.setUserId(form.getUserId());
-        noticeBoard.setUserName(form.getUserName());
-
-        return noticeBoard;
+        boardRepository.delete(boardId);
     }
 }

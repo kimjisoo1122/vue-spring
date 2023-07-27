@@ -1,4 +1,4 @@
-package com.study.mapper;
+package com.study.mapper.board;
 
 import com.study.dto.BoardDto;
 import com.study.dto.BoardForm;
@@ -15,7 +15,7 @@ public interface NoticeMapper {
 
     List<BoardDto> selectNoticeAlarm(int limit);
 
-    BoardForm selectNoticeFormByBoardId(Long boardId);
+    BoardForm selectNoticeForm(Long boardId);
 
     void deleteNoticeAlarm(Long boardId);
 }

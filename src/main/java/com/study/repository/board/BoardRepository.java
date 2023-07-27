@@ -1,8 +1,9 @@
-package com.study.repository;
+package com.study.repository.board;
 
 import com.study.dto.BoardDto;
+import com.study.dto.BoardForm;
 import com.study.dto.BoardSearchCondition;
-import com.study.mapper.BoardMapper;
+import com.study.mapper.board.BoardMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -21,8 +22,8 @@ public class BoardRepository {
      * 게시글을 등록합니다.
      * @param board 게시글 DTO
      */
-    public void insertBoard(BoardDto board) {
-        boardMapper.insertBoard(board);
+    public void insert(BoardDto board) {
+        boardMapper.insert(board);
     }
 
     /**
@@ -33,6 +34,17 @@ public class BoardRepository {
     public List<BoardDto> selectByCondition(BoardSearchCondition condition) {
         return boardMapper.selectByCondition(condition);
     }
+
+    /**
+     * 게시글번호로 게시글폼을 조회합니다.
+     * @param boardId 게시글 번호
+     * @return BoardForm
+     */
+    public BoardForm selectForm(Long boardId) {
+        return boardMapper.selectForm(boardId);
+    }
+
+
 
     /**
      * 조회수를 1 증가시킵니다.
@@ -46,15 +58,15 @@ public class BoardRepository {
      * 게시글을 수정합니다.
      * @param board 게시글 DTO
      */
-    public void updateBoard(BoardDto board) {
-        boardMapper.updateBoard(board);
+    public void update(BoardDto board) {
+        boardMapper.update(board);
     }
 
     /**
      * 게시글을 삭제합니다.
      * @param boardId 게시글번호
      */
-    public void deleteBoard(Long boardId) {
-        boardMapper.deleteBoard(boardId);
+    public void delete(Long boardId) {
+        boardMapper.delete(boardId);
     }
 }

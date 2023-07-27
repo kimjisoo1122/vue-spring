@@ -27,15 +27,6 @@ public class BoardSearchCondition {
     private String orderCondition = ""; // SQL ORDER 조건
     private String order = "DESC"; // SQL ORDER 방향
 
-    /**
-     * 검색조건 페이징처리를 위한 값을 설정합니다.
-     * @param page 현재 페이지
-     */
-    public void setLimitOffset(int page, int limit) {
-        this.page = page;
-        this.limit = limit;
-        this.offset = (page - 1) * limit;
-    }
 
     /**
      * 검색조건들을 쿼리스트링으로 변환합니다.
@@ -58,5 +49,26 @@ public class BoardSearchCondition {
         this.search = UriUtils.encode(search, StandardCharsets.UTF_8);
 
         return getQueryParam(page);
+    }
+
+    /**
+     * 검색조건객체의 게시글타입과 페이징 설정을합니다.
+     * @param page 현재페이지
+     * @param limit 페이지크기
+     * @param boardType 게시글타입
+     */
+    public void setBoardTypeAndPagination(BoardType boardType, int page, int limit) {
+        this.setBoardType(boardType);
+        this.setPagination(page, limit);
+    }
+
+    /**
+     * 검색조건 페이징처리를 위한 값을 설정합니다.
+     * @param page 현재 페이지
+     */
+    public void setPagination(int page, int limit) {
+        this.page = page;
+        this.limit = limit;
+        this.offset = (page - 1) * limit;
     }
 }

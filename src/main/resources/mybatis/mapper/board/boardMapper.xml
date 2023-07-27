@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.study.mapper.BoardMapper">
+<mapper namespace="com.study.mapper.board.BoardMapper">
 
     <!-- 게시글을 등록합니다. -->
-    <insert id="insertBoard"
+    <insert id="insert"
             parameterType="boardDto"
             useGeneratedKeys="true"
             keyProperty="boardId">
@@ -32,37 +32,27 @@
             parameterType="boardSearchCondition"
             resultType="boardDto">
         SELECT
+            c.category_name,
             <include refid="selectBoard"/>
-            ,c.category_name
         FROM board b
             JOIN category c ON c.category_id = b.category_id
         <include refid="whereSearchCondition"/>
 
-        <!-- ORDER BY -->
-        <trim prefix="ORDER BY" suffix=" ">
-            <choose>
-                <when test="orderCondition == 'title'">
-                    b.board_title
-                </when>
-                <when test="orderCondition == 'viewCnt'">
-                    b.view_cnt
-                </when>
-                <otherwise>
-                    b.create_date
-                </otherwise>
-            </choose>
-            <choose>
-                <when test="order == 'asc'">
-                    asc
-                </when>
-                <otherwise>
-                    desc
-                </otherwise>
-            </choose>
-        </trim>
+        <include refid="orderBoard"/>
 
         LIMIT #{limit} OFFSET #{offset}
     </select>
+
+    <!-- 게시글번호로 폼 DTO를 조회합니다. -->
+    <select id="selectForm"
+            parameterType="long"
+            resultType="boardForm">
+        SELECT
+        <include refid="selectBoard"/>
+        FROM board b
+        WHERE board_id = #{boardId}
+    </select>
+
 
     <!-- 게시글의 조회수를 1 증가시킵니다. -->
     <update id="increaseViewCnt"
@@ -73,7 +63,7 @@
     </update>
     
     <!-- 게시글을 업데이트 합니다.-->
-    <update id="updateBoard"
+    <update id="update"
             parameterType="boardDto">
         UPDATE board
             <set>
@@ -97,7 +87,8 @@
         WHERE board_id = #{boardId}
     </update>
 
-    <delete id="deleteBoard"
+    <!-- 게시글을 삭제합니다. -->
+    <delete id="delete"
             parameterType="long">
         DELETE
         FROM board
@@ -148,6 +139,30 @@
                     b.board_content LIKE CONCAT('%', #{search}, '%'))
             </if>
         </where>
+    </sql>
+
+    <sql id="orderBoard">
+        <trim prefix="ORDER BY" suffix=" ">
+            <choose>
+                <when test="orderCondition == 'title'">
+                    b.board_title
+                </when>
+                <when test="orderCondition == 'viewCnt'">
+                    b.view_cnt
+                </when>
+                <otherwise>
+                    b.create_date
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="order == 'asc'">
+                    asc
+                </when>
+                <otherwise>
+                    desc
+                </otherwise>
+            </choose>
+        </trim>
     </sql>
 
 </mapper>

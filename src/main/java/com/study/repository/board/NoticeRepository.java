@@ -1,8 +1,8 @@
-package com.study.repository;
+package com.study.repository.board;
 
 import com.study.dto.BoardDto;
 import com.study.dto.BoardForm;
-import com.study.mapper.NoticeMapper;
+import com.study.mapper.board.NoticeMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -39,8 +39,8 @@ public class NoticeRepository {
      * @param boardId 공지사항 번호
      * @return BoardForm
      */
-    public BoardForm selectNoticeFormByBoardId(Long boardId) {
-        return noticeMapper.selectNoticeFormByBoardId(boardId);
+    public BoardForm selectNoticeForm(Long boardId) {
+        return noticeMapper.selectNoticeForm(boardId);
     }
 
     /**

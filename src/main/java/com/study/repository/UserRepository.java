@@ -19,7 +19,7 @@ public class UserRepository {
      * @param userId 사용자 아이디
      * @return UserDto
      */
-    public UserDto selectUserById(String userId) {
+    public UserDto selectById(String userId) {
         return userMapper.selectUserById(userId);
     }
 }

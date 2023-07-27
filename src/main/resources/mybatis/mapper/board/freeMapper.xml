@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.mapper.board.FreeMapper">
+
+    <!-- 게시글 조건에 자유게시판 목록을 조회합니다. -->
+    <select id="selectFreeListByCondition"
+            parameterType="boardSearchCondition"
+            resultType="boardDto">
+        SELECT
+            c.category_name,
+            EXISTS (SELECT 1 FROM file f WHERE f.board_id = b.board_id) AS has_file,
+            (SELECT COUNT(*) FROM reply r WHERE r.board_id = b.board_id) AS reply_cnt,
+            <include refid="com.study.mapper.board.BoardMapper.selectBoard"/>
+        FROM board b
+            JOIN category c ON c.category_id = b.category_id
+        <include refid="com.study.mapper.board.BoardMapper.whereSearchCondition"/>
+
+        <include refid="com.study.mapper.board.BoardMapper.orderBoard"/>
+
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+</mapper>

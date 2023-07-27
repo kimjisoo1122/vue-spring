@@ -1,14 +1,15 @@
-package com.study.controller.admin;
+package com.study.controller.admin.board;
 
 import com.study.dto.BoardForm;
 import com.study.dto.BoardSearchCondition;
 import com.study.enums.BoardType;
 import com.study.enums.Category;
 import com.study.enums.FormType;
-import com.study.repository.BoardRepository;
+import com.study.repository.board.BoardRepository;
 import com.study.repository.CategoryRepository;
-import com.study.repository.NoticeRepository;
-import com.study.service.NoticeService;
+import com.study.repository.board.NoticeRepository;
+import com.study.service.board.NoticeService;
+import com.study.util.BoardUtil;
 import com.study.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/admin/notice")
 @RequiredArgsConstructor
 public class NoticeController {
+
+    /**
+     * 공지사항 목록 리다이렉트 경로
+     */
+    private final String NOTICE_REDIRECT_PATH = "redirect:/admin/notice";;
 
     private final CategoryRepository categoryRepository;
     private final BoardRepository boardRepository;
@@ -46,42 +52,35 @@ public class NoticeController {
             @ModelAttribute("condition") BoardSearchCondition condition,
             Model model) {
 
-        condition.setBoardType(BoardType.NOTICE);
-        condition.setLimitOffset(page, limit);
+        condition.setBoardTypeAndPagination(BoardType.NOTICE, page, limit);
 
         model.addAttribute("boardList", noticeService.findNoticeList(condition));
-        model.addAttribute("boardType", BoardType.NOTICE);
         model.addAttribute("categoryList",
                 categoryRepository.selectByParentId(Category.NOTICE));
 
-        return "board/boardList";
+        return BoardUtil.LIST_PATH;
     }
 
     /**
      * 공지사항 등록폼을 조회합니다.
-     * @param form 공지사항등록폼
+     * @param form 공지사항 등록폼
      * @param condition 검색조건
-     * @param model categoryList: 카테고리목록
      * @return board/boardForm 게시글폼
      */
     @GetMapping("/register")
     public String registerForm(
             @ModelAttribute("form") BoardForm form,
-            @ModelAttribute("condition") BoardSearchCondition condition,
-            Model model) {
+            @ModelAttribute("condition") BoardSearchCondition condition) {
 
-        form.setBoardType(BoardType.NOTICE);
-        form.setFormType(FormType.REGISTER);
+        form.setBoardFormType(BoardType.NOTICE, FormType.REGISTER);
+        form.setCategoryList(categoryRepository.selectByParentId(Category.NOTICE));
 
-        model.addAttribute("categoryList",
-                categoryRepository.selectByParentId(Category.NOTICE));
-
-        return "board/boardForm";
+        return BoardUtil.FORM_PATH;
     }
 
     /**
      * 공지사항을 등록합니다
-     * @param form 공지사항등록폼
+     * @param form 공지사항 등록폼
      * @param bindingResult 폼 유효성검증객체
      * @param condition 검색조건
      * @return redirect:/admin/notice 공지사항목록 리다이렉트
@@ -92,10 +91,10 @@ public class NoticeController {
             BindingResult bindingResult,
             @ModelAttribute("condition") BoardSearchCondition condition) {
 
-        form.setBoardType(BoardType.NOTICE);
-
         if (bindingResult.hasErrors()) {
-            return "board/boardForm";
+            form.setCategoryList(categoryRepository.selectByParentId(Category.NOTICE));
+
+            return BoardUtil.FORM_PATH;
         }
 
         // 현재 인증된 사용자정보로 유저정보를 설정합니다.
@@ -103,12 +102,12 @@ public class NoticeController {
 
         noticeService.register(form);
 
-        return "redirect:/admin/notice" + condition.getEncodedQueryParam();
+        return NOTICE_REDIRECT_PATH + condition.getEncodedQueryParam();
     }
 
     /**
      * 공지사항 상세페이지를 조회합니다.
-     * @param boardId 공지사항번호
+     * @param boardId 공지사항 번호
      * @param condition 검색조건
      * @param model form 검색한 공지사항, categoryList: 카테고리목록
      * @return board/boardForm 게시글폼
@@ -121,14 +120,13 @@ public class NoticeController {
 
         boardRepository.increaseViewCnt(boardId);
 
-        BoardForm noticeForm = noticeRepository.selectNoticeFormByBoardId(boardId);
+        BoardForm noticeForm = noticeRepository.selectNoticeForm(boardId);
         noticeForm.setFormType(FormType.UPDATE);
+        noticeForm.setCategoryList(categoryRepository.selectByParentId(Category.NOTICE));
 
         model.addAttribute("form", noticeForm);
-        model.addAttribute("categoryList",
-                categoryRepository.selectByParentId(Category.NOTICE));
 
-        return "board/boardForm";
+        return BoardUtil.FORM_PATH;
     }
 
     /**
@@ -136,7 +134,7 @@ public class NoticeController {
      * @param boardId 공지사항 번호
      * @param condition 검색조건
      * @param form 공지사항 수정폼
-     * @param bindingResult 공지사항 유효성검증 객체
+     * @param bindingResult 유효성검증 객체
      * @return 수정된 공지사항으로 리다이렉트
      */
     @PostMapping("/{boardId}")
@@ -147,7 +145,9 @@ public class NoticeController {
             BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return "board/boardForm";
+            form.setCategoryList(categoryRepository.selectByParentId(Category.NOTICE));
+
+            return BoardUtil.FORM_PATH;
         }
 
         SecurityUtil.setFormUser(form);
@@ -155,7 +155,7 @@ public class NoticeController {
 
         noticeService.update(form);
 
-        return "redirect:/admin/notice/" + boardId + condition.getEncodedQueryParam();
+        return NOTICE_REDIRECT_PATH + boardId + condition.getEncodedQueryParam();
     }
 
     /**
@@ -171,6 +171,6 @@ public class NoticeController {
 
         noticeService.delete(boardId);
 
-        return "redirect:/admin/notice" + condition.getEncodedQueryParam();
+        return NOTICE_REDIRECT_PATH + condition.getEncodedQueryParam();
     }
 }

@@ -16,7 +16,7 @@
         WHERE user_id = #{userId}
     </select>
 
-    <insert id="insertUser"
+    <insert id="insert"
             parameterType="userDto">
         INSERT INTO user
             (user_id,

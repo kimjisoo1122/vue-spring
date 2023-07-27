@@ -61,10 +61,9 @@ function submitSearch() {
   const searchForm = document.querySelector('.search-form');
   const fromDateElm = document.querySelector('.search-date-from');
   const toDateElm = document.querySelector('.search-date-to');
-  const totalValue = fromDateElm.value + toDateElm.value;
+  const totalLen = fromDateElm.value.length * toDateElm.value.length;
 
-  console.log(totalValue, totalValue.length);
-  if (totalValue.length === 0) {
+  if (totalLen === 0) {
     fromDateElm.value = '';
     toDateElm.value = '';
   }

@@ -7,7 +7,7 @@
 
   <head>
     <meta charset="UTF-8">
-    <title th:text="${boardType.getTitle()}"></title>
+    <title th:text="${condition.getBoardType().getTitle()}"></title>
     <link rel="stylesheet" th:href="@{/css/board/boardList.css}">
     <link rel="stylesheet" th:href="@{/css/fragment/searchCondition.css}">
     <script th:src="@{/js/fragment/searchCondition.js}"></script>
@@ -17,7 +17,8 @@
 
     <header layout:fragment="header">
       <!-- 타이틀 -->
-      <h1 th:text="${boardType.getTitle()}" class="boardlist-header-title"></h1>
+      <a th:href="@{/admin}"><button>목록</button></a>
+      <h1 th:text="${condition.getBoardType().getTitle()}" class="boardlist-header-title"></h1>
     </header>
 
     <main layout:fragment="main" >

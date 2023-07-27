@@ -24,7 +24,7 @@ public class UserServiceTest {
         userDto.setUserName("관리자");
         userDto.setUserAuth(UserAuth.ADMIN);
 
-        userMapper.insertUser(userDto);
+        userMapper.insert(userDto);
 
     }
 }
