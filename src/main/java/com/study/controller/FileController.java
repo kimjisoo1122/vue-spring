@@ -3,7 +3,6 @@ package com.study.controller;
 import com.study.dto.FileDto;
 import com.study.service.FileService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.UriUtils;
 
 import java.io.FileNotFoundException;
@@ -25,7 +25,6 @@ import java.nio.charset.StandardCharsets;
 @Controller
 @RequestMapping("/file")
 @RequiredArgsConstructor
-@Slf4j
 public class FileController {
 
     private final FileService fileService;
@@ -45,18 +44,26 @@ public class FileController {
         UrlResource resource = new UrlResource("file:" + findFile.getFullPath());
 
         if (!resource.exists() || !resource.isReadable()) {
-            log.error("파일을 찾을수 없습니다. 경로 : {}", findFile.getFullPath());
-
             throw new FileNotFoundException("파일을 찾을 수 없습니다.");
         }
 
         String encodedOriginalFileName = UriUtils.encode(findFile.getFileOrgName(), StandardCharsets.UTF_8);
         String contentDisposition = "attachment; filename=\"" + encodedOriginalFileName + "\"";
 
-        log.info("다운로드파일 : {}", findFile.getFileOrgName());
-
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
                 .body(resource);
+    }
+
+    /**
+     *
+     * @param imgUrl 이미지 이름
+     * @throws MalformedURLException 파일경로가 올바르지 않은 경우
+     */
+    @ResponseBody
+    @GetMapping("/image/{imgUrl}")
+    public Resource showImage(
+            @PathVariable("imgUrl") String imgUrl) throws MalformedURLException {
+        return new UrlResource("file:" + fileService.getGalleyPath() + imgUrl);
     }
 }

@@ -91,10 +91,11 @@ public class FreeService {
     }
 
     /**
-     * 자유게시글을 삭제합니다.
+     * 자유게시글, 첨부파일을 삭제합니다.
      * @param boardId 게시글번호
      */
     public void delete(Long boardId) {
+        fileService.deleteByBoardId(boardId);
         boardRepository.delete(boardId);
     }
 }

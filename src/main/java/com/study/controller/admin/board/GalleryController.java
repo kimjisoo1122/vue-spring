@@ -8,7 +8,6 @@ import com.study.enums.FormType;
 import com.study.page.PageHandler;
 import com.study.repository.CategoryRepository;
 import com.study.repository.FileRepository;
-import com.study.repository.ReplyRepository;
 import com.study.repository.board.BoardRepository;
 import com.study.service.board.GalleryService;
 import com.study.util.BoardUtil;
@@ -38,7 +37,6 @@ public class GalleryController {
     private final CategoryRepository categoryRepository;
     private final BoardRepository boardRepository;
     private final FileRepository fileRepository;
-    private final ReplyRepository replyRepository;
 
     private final GalleryService galleryService;
 
@@ -68,6 +66,31 @@ public class GalleryController {
     }
 
     /**
+     * 갤러리게시글 상세페이지를 조회합니다.
+     * @param boardId 갤러리게시글 번호
+     * @param condition 검색조건
+     * @param model form 검색한 갤러리게시글
+     * @return board/boardForm 게시글폼
+     */
+    @GetMapping("/{boardId}")
+    public String galleryDetail(
+            @PathVariable("boardId") Long boardId,
+            @ModelAttribute("condition") BoardSearchCondition condition,
+            Model model) {
+
+        boardRepository.increaseViewCnt(boardId);
+
+        BoardForm galleryForm = boardRepository.selectForm(boardId);
+        galleryForm.setFormType(FormType.UPDATE);
+        galleryForm.setCategoryList(categoryRepository.selectByParentId(Category.GALLERY));
+        galleryForm.setFileList(fileRepository.selectGalleryFile(boardId));
+
+        model.addAttribute("form", galleryForm);
+
+        return BoardUtil.FORM_PATH;
+    }
+
+    /**
      * 갤러리게시글 등록폼을 조회합니다.
      * @param form 갤러리게시판 등록폼
      * @param condition 검색조건
@@ -83,34 +106,6 @@ public class GalleryController {
 
         return BoardUtil.FORM_PATH;
     }
-
-    /**
-     * 갤러리게시글 상세페이지를 조회합니다.
-     * @param boardId 갤러리게시글 번호
-     * @param condition 검색조건
-     * @param model form 검색한 갤러리게시글
-     * @return board/boardForm 게시글폼
-     */
-    @GetMapping("/{boardId}")
-    public String galleryDetail(
-            @PathVariable("boardId") Long boardId,
-            @ModelAttribute("condition") BoardSearchCondition condition,
-            Model model) {
-
-        boardRepository.increaseViewCnt(boardId);
-
-        BoardForm freeForm = boardRepository.selectForm(boardId);
-        freeForm.setFormType(FormType.UPDATE);
-        freeForm.setCategoryList(categoryRepository.selectByParentId(Category.FREE));
-        freeForm.setFileList(fileRepository.selectByBoardId(boardId));
-        freeForm.setReplyList(replyRepository.selectByBoardId(boardId));
-
-        model.addAttribute("form", freeForm);
-
-        return BoardUtil.FORM_PATH;
-    }
-
-
 
     /**
      * 갤러리게시글을 등록합니다

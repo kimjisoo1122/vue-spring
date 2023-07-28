@@ -2,6 +2,37 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.study.mapper.board.GalleryMapper">
 
+    <!-- 게시글의 마지막오더를 조회한 후 갤러리디테일을 등록합니다. -->
+    <insert id="insertGalleryDetail"
+            parameterType="boardDto">
+
+        <selectKey resultType="int"
+                    keyProperty="galleryOrder"
+                    order="BEFORE">
+            SELECT (IFNULL(MAX(gallery_order), 0) + 1) AS gallery_order
+            FROM gallery_detail
+            WHERE board_id = #{boardId};
+        </selectKey>
+
+        INSERT INTO gallery_detail
+            (board_id,
+            file_id,
+            gallery_img_name,
+            gallery_thumb_name,
+            gallery_order)
+        VALUES
+            (#{boardId},
+            #{fileId},
+            #{galleryImgName},
+            #{galleryThumbName},
+            #{galleryOrder});
+    </insert>
+
+    <select id="selectMaxOrder"
+            parameterType="long">
+
+    </select>
+
     <!--갤러리디테일에서 가장 순서가 빠른 썸네일,
     게시글이 포함한 갤러리 갯수를 포함한 갤러리게시글 정보를 조회합니다.-->
     <select id="selectByCondition"
@@ -9,7 +40,7 @@
             resultType="boardDto">
         SELECT
             c.category_name,
-            g.gallery_thumb_path,
+            g.gallery_thumb_name,
             (SELECT COUNT(*) FROM gallery_detail g WHERE b.board_id = g.board_id) AS gallery_cnt,
             <include refid="com.study.mapper.board.BoardMapper.selectBoard"/>
         FROM board b
@@ -27,5 +58,23 @@
 
         LIMIT #{limit} OFFSET #{offset}
     </select>
+
+    <!-- 파일번호로 썸네일 이름을 조회합니다. -->
+    <select id="selectThumbNameByFileId"
+            parameterType="long"
+            resultType="string">
+        SELECT
+            gallery_thumb_name
+        FROM gallery_detail
+        WHERE file_id = #{fileId}
+    </select>
+
+    <!-- 파일번호로 삭제합니다. -->
+    <delete id="deleteByFileId"
+            parameterType="long">
+        DELETE
+        FROM gallery_detail
+        WHERE file_id = #{fileId}
+    </delete>
 
 </mapper>

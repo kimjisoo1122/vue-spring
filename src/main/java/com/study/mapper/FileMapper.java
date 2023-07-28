@@ -15,5 +15,5 @@ public interface FileMapper {
     List<FileDto> selectByBoardId(Long boardId);
     FileDto selectById(Long fileId);
     void delete(Long fileId);
-    void deleteByBoardId(Long boardId);
+    List<FileDto> selectGalleryFile(Long boardId);
 }

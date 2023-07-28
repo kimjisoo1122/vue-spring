@@ -34,8 +34,11 @@ public class BoardDto {
     private int replyCnt; // 댓글 갯수
 
     /* 갤러리 게시판 */
-    private String galleryThumbPath; // 갤러리 썸네일 경로
+    private Long fileId; // 갤러리 파일 아이디
+    private String galleryImgName; // 갤러리 이미지 이름
+    private String galleryThumbName; // 갤러리 썸네일 이름
     private int galleryCnt; // 갤러리 갯수
+    private int galleryOrder; // 갤러리 등록순서
 
     /* 문의 게시판 */
     private String boardSecret; // 비밀글 여부

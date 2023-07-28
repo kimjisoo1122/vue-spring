@@ -67,13 +67,17 @@ function validateContent() {
  * @returns {boolean}
  */
 
-function validateFile(idx) {
+function validateFile(thisElm) {
+  const idx = thisElm.getAttribute('idx');
   const fileElm = document.querySelector(`.form-file-input[idx="${idx}"]`);
   const fileErrElm = document.querySelector('.form-file-error');
+  const thumbElm = document.querySelector(`.form-file-thumb[idx='${idx}']`);
   const file = fileElm.files[0];
 
   if (file === undefined) {
     fileErrElm.innerHTML = '';
+    thumbElm.src = ''
+    thumbElm.style.display = 'none';
 
     return true;
   }
@@ -97,7 +101,30 @@ function validateFile(idx) {
 
   fileErrElm.innerHTML = '';
 
+  /* 파일 썸네일 */
+  showThumb(file, fileExt, thumbElm);
+
   return true;
+}
+
+/**
+ * 첨부한 이미지파일의 썸네일을 보여줍니다.
+ * @param file 파일객체
+ * @param fileExt 파일확장자
+ * @param thumbElm 썸네일 엘리먼트
+ */
+function showThumb(file, fileExt, thumbElm) {
+  if (fileExt !== 'zip') {
+    const reader = new FileReader();
+    reader.onload = e => {
+      thumbElm.src = e.target.result;
+      thumbElm.style.display = 'block';
+    }
+    reader.readAsDataURL(file);
+  } else {
+    thumbElm.src = ''
+    thumbElm.style.display = 'none';
+  }
 }
 
 /**
@@ -183,13 +210,13 @@ function createFileInputBox(idx) {
   fileInputBox.setAttribute('class', 'form-file-input-box');
   fileInputBox.innerHTML =
       `
-        <label th:for="${idx}" class="form-file-label"></label>
+        <img idx="${idx}" class="form-file-thumb">
+        <label for="${idx}" class="form-file-label"></label>
         <input idx="${idx}"
                id="${idx}"
                type="file"
-               value="test.jpg"
                name="saveFiles"
-               onchange="validateFile(this.getAttribute('idx'))"
+               onchange="validateFile(this)"
                class="form-file-input">
       `;
 
@@ -272,7 +299,7 @@ function deleteReply(thisElm) {
  * @param date
  * @returns yyyy.MM.dd HH:mm 포맷
  */
-function formatDate(date) {
+function formatDate(date)  {
   return date.replace('T', ' ').replaceAll('-', '.').slice(0, -3);
 }
 

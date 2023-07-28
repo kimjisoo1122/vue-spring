@@ -32,6 +32,15 @@ public class FileRepository {
     }
 
     /**
+     * 갤러리게시판 상세페이지 첨부파일을 조회합니다.
+     * @param boardId 게시글번호
+     * @return List<FileDto>
+     */
+    public List<FileDto> selectGalleryFile(Long boardId) {
+        return fileMapper.selectGalleryFile(boardId);
+    }
+
+    /**
      * 파일을 조회합니다.
      * @param fileId 파일 번호
      * @return FileDto
@@ -46,13 +55,5 @@ public class FileRepository {
      */
     public void delete(Long fileId) {
         fileMapper.delete(fileId);
-    }
-
-    /**
-     * 게시글에 첨부된 파일을 삭제합니다.
-     * @param boardId 게시글 번호
-     */
-    public void deleteByBoardId(Long boardId) {
-        fileMapper.deleteByBoardId(boardId);
     }
 }

@@ -13,4 +13,8 @@ import java.util.List;
 public interface GalleryMapper {
 
     List<BoardDto> selectByCondition(BoardSearchCondition condition);
+    void insertGalleryDetail(BoardDto board);
+    String selectThumbNameByFileId(Long fileId);
+
+    void deleteByFileId(Long fileId);
 }

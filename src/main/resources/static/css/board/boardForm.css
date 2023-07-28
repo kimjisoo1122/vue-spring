@@ -79,12 +79,25 @@ main {
 .form-file-input-box {
   flex-basis: 100%;
   margin: 5px 0;
+  display: flex;
+  align-items: center;
 }
 
 .form-file-notice {
   font-size: var(--small-font-size);
   font-weight: bold;
   flex-basis: 100%;
+}
+
+.form-file-thumb {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  display: none;
+}
+
+.form-file-input-thumb {
+  margin-right: 5px;
 }
 
 .form-file-down-link {

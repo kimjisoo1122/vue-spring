@@ -53,14 +53,26 @@
           <div th:text="${board.getBoardId()}" class="board-id"></div>
           <div th:text="${board.getCategoryName()}" class="board-category"></div>
           <div class="board-title">
+
+            <!-- 갤러리게시판 썸네일, 갤러리 갯수 -->
+            <div th:if="${board.getBoardType().name() == 'GALLERY'}" class="board-gallery-container">
+              <img th:src="|/file/image/${board.getGalleryThumbName()}|"
+                   alt="갤러리썸네일"
+                   class="board-galley-thumb">
+              <span th:text="|+${board.getGalleryCnt()}|" class="board-galley-cnt"></span>
+            </div>
+
             <a th:text="${board.getBoardTitle()}"
                th:href="@{|${#httpServletRequest.getRequestURI()}/${board.getBoardId()}${condition.getQueryParam()}|}"
                class="board-title-link">
             </a>
 
             <!-- 자유게시판 제목(댓글수, 파일) -->
-            <div th:if="${board.getBoardType().name() == 'FREE'}" class="board-free-title">
-              <span th:if="${board.getReplyCnt() != 0}" th:text="|(${board.getReplyCnt()})|"></span>
+            <div th:if="${board.getBoardType().name() == 'FREE'}" class="board-free-container">
+              <span th:if="${board.getReplyCnt() != 0}"
+                    th:text="|(${board.getReplyCnt()})|"
+                    class="board-free-title">
+              </span>
               <i th:if="${board.hasFile}" class="far fa-file board-hasFile"></i>
             </div>
 

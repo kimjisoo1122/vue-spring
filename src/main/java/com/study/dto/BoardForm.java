@@ -39,7 +39,7 @@ public class BoardForm {
     private BoardType boardType; // 게시글 타입
     private FormType formType; // 폼 타임
 
-    private List<MultipartFile> saveFiles; // 저장할 파일목록
+    private MultipartFile[] saveFiles; // 저장할 파일목록
     private Long[] deleteFiles; // 삭제할 파일목록
 
     /* 폼으로 전송하는 데이터 */

@@ -28,10 +28,10 @@ button {
   padding: 3px 10px;
   border: none;
   font-size: var(--small-font-size);
-  cursor: pointer;
   background-color: var(--main-color-blue);
   color: white;
   border-radius: 3px;
+  cursor: pointer;
 }
 
 header {

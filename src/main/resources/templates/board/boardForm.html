@@ -83,23 +83,25 @@
 
           <!-- 첨부파일 -->
           <div th:if="${form.hasFileInput()}" class="form-main-file-container">
-            <div class="form-file-name">
-              첨부
-            </div>
+
+            <div class="form-file-name">첨부</div>
+
             <div class="form-file-input-container">
+
               <p class="form-file-notice">jpg, gif, png, zip파일만 파일사이즈 2MB까지 업로드 가능합니다.</p>
 
               <!-- 파일등록 폼 -->
               <div th:if="${form.getFormType().name() == 'REGISTER'}"
                    th:each="idx : ${#numbers.sequence(1, 5)}"
                    class="form-file-input-box">
+                <img data-th-idx="${idx}" class="form-file-thumb">
                 <label th:for="${idx}" class="form-file-label"></label>
                 <input data-th-idx="${idx}"
                        th:id="${idx}"
                        type="file"
                        value="test.jpg"
                        name="saveFiles"
-                       onchange="validateFile(this.getAttribute('idx'))"
+                       onchange="validateFile(this)"
                        class="form-file-input">
               </div>
 
@@ -110,6 +112,10 @@
                 <!-- 등록된 파일목록 -->
                 <div th:each="file : ${form.getFileList()}"
                      class="form-file-input-box">
+                  <img th:if="${file.getGalleryThumbName() != null}"
+                       th:src="|/file/image/${file.getGalleryThumbName()}|"
+                       alt="첨부파일 이미지 썸네일"
+                       class="form-file-input-thumb">
                   <a th:href="|/file/${file.getFileId()}|"
                      th:text="${file.getFileOrgName()}"
                      class="form-file-down-link">
@@ -124,13 +130,13 @@
                 <div class="form-file-input-box-container">
                   <div th:each="idx : ${#numbers.sequence(1, fileInputSize)}"
                        class="form-file-input-box">
+                    <img data-th-idx="${idx}" class="form-file-thumb">
                     <label th:for="${idx}" class="form-file-label"></label>
                     <input data-th-idx="${idx}"
                            th:id="${idx}"
                            type="file"
-                           value="test.jpg"
                            name="saveFiles"
-                           onchange="validateFile(this.getAttribute('idx'))"
+                           onchange="validateFile(this)"
                            class="form-file-input">
                   </div>
                 </div>
@@ -141,6 +147,7 @@
               <span class="form-file-error field-error"></span>
 
             </div>
+
           </div>
 
           <!-- 알림글 체크 -->
