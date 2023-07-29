@@ -19,8 +19,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .anyRequest()
-                    .hasRole("ADMIN") // 모든 요청을 관리자권한이 존재해야한다.
+                .antMatchers("/admin/css/**", "/admin/js/**", "/vue/**").permitAll()
+                .antMatchers("/admin/**")
+                    .hasRole("ADMIN")
                 .and()
                 .formLogin()
                     .loginPage("/admin/login")
@@ -50,7 +51,8 @@ public class SecurityConfig {
      */
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+        return web -> web.ignoring()
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 
     /**
