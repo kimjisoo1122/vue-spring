@@ -31,8 +31,8 @@
               onsubmit="return validateForm(this.getAttribute('formTypeValue'), this.getAttribute('boardType'))"
               class="board-form">
 
-          <div class="form-main-type-container">
-            <!-- 카테고리 -->
+          <!-- 카테고리 -->
+          <div th:if="${!form.getFormType().isAnswerForm()}" class="form-main-type-container">
             <div class="form-type-name">
               분류
               <span class="from-required-star">*</span>
@@ -57,6 +57,7 @@
             <div class="form-title-input-container">
               <input th:field="*{boardTitle}"
                      th:errorclass="input-error"
+                     th:readonly="${form.getFormType().isAnswerForm() ? 'readony' : ''}"
                      onchange="validateTitle()"
                      type="text" class="form-title-input">
               <span class="form-title-error field-error"></span>
@@ -74,10 +75,26 @@
             <div class="form-content-input-container">
               <textarea th:field="*{boardContent}"
                         th:errorclass="input-error"
+                        th:readonly="${form.getFormType().isAnswerForm() ? 'readony' : ''}"
                         onchange="validateContent()"
                         class="form-content-textarea" ></textarea>
               <span class="form-content-error field-error"></span>
               <span th:errors="*{boardContent}" class="field-error"></span>
+            </div>
+          </div>
+
+          <!-- 문의게시판 답변 -->
+          <div th:if="${form.getFormType().isAnswerForm()}" class="form-main-answer-container">
+            <div class="form-content-name">
+              답변
+            </div>
+            <div class="form-answer-input-container">
+              <textarea th:field="*{qnaAnswer}"
+                        th:errorclass="input-error"
+                        onchange="validateAnswer()"
+                        class="form-answer-textarea" ></textarea>
+              <span class="form-answer-error field-error"></span>
+              <span th:errors="*{qnaAnswer}" class="field-error"></span>
             </div>
           </div>
 

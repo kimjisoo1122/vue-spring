@@ -20,7 +20,9 @@
 
       <!-- searchCategory -->
       <div class="search-keyword-container">
-        <select th:field="*{searchCategory}" class="search-keyword-select"  >
+        <select th:if="${!condition.getBoardType().isQnaType()}"
+                th:field="*{searchCategory}"
+                class="search-keyword-select"  >
           <option value="">전체 분류</option>
           <option th:each="category : ${categoryList}"
                   th:value="${category.getCategoryId}"

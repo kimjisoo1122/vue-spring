@@ -41,5 +41,8 @@ public class BoardDto {
     private int galleryOrder; // 갤러리 등록순서
 
     /* 문의 게시판 */
-    private String boardSecret; // 비밀글 여부
+    private String qnaAnswer; // 문의게시글 답변
+    private boolean qnaSecret; // 문의게시글 비밀여부
+    private boolean hasAnswer; // 문의게시글 답변여부
+
 }

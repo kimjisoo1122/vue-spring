@@ -102,6 +102,17 @@ main {
   padding-left: 5px;
 }
 
+/* 문의게시판 */
+.board-qna-container {
+  display: flex;
+  align-items: center;
+}
+.board-isSecret {
+  display: inline-block;
+  padding-top: 3px;
+  padding-left: 5px;
+}
+
 /* 페이징처리 */
 
 .paging-container {

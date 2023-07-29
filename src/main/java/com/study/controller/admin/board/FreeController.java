@@ -101,7 +101,7 @@ public class FreeController {
         boardRepository.increaseViewCnt(boardId);
 
         BoardForm freeForm = boardRepository.selectForm(boardId);
-        freeForm.setFormType(FormType.UPDATE);
+        freeForm.setBoardFormType(BoardType.FREE, FormType.UPDATE);
         freeForm.setCategoryList(categoryRepository.selectByParentId(Category.FREE));
         freeForm.setFileList(fileRepository.selectByBoardId(boardId));
         freeForm.setReplyList(replyRepository.selectByBoardId(boardId));

@@ -124,7 +124,7 @@ public class NoticeController {
         boardRepository.increaseViewCnt(boardId);
 
         BoardForm noticeForm = noticeRepository.selectNoticeForm(boardId);
-        noticeForm.setFormType(FormType.UPDATE);
+        noticeForm.setBoardFormType(BoardType.NOTICE, FormType.UPDATE);
         noticeForm.setCategoryList(categoryRepository.selectByParentId(Category.NOTICE));
 
         model.addAttribute("form", noticeForm);
@@ -158,7 +158,7 @@ public class NoticeController {
 
         noticeService.update(form);
 
-        return NOTICE_REDIRECT_PATH + boardId + condition.getEncodedQueryParam();
+        return NOTICE_REDIRECT_PATH + "/" +  boardId + condition.getEncodedQueryParam();
     }
 
     /**

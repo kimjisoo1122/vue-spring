@@ -26,7 +26,7 @@
       <div class="search-condition-container" th:replace="~{fragment/searchCondition}"></div>
 
       <!-- 글 등록 -->
-      <div class="boardlist-register-container">
+      <div th:if="${!condition.getBoardType().isQnaType()}" class="boardlist-register-container">
         <a th:href="|${#httpServletRequest.getRequestURI()}/register${condition.getQueryParam()}|">
           <button class="boardlist-register-btn">글 등록</button>
         </a>
@@ -38,7 +38,7 @@
         <!-- 게시글 헤더 -->
         <div class="boardlist-header">
           <div class="board-id">번호</div>
-          <div class="board-category">분류</div>
+          <div th:if="${!condition.getBoardType().isQnaType()}" class="board-category">분류</div>
           <div class="board-title">제목</div>
           <div class="board-view">조회</div>
           <div class="board-create-date">생성일시</div>
@@ -51,29 +51,41 @@
              class="board">
 
           <div th:text="${board.getBoardId()}" class="board-id"></div>
-          <div th:text="${board.getCategoryName()}" class="board-category"></div>
+          <div th:if="${!board.getBoardType().isQnaType()}"
+               th:text="${board.getCategoryName()}"
+               class="board-category"></div>
           <div class="board-title">
 
-            <!-- 갤러리게시판 썸네일, 갤러리 갯수 -->
-            <div th:if="${board.getBoardType().name() == 'GALLERY'}" class="board-gallery-container">
+            <!-- 갤러리게시판 제목 (썸네일, 갤러리 갯수) -->
+            <div th:if="${board.getBoardType().isGalleryType()}" class="board-gallery-container">
               <img th:src="|/file/image/${board.getGalleryThumbName()}|"
                    alt="갤러리썸네일"
                    class="board-galley-thumb">
               <span th:text="|+${board.getGalleryCnt()}|" class="board-galley-cnt"></span>
             </div>
 
+            <!-- 통합게시글 공통제목 -->
             <a th:text="${board.getBoardTitle()}"
                th:href="@{|${#httpServletRequest.getRequestURI()}/${board.getBoardId()}${condition.getQueryParam()}|}"
                class="board-title-link">
             </a>
 
             <!-- 자유게시판 제목(댓글수, 파일) -->
-            <div th:if="${board.getBoardType().name() == 'FREE'}" class="board-free-container">
+            <div th:if="${board.getBoardType().isFreeType()}" class="board-free-container">
               <span th:if="${board.getReplyCnt() != 0}"
                     th:text="|(${board.getReplyCnt()})|"
-                    class="board-free-title">
+                    class="board-free-replyCnt">
               </span>
               <i th:if="${board.hasFile}" class="far fa-file board-hasFile"></i>
+            </div>
+
+            <!-- 문의게시판 제목(답변여부, 비밀글여부) -->
+            <div th:if="${board.getBoardType().isQnaType()}" class="board-qna-container">
+              <span
+                    th:text="${board.hasAnswer ? '(답변완료)' : '(미답변)'}"
+                    class="board-qna-answer">
+              </span>
+              <i th:if="${board.isQnaSecret()}" class="fas fa-lock board-isSecret"></i>
             </div>
 
           </div>

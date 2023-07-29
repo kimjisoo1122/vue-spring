@@ -35,7 +35,7 @@
             c.category_name,
             <include refid="selectBoard"/>
         FROM board b
-            JOIN category c ON c.category_id = b.category_id
+            LEFT JOIN category c ON c.category_id = b.category_id
         <include refid="whereSearchCondition"/>
 
         <include refid="orderBoard"/>
@@ -90,9 +90,6 @@
                 <if test="boardContent != null and boardContent != ''">
                     board_content = #{boardContent},
                 </if>
-                <if test="boardSecret != null and boardSecret != ''">
-                    board_secret = #{boardSecret},
-                </if>
                 update_date = now()
             </set>
         WHERE board_id = #{boardId}
@@ -114,7 +111,6 @@
         b.board_type,
         b.board_title,
         b.board_content,
-        b.board_secret,
         b.view_cnt,
         b.user_id,
         b.user_name,

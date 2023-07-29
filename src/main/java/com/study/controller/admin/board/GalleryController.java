@@ -81,7 +81,7 @@ public class GalleryController {
         boardRepository.increaseViewCnt(boardId);
 
         BoardForm galleryForm = boardRepository.selectForm(boardId);
-        galleryForm.setFormType(FormType.UPDATE);
+        galleryForm.setBoardFormType(BoardType.GALLERY, FormType.UPDATE);
         galleryForm.setCategoryList(categoryRepository.selectByParentId(Category.GALLERY));
         galleryForm.setFileList(fileRepository.selectGalleryFile(boardId));
 

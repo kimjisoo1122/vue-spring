@@ -16,4 +16,33 @@ public enum BoardType {
 
     private final String value;
     private final String title;
+
+    /**
+     * @return 문의게시판 타입여부
+     */
+    public boolean isQnaType() {
+        return this == BoardType.QNA;
+    }
+
+    /**
+     * @return 공지사항 타입여부
+     */
+    public boolean isNoticeType() {
+        return this == BoardType.NOTICE;
+    }
+
+    /**
+     * @return 갤러리게시판 타입여부
+     */
+    public boolean isGalleryType() {
+        return this == BoardType.GALLERY;
+    }
+
+    /**
+     * @return 자유게시판 타입여부
+     */
+    public boolean isFreeType() {
+        return this == BoardType.FREE;
+    }
+
 }

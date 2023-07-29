@@ -7,19 +7,23 @@
 function validateForm(formTypeValue, boardType) {
   const titleResult = validateTitle();
   const contentResult = validateContent();
-  let fileError = false;
+  let fileResult = true;
+  let answerResult = true;
 
   /* 자유게시판인 경우 파일검증을 합니다. */
   if (boardType === 'FREE') {
     /* 에러태그에 메시지가 존재하면 에러존재 */
-    fileError = hasFileError();
+    fileResult = validateFileError();
   }
 
-  if (!(titleResult && contentResult && !fileError)) {
+  /* 문의게시판인 경우 답변검증을 합니다.*/
+  if (boardType === 'QNA') {
+    answerResult = validateAnswer()
+  }
+
+  if (!(titleResult && contentResult && fileResult && answerResult)) {
     return false;
   }
-
-
 
   return confirm(`${formTypeValue} 하시겠습니까?`);
 }
@@ -32,7 +36,7 @@ function validateTitle() {
   const titleElm = document.querySelector('.form-title-input');
   const titleErrElm = document.querySelector('.form-title-error');
 
-  if (!validElm(titleElm, 100)) {
+  if (!validateElm(titleElm, 100)) {
     titleErrElm.innerHTML = '필수 입력, 100자 미만이여야 합니다.';
 
     return false;
@@ -51,7 +55,7 @@ function validateContent() {
   const contentElm = document.querySelector('.form-content-textarea');
   const contentErrElm = document.querySelector('.form-content-error');
 
-  if (!validElm(contentElm, 4000)) {
+  if (!validateElm(contentElm, 4000)) {
     contentErrElm.innerHTML = '필수 입력, 4000자 미만이여야 합니다.';
 
     return false;
@@ -61,6 +65,26 @@ function validateContent() {
 
   return true;
 }
+
+/**
+ * 게시글 내용을 검증합니다.
+ * @returns {boolean}
+ */
+function validateAnswer() {
+  const answerElm = document.querySelector('.form-answer-textarea');
+  const answerErrElm = document.querySelector('.form-answer-error');
+
+  if (!validateElm(answerElm, 4000)) {
+    answerErrElm.innerHTML = '필수 입력, 4000자 미만이여야 합니다.';
+
+    return false;
+  }
+
+  answerErrElm.innerHTML = '';
+
+  return true;
+}
+
 
 /**
  * 게시글 파일을 검증합니다.
@@ -133,7 +157,7 @@ function showThumb(file, fileExt, thumbElm) {
  * @param maxSize
  * @returns {boolean}
  */
-function validElm(elm, maxSize) {
+function validateElm(elm, maxSize) {
   if (elm.value.length >= maxSize || elm.value.length === 0) {
     elm.classList.add('input-error');
 
@@ -149,9 +173,9 @@ function validElm(elm, maxSize) {
  * 파일에러가 존재하는지 확인합니다.
  * @returns {boolean}
  */
-function hasFileError() {
+function validateFileError() {
     const fileErrElm = document.querySelector('.form-file-error');
-    return fileErrElm.innerHTML.length > 0;
+    return !fileErrElm.innerHTML.length > 0;
 }
 
 /**
