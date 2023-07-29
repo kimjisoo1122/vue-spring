@@ -53,7 +53,7 @@ public class NoticeController {
             @ModelAttribute("condition") BoardSearchCondition condition,
             Model model) {
 
-        condition.setBoardTypeAndPagination(BoardType.NOTICE, page, limit);
+        condition.setSearchCondition(BoardType.NOTICE, page, limit);
 
         model.addAttribute("categoryList",
                 categoryRepository.selectByParentId(Category.NOTICE));

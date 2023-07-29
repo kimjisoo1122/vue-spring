@@ -8,8 +8,8 @@ public interface BoardUtil {
     /**
      * 게시글폼 VIEW 경로
      */
-    String FORM_PATH = "board/boardForm";
-    String LIST_PATH = "board/boardList";
+    String FORM_PATH = "admin/board/boardForm";
+    String LIST_PATH = "admin/board/boardList";
 
     /**
      * 업데이트에 사용되는 게시글 DTO를 생성합니다

@@ -30,9 +30,6 @@ header, main {
 .login-btn {
   width: 300px;
   padding: 10px;
-  color: white;
-  cursor: pointer;
-  background: #333;
   border: none;
   font-size: var(--small-font-size);
 }

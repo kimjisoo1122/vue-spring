@@ -57,7 +57,7 @@ public class FreeController {
             @ModelAttribute("condition") BoardSearchCondition condition,
             Model model) {
 
-        condition.setBoardTypeAndPagination(BoardType.FREE, page, limit);
+        condition.setSearchCondition(BoardType.FREE, page, limit);
 
 
         model.addAttribute("categoryList", categoryRepository.selectByParentId(Category.FREE));

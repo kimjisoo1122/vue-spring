@@ -19,11 +19,12 @@ public class BoardSearchCondition {
     private String search = ""; // 검색어
     private String searchCategory = ""; // 검색 카테고리
     private int page = 1; // 현재 페이지
+    private int newDay; // 최신글 new 조건
 
 
     // 조회 SQL에 사용합니다.
     private int offset; // SQL OFFSET
-    private int limit; // SQL LIMIT
+    private int limit = 10; // SQL LIMIT
     private String orderCondition = ""; // SQL ORDER 조건
     private String order = "DESC"; // SQL ORDER 방향
 
@@ -52,14 +53,16 @@ public class BoardSearchCondition {
     }
 
     /**
-     * 검색조건객체의 게시글타입과 페이징 설정을합니다.
+     * 검색조건을 설정합니다.
+     * 게시글타입, new조건, 페이징 설정을합니다.
      * @param page 현재페이지
      * @param limit 페이지크기
      * @param boardType 게시글타입
      */
-    public void setBoardTypeAndPagination(BoardType boardType, int page, int limit) {
-        this.setBoardType(boardType);
-        this.setPagination(page, limit);
+    public void setSearchCondition(BoardType boardType, int page, int limit) {
+        this.boardType = boardType;
+        this.newDay = boardType.getNewDay();
+        setPagination(page, limit);
     }
 
     /**

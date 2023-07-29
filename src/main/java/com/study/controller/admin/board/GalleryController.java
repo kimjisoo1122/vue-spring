@@ -55,7 +55,7 @@ public class GalleryController {
             @ModelAttribute("condition") BoardSearchCondition condition,
             Model model) {
 
-        condition.setBoardTypeAndPagination(BoardType.GALLERY, page, limit);
+        condition.setSearchCondition(BoardType.GALLERY, page, limit);
 
         model.addAttribute("categoryList", categoryRepository.selectByParentId(Category.GALLERY));
         model.addAttribute("boardList", galleryService.findGalleryList(condition));

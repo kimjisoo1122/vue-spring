@@ -1,0 +1,56 @@
+<!-- 등록폼 파일처리 -->
+<div th:fragment="register"
+     th:if="${form.formType.isRegisterForm()}"
+     th:each="idx : ${#numbers.sequence(1, 5)}"
+     class="form-file-input-box">
+
+  <img data-th-idx="${idx}" class="form-file-thumb">
+  <label th:for="${idx}" class="form-file-label"></label>
+  <input data-th-idx="${idx}"
+         th:id="${idx}"
+         type="file"
+         value="test.jpg"
+         name="saveFiles"
+         onchange="validateFile(this)"
+         class="form-file-input">
+
+</div>
+
+<!-- 수정폼 파일처리 -->
+<th:block th:fragment="update"
+          th:if="${form.formType.isUpdateForm()}"
+          th:with="fileInputSize=${5 - form.fileList.size()}">
+
+  <!-- 등록된 파일목록 -->
+  <div th:each="file : ${form.fileList}"
+       class="form-file-input-box">
+    <img th:if="${file.galleryThumbName != null}"
+         th:src="|/file/image/${file.galleryThumbName}|"
+         alt="첨부파일 이미지 썸네일"
+         class="form-file-input-thumb">
+    <a th:href="|/file/${file.fileId}|"
+       th:text="${file.fileOrgName}"
+       class="form-file-down-link">
+    </a>
+    <button data-th-fileId="${file.fileId}"
+            type="button"
+            class="form-file-down-btn"
+            onclick="hideFile(this)"> X </button>
+  </div>
+
+  <!-- 첨부파일 인풋 -->
+  <div class="form-file-input-box-container">
+    <div th:each="idx : ${#numbers.sequence(1, fileInputSize)}"
+         class="form-file-input-box">
+      <img data-th-idx="${idx}" class="form-file-thumb">
+      <label th:for="${idx}" class="form-file-label"></label>
+      <input data-th-idx="${idx}"
+             th:id="${idx}"
+             type="file"
+             name="saveFiles"
+             onchange="validateFile(this)"
+             class="form-file-input">
+    </div>
+  </div>
+
+</th:block>

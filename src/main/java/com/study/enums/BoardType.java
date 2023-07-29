@@ -9,13 +9,14 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum BoardType {
-    NOTICE("notice", "공지사항 관리"),
-    FREE("free", "자유 게시판 관리"),
-    QNA("qna", "문의 게시판 관리"),
-    GALLERY("gallery", "갤러리 게시판 관리");
+    NOTICE("notice", "공지사항 관리", 7),
+    FREE("free", "자유 게시판 관리", 7),
+    QNA("qna", "문의 게시판 관리", 10),
+    GALLERY("gallery", "갤러리 게시판 관리", 7);
 
     private final String value;
     private final String title;
+    private final int newDay;
 
     /**
      * @return 문의게시판 타입여부

@@ -63,8 +63,15 @@ main {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 480px;
+  max-width: 400px;
   margin-right: 5px;
+  font-size: var(--middle-font-size);
+}
+
+.board-title-new {
+  margin: 0 3px;
+  font-size: 11px;
+  color: orange;
 }
 
 .board-create-date {
@@ -96,7 +103,7 @@ main {
   align-items: center;
 }
 
-.board-hasFile {
+.board-free-file {
   display: inline-block;
   padding-top: 3px;
   padding-left: 5px;
@@ -107,6 +114,7 @@ main {
   display: flex;
   align-items: center;
 }
+
 .board-isSecret {
   display: inline-block;
   padding-top: 3px;

@@ -1,4 +1,7 @@
-<div th:if="${form.hasReply()}" th:fragment="reply" class="reply-container" >
+<div th:fragment="reply"
+     th:if="${form.hasReply()}"
+     class="reply-container" >
+
   <!-- 댓글목록 -->
   <div class="reply-list-container">
     <div class="reply" th:each="reply : ${form.getReplyList()}">
@@ -25,4 +28,5 @@
       onclick="registerReply(this.getAttribute('boardId'))">등록
     </button>
   </div>
+
 </div>

@@ -51,7 +51,7 @@ public class QnaController {
             @ModelAttribute("condition") BoardSearchCondition condition,
             Model model) {
 
-        condition.setBoardTypeAndPagination(BoardType.QNA, page, limit);
+        condition.setSearchCondition(BoardType.QNA, page, limit);
 
         model.addAttribute("boardList", qnaService.findQnaList(condition));
         model.addAttribute("pageHandler",

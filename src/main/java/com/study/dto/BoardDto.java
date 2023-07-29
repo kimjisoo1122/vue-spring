@@ -17,6 +17,7 @@ public class BoardDto {
     private String boardTitle; // 게시글 제목
     private String boardContent; // 게시글 내용
     private Integer viewCnt; // 조회수
+    private boolean newStatus; // new 여부
     private LocalDateTime createDate; // 생성일시
     private LocalDateTime updateDate; // 수정일시
 
@@ -30,7 +31,7 @@ public class BoardDto {
     /***************특정 게시판 전용 필드**************/
 
     /* 자유게시판 */
-    private boolean hasFile; // 첨부파일 여부
+    private boolean fileStatus; // 첨부파일 여부
     private int replyCnt; // 댓글 갯수
 
     /* 갤러리 게시판 */
@@ -43,6 +44,6 @@ public class BoardDto {
     /* 문의 게시판 */
     private String qnaAnswer; // 문의게시글 답변
     private boolean qnaSecret; // 문의게시글 비밀여부
-    private boolean hasAnswer; // 문의게시글 답변여부
+    private boolean answerStatus; // 문의게시글 답변여부
 
 }

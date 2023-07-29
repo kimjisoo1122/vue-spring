@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html
+  lang="ko"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{/admin/common/layout.html}">
+
+  <head>
+    <meta charset="UTF-8">
+    <title th:text="${form.boardType.getTitle()}"></title>
+    <link rel="stylesheet" th:href="@{/css/board/boardForm.css}">
+    <script th:src="@{/js/board/boardForm.js}"></script>
+  </head>
+
+  <body>
+
+    <header layout:fragment="header">
+      <!-- 타이틀 -->
+      <h1 th:text="${form.boardType.title}" class="form-header-title"></h1>
+    </header>
+
+    <main layout:fragment="main">
+
+      <div class="form-main-container">
+
+        <form th:method="post"
+              th:enctype="${form.encType}"
+              th:object="${form}"
+              data-th-formTypeValue="${form.formType.value}"
+              data-th-boardType="${form.boardType}"
+              onsubmit="return validateForm(this.getAttribute('formTypeValue'), this.getAttribute('boardType'))"
+              class="board-form">
+
+          <!-- 카테고리 -->
+          <div th:if="${!form.formType.isAnswerForm()}" class="form-main-type-container">
+            <div class="form-type-name">
+              분류
+              <span class="from-required-star">*</span>
+            </div>
+            <div class="form-category-input-container">
+              <select th:field="*{categoryId}" class="form-category-select">
+                <option th:each="category : ${form.categoryList}"
+                        th:value="${category.categoryId}"
+                        th:text="${category.categoryName}">
+                </option>
+              </select>
+              <span th:errors="*{categoryId}" class="field-error"></span>
+            </div>
+          </div>
+
+          <!-- 제목 -->
+          <div class="form-main-title-container">
+            <div class="form-title-name">
+              제목
+              <span class="from-required-star">*</span>
+            </div>
+            <div class="form-title-input-container">
+              <input th:field="*{boardTitle}"
+                     th:errorclass="input-error"
+                     th:readonly="${form.formType.isAnswerForm()}"
+                     onchange="validateTitle()"
+                     type="text" class="form-title-input">
+              <span class="form-title-error field-error"></span>
+              <span th:errors="*{boardTitle}" class="form-title-error field-error"></span>
+            </div>
+
+          </div>
+
+          <!-- 내용 -->
+          <div class="form-main-content-container">
+            <div class="form-content-name">
+              내용
+              <span class="from-required-star">*</span>
+            </div>
+            <div class="form-content-input-container">
+              <textarea th:field="*{boardContent}"
+                        th:errorclass="input-error"
+                        th:readonly="${form.formType.isAnswerForm()}"
+                        onchange="validateContent()"
+                        class="form-content-textarea" ></textarea>
+              <span class="form-content-error field-error"></span>
+              <span th:errors="*{boardContent}" class="field-error"></span>
+            </div>
+          </div>
+
+          <!-- 문의게시판 답변 -->
+          <div th:replace="~{/admin/fragment/board/form/qna :: answer}"></div>
+
+          <!-- 자유게시판, 갤러리게시판 첨부파일 -->
+          <div th:if="${form.hasFileInput()}" class="form-main-file-container">
+
+            <div class="form-file-name">첨부</div>
+            <div class="form-file-input-container">
+              <p class="form-file-notice">jpg, gif, png, zip파일만 파일사이즈 2MB까지 업로드 가능합니다.</p>
+
+              <!-- 파일등록 폼 -->
+              <div th:replace="~{/admin/fragment/board/form/file :: register}"></div>
+
+              <!-- 파일수정 폼 -->
+              <div th:replace="~{/admin/fragment/board/form/file :: update}"></div>
+
+              <!-- 파일에러 -->
+              <span class="form-file-error field-error"></span>
+
+            </div>
+
+          </div>
+
+          <!-- 공지사항 알림글 체크 -->
+          <div th:replace="~{/admin/fragment/board/form/notice :: alarm}"></div>
+
+          <!-- 자유게시판 수정폼 댓글  -->
+          <div th:replace="~{/admin/fragment/board/form/free :: reply}" ></div>
+
+          <!-- 폼 버튼 -->
+          <div class="form-main-btn-container">
+            <!-- 등록/수정 -->
+            <button th:text="${form.formType.value}"
+                    type="submit"
+                    class="form-btn-submit">
+            </button>
+
+            <!-- 목록 -->
+            <a th:href="|/admin/${form.boardType.value}${condition.getQueryParam()}|">
+              <button type="button" class="form-btn-list">목록</button>
+            </a>
+
+            <!-- 삭제 -->
+            <button th:if="${form.hasDeleteBtn()}"
+                    data-th-action="|${#httpServletRequest.getRequestURI()}/delete/${condition.getQueryParam()}|"
+                    onclick="deleteBoard(this.getAttribute('action'))"
+                    type="button"
+                    class="form-btn-delete">
+              삭제
+            </button>
+          </div>
+
+          <!-- 게시글 타입설정 -->
+          <div class="form-hidden-container">
+            <input type="hidden" name="boardType" th:value="${form.boardType}">
+            <input type="hidden" name="formType" th:value="${form.formType}">
+          </div>
+
+        </form>
+
+      </div>
+
+
+
+    </main>
+
+  </body>
+
+</html>

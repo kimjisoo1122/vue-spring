@@ -1,0 +1,9 @@
+<!-- 갤러리게시판 제목 (썸네일, 갤러리 갯수) -->
+<div th:fragment="title"
+     th:if="${board.boardType.isGalleryType()}"
+     class="board-gallery-container">
+  <img th:src="|/file/image/${board.galleryThumbName}|"
+       alt="갤러리썸네일"
+       class="board-galley-thumb">
+  <span th:text="|+${board.galleryCnt}|" class="board-galley-cnt"></span>
+</div>

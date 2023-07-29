@@ -40,7 +40,7 @@
 
 .index-article-container article {
   width: 45%;
-  height: 250px;
+  height: 270px;
   margin: 0 15px;
   border: var(--main-border-gray);
   display: flex;
@@ -83,6 +83,7 @@
 .index-notice-list-container, .index-free-list-container,
 .index-qna-list-container {
   display: flex;
+  align-items: center;
   padding: 2px 0;
   border-bottom: 1px solid var(--main-color-border)
 }
@@ -102,6 +103,46 @@
   box-sizing: border-box;
   padding-left: 5px;
   display: flex;
+}
+
+.index-article-list {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.index-article-list > div {
+  flex-grow: 1;
+}
+
+.index-new {
+  margin: 0 3px;
+  font-size: 11px;
+  color: orange;
+}
+
+.index-notice-list-title, .index-qna-list-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 250px;
+}
+
+.index-notice-alarm {
+  background: #F0F6FA;
+}
+
+.index-free-list-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 230px;
+}
+
+.index-free-list-file {
+  display: inline-block;
+  padding-top: 3px;
+  padding-left: 5px;
 }
 
 .index-gallery-list-container {
@@ -130,6 +171,10 @@
   justify-content: center;
 }
 
+.index-gallery-list-img {
+  margin: 0 15px;
+}
+
 .index-qna-header-no {
   flex-basis: 10%;
 }
@@ -142,4 +187,10 @@
 .index-qna-list-title-container {
   flex-basis: 90%;
   display: flex;
+}
+
+.index-qna-list-secret {
+  display: inline-block;
+  padding-top: 3px;
+  padding-left: 5px;
 }
