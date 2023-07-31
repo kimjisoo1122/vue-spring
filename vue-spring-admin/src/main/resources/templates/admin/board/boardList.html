@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+  <html
+    lang="ko"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/admin/common/layout.html}">
+
+  <head>
+    <meta charset="UTF-8">
+    <title th:text="${condition.boardType.title}"></title>
+    <link rel="stylesheet" th:href="@{/admin/css/board/boardList.css}">
+    <link rel="stylesheet" th:href="@{/admin/css/fragment/searchCondition.css}">
+    <script th:src="@{/admin/js/fragment/searchCondition.js}"></script>
+  </head>
+
+  <body>
+
+    <header layout:fragment="header">
+      <!-- 타이틀 -->
+      <div class="boardlist-header-container">
+        <a th:href="@{/admin}">
+          <button class="boardlist-header-button">목록</button>
+        </a>
+        <h1 th:text="${condition.boardType.title}" class="boardlist-header-title"></h1>
+      </div>
+      <!-- GNB -->
+      <div th:replace="~{/admin/fragment/gnb}"></div>
+    </header>
+
+    <main layout:fragment="main" >
+      <!-- 검색조건 -->
+      <div th:replace="~{/admin/fragment/board/list/searchCondition}"></div>
+
+      <!-- 글 등록 -->
+      <div th:if="${!condition.boardType.isQnaType()}" class="boardlist-register-container">
+        <a th:href="|${#httpServletRequest.getRequestURI()}/register${condition.getQueryParam()}|">
+          <button class="boardlist-register-btn">글 등록</button>
+        </a>
+      </div>
+
+      <!-- 게시글 목록 -->
+      <div class="boardlist-container">
+
+        <!-- 게시글 헤더 -->
+        <div class="boardlist-header">
+          <div class="board-id">번호</div>
+          <div th:if="${!condition.boardType.isQnaType()}" class="board-category">분류</div>
+          <div class="board-title">제목</div>
+          <div class="board-view">조회</div>
+          <div class="board-create-date">생성일시</div>
+          <div class="board-user">등록자</div>
+        </div>
+
+        <!-- 게시글 -->
+        <div th:each="board : ${boardList}"
+             th:classappend="${board.categoryName == '알림' ? 'board-notice-alarm' : ''}"
+             class="board">
+
+          <div th:text="${board.boardId}" class="board-id"></div>
+          <div th:if="${!board.boardType.isQnaType()}"
+               th:text="${board.categoryName}"
+               class="board-category"></div>
+
+          <div class="board-title">
+
+            <!-- 갤러리게시판 제목 (썸네일, 갤러리 갯수) -->
+            <div th:replace="~{/admin/fragment/board/list/gallery :: title}"></div>
+
+            <!-- 통합게시글 공통제목 -->
+            <a th:text="${board.boardTitle}"
+               th:href="@{|${#httpServletRequest.getRequestURI()}/${board.boardId}${condition.getQueryParam()}|}"
+               class="board-title-link">
+            </a>
+
+            <!-- 문의게시글 답글상태 -->
+            <span th:replace="~{/admin/fragment/board/list/qna :: answerStatus}"></span>
+
+            <!-- 통합게시글 NEW -->
+            <p th:if="${board.newStatus}" class="board-title-new">new</p>
+
+            <!-- 자유게시판 제목(댓글수, 파일) -->
+            <div th:replace="~{/admin/fragment/board/list/free :: title}"></div>
+
+            <!-- 문의게시판 제목(답변여부, 비밀글여부) -->
+            <div th:replace="~{/admin/fragment/board/list/qna :: qnaSecret}"></div>
+
+          </div>
+
+          <div th:text="${board.viewCnt}" class="board-view"></div>
+          <div th:text="${#temporals.format(board.getCreateDate(), 'yyyy-MM-dd HH:mm')}" class="board-create-date"/>
+          <div th:text="${board.userName}" class="board-user"></div>
+        </div>
+      </div>
+
+      <!-- 페이징처리 -->
+      <div th:replace="~{/admin/fragment/board/list/pagination}"></div>
+
+    </main>
+
+  </body>
+
+</html>

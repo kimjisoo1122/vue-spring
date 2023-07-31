@@ -1,0 +1,97 @@
+.search-keyword-select, .search-limit-select,
+.search-ordercondition-select, .search-order-select {
+  padding: 3px;
+  box-sizing: border-box;
+  height: 25px;
+}
+
+.search-date-from, .search-date-to,
+.search-keyword-input, .search-keyword-input-qna {
+  border: var(--main-border);
+  border-radius: 3px;
+  outline-color: var(--main-color-blue);
+  height: 25px;
+  box-sizing: border-box;
+  padding: 3px;
+  font-size: var(--small-font-size);
+}
+
+.search-condition-container {
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-date-container {
+  width: 400px;
+}
+
+.search-keyword-container {
+  width: 700px;
+  display: flex;
+  justify-content: space-between;
+}
+
+
+.search-first-container {
+  border: var(--main-border);
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 40px;
+  gap: 10px;
+}
+
+.search-date-register {
+  font-size: var(--middle-font-size);
+  margin-right: 10px;
+}
+
+.search-keyword-select {
+  width: 150px;
+}
+
+.search-keyword-input {
+  width: 400px;
+  flex-shrink: 1;
+}
+
+.search-keyword-input {
+  width: 400px;
+}
+
+.search-keyword-input-qna {
+  width: 500px;
+}
+
+.search-keyword-btn {
+  width: 80px;
+  background-color: var(--main-color-blue);
+  color: white;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.search-second-container {
+  margin: 20px 0;
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--small-font-size);
+}
+
+.search-limit-text {
+  margin-left: 5px;
+}
+
+.search-order-title {
+  margin-right: 10px;
+}
+
+.search-ordercondition-select, .search-order-select {
+  width: 100px;
+}
+
+.search-date-error {
+  border: 1px solid red;
+}

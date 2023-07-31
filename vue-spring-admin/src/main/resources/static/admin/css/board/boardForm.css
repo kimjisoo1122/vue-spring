@@ -1,0 +1,218 @@
+header {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 20px 0 ;
+}
+
+main {
+  border-top: none;
+}
+
+.form-header-title {
+  margin: 0;
+  font-size: var(--title-font-size);
+}
+
+.form-main-container {
+  padding: 20px;
+}
+
+.from-required-star {
+  color: red;
+}
+
+.form-main-type-container, .form-main-title-container,
+.form-main-content-container, .form-main-file-container,
+.form-main-alarm-container, .form-main-btn-container, .form-main-answer-container {
+  display: flex;
+  border-top: var(--main-border);
+}
+
+
+.form-type-name, .form-title-name,
+.form-content-name, .form-file-name,
+.form-alarm-name {
+  flex-basis: 15%;
+  background-color: var(--sub-color-blue);
+  padding: 15px 10px;
+  font-size: var(--middle-font-size);
+  display: flex;
+  align-items: center;
+}
+
+.form-category-input-container, .form-title-input-container,
+.form-content-input-container, .form-file-input-container,
+.form-alarm-input-container, .form-answer-input-container {
+  flex-basis: 85%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 5px 0 5px 10px;
+  flex-wrap: wrap;
+}
+
+.form-title-input, .form-content-textarea,
+.form-file-input, .form-answer-textarea {
+  outline-color: var(--main-color-blue);
+  border: var(--main-border);
+}
+
+.form-content-input-container, .form-answer-input-container {
+  height: 220px;
+}
+
+.form-category-select {
+  width: 150px;
+  height: 30px;
+  padding: 0 5px;
+}
+
+.form-title-input {
+  width: 95%;
+  height: 30px;
+  padding: 0 5px;
+  box-sizing: border-box;
+}
+
+.form-content-textarea, .form-answer-textarea {
+  resize: none;
+  width: 95%;
+  padding: 5px;
+  min-height: 200px;
+  box-sizing: border-box;
+}
+
+.form-file-input-container {
+  flex-direction: row;
+}
+
+.form-file-input-box {
+  flex-basis: 100%;
+  margin: 5px 0;
+  display: flex;
+  align-items: center;
+}
+
+.form-file-notice {
+  font-size: var(--small-font-size);
+  font-weight: bold;
+  flex-basis: 100%;
+}
+
+.form-file-thumb {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  display: none;
+}
+
+.form-file-input-thumb {
+  margin-right: 5px;
+}
+
+.form-file-down-link {
+  font-size: var(--middle-font-size);
+  color: var(--main-color-blue);
+  margin-right: 10px;
+}
+
+.form-alarm-check {
+  height: 18px;
+  width: 18px;
+}
+
+.form-main-btn-container {
+  padding-top: 20px;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+.form-btn-list {
+  background-color: var(--sub-color-violet);
+  color: white;
+}
+
+.form-btn-delete {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+}
+
+.input-error {
+  border: 1px solid red;
+  outline: red;
+}
+
+.field-error {
+  font-size: var(--small-font-size);
+  color: red;
+  flex-basis: 100%;
+}
+
+
+
+
+
+/* 댓글 */
+
+.reply-container {
+  background-color: antiquewhite;
+  padding: 10px;
+  border-top: 1px solid var(--border-color-gray);
+}
+
+.reply {
+  border-bottom: 1px solid black;
+  padding: 10px 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.reply-writer, .reply-date {
+  font-size: var(--small-font-size);
+  margin-right: 5px;
+}
+
+.reply-delete {
+  margin-left: auto;
+  padding-right: 10px;
+  font-size: var(--small-font-size);
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+}
+
+.reply-content {
+  margin: 3px 0;
+  flex-basis: 100%;
+  font-size: var(--small-font-size);
+}
+
+.reply-register-container {
+  height: 100px;
+}
+
+.reply-register-input {
+  box-sizing: border-box;
+  font-size: 12px;
+  height: 50px;
+  margin-top: 10px;
+  padding: 0 10px;
+  width: 93%;
+}
+
+.reply-register-input::placeholder {
+  color: #ccc;
+}
+
+.reply-register-button {
+  background-color: white;
+  border: 1px solid black;
+  color: black;
+  cursor: pointer;
+  height: 50px;
+  width: 50px;
+  margin-left: 10px;
+}

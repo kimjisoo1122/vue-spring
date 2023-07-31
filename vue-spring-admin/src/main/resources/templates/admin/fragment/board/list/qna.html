@@ -1,0 +1,12 @@
+<!-- 문의게시글 답글상태 -->
+<span th:fragment="answerStatus"
+      th:if="${board.boardType.isQnaType()}"
+      th:text="${board.answerStatus ? '(답변완료)' : '(미답변)'}"
+      class="board-qna-answer">
+</span>
+
+<!-- 문의게시판 제목(답변여부, 비밀글여부) -->
+<div th:fragment="qnaSecret"
+     th:if="${board.boardType.isQnaType()}" class="board-qna-container">
+  <i th:if="${board.qnaSecret}" class="fas fa-lock board-isSecret"></i>
+</div>

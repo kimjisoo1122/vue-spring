@@ -1,0 +1,4 @@
+<div class="header-gnb-container">
+  <div th:text="|${#authentication.name}님 안녕하세요|" class="header-gnb-name" ></div>
+  <a th:href="@{/admin/logout}" th:text="로그아웃" class="header--gnb-logout" ></a>
+</div>

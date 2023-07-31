@@ -1,0 +1,43 @@
+header, main {
+  border: none;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 800px;
+  margin: 100px auto;
+}
+
+.login-title {
+  font-size: var(--title-font-size);
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.login-id, .login-pw {
+  height: 20px;
+  padding: 5px;
+  font-size: var(--small-font-size);
+  outline-color: var(--main-color-blue);
+  border: var(--main-border);
+  border-radius: 3px;
+}
+
+.login-btn {
+  width: 300px;
+  padding: 10px;
+  border: none;
+  font-size: var(--small-font-size);
+}
+
+.login-error {
+  font-size: var(--small-font-size);
+  color: red;
+}

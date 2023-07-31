@@ -1,0 +1,168 @@
+header {
+  padding: 20px 20px 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+main {
+  border-top: none;
+  padding: 20px;
+}
+
+.boardlist-header-button{
+  margin-bottom: 10px;
+  background-color: var(--sub-color-violet);
+  color: white;
+}
+
+.boardlist-header-title {
+  font-size: var(--title-font-size);
+  margin: 0;
+}
+
+.boardlist-register-container {
+  height: 50px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.boardlist-container {
+  font-size: var(--middle-font-size);
+}
+
+.boardlist-header {
+  margin-top: 10px;
+  font-weight: bold;
+  border-top: 1px solid var(--border-color-gray);
+  border-bottom: 1px solid #333333;
+}
+
+.board-id, .board-category, .board-view, .board-create-date, .board-user {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.board {
+  border-bottom: 1px solid var(--border-color-gray);
+}
+
+.boardlist-header, .board {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  text-align: center;
+}
+
+.board-id, .board-category, .board-view {
+  flex-basis: 5%;
+}
+
+.board-title {
+  flex-basis: 50%;
+  display: flex;
+  box-sizing: border-box;
+  align-items: center;
+}
+
+.board-title-link {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 400px;
+  margin-right: 5px;
+  font-size: var(--middle-font-size);
+}
+
+.board-title-new {
+  margin: 0 3px;
+  font-size: 11px;
+  color: orange;
+}
+
+.board-create-date {
+  flex-basis: 15%;
+}
+
+.board-user {
+  flex-basis: 10%;
+}
+
+.board-notice-alarm {
+  background: #F0F6FA;
+}
+
+/* 갤러리게시판 */
+.board-gallery-container {
+  display: flex;
+  align-items: center;
+}
+
+.board-galley-cnt {
+  margin: 0 5px;
+  display: block;
+}
+
+/* 자유게시판 */
+.board-free-container {
+  display: flex;
+  align-items: center;
+}
+
+.board-free-file {
+  display: inline-block;
+  padding-top: 3px;
+  padding-left: 5px;
+}
+
+/* 문의게시판 */
+.board-qna-container {
+  display: flex;
+  align-items: center;
+}
+
+.board-isSecret {
+  display: inline-block;
+  padding-top: 3px;
+  padding-left: 5px;
+}
+
+/* 페이징처리 */
+
+.paging-container {
+  margin-top: 20px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+
+.paging-container a {
+  color: black;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.paging-prev, .paging-next, .paging-prev-total, .paging-next-total {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 2px;
+}
+
+
+.paging-prev-total-container,.paging-prev-container,
+.paging-next-container, .paging-next-total-container {
+  width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.paging-index-container {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}

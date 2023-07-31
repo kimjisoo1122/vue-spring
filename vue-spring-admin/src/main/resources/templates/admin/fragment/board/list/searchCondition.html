@@ -1,0 +1,85 @@
+<div th:fragment="searchCondition" class="search-condition-container" >
+
+  <form th:object="${condition}"
+        class="search-form"
+        onsubmit="return validateDate()">
+
+    <div class="search-first-container">
+
+      <!-- fromDate, toDate -->
+      <div class="search-date-container">
+        <span class="search-date-register">등록일시</span>
+        <input th:field="*{fromDate}"
+               class="search-date-from"
+               type="date">
+        <span class="search-date-between"> ~ </span>
+        <input th:field="*{toDate}"
+               class="search-date-to"
+               type="date">
+      </div>
+
+      <!-- searchCategory -->
+      <div class="search-keyword-container">
+        <select th:if="${!condition.getBoardType().isQnaType()}"
+                th:field="*{searchCategory}"
+                class="search-keyword-select"  >
+          <option value="">전체 분류</option>
+          <option th:each="category : ${categoryList}"
+                  th:value="${category.getCategoryId}"
+                  th:selected="${category.getCategoryId()} == ${condition.getSearchCategory()}"
+                  th:text="${category.getCategoryName()}">
+          </option>
+          </optgroup>
+        </select>
+
+        <!-- search -->
+        <input th:field="*{search}"
+               th:class="${condition.getBoardType().isQnaType() ? 'search-keyword-input-qna' : 'search-keyword-input' }"
+               class="search-keyword-input"
+               type="text"
+               placeholder="제목 OR 내용">
+        <button class="search-keyword-btn" type="submit">검색</button>
+      </div>
+
+    </div>
+
+    <div class="search-second-container">
+
+      <!-- limit -->
+      <div class="search-limit-container">
+        <select th:field="*{limit}"
+                class="search-limit-select"
+                onchange="submitSearch()">
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="30">30</option>
+          <option value="40">40</option>
+          <option value="50">50</option>
+        </select>
+        <span class="search-limit-text">개씩 보기</span>
+      </div>
+
+      <!-- orderCondition, order -->
+      <div class="search-order-container">
+        <span class="search-order-title">정렬</span>
+        <select th:field="*{orderCondition}"
+                class="search-ordercondition-select"
+                onchange="submitSearch()">
+          <option value="">분류</option>
+          <option value="title">제목</option>
+          <option value="viewCnt">조회수</option>
+        </select>
+
+        <select th:field="*{order}"
+                class="search-order-select"
+                onchange="submitSearch()">
+          <option value="desc">내림차순</option>
+          <option value="asc">오름차순</option>
+        </select>
+      </div>
+
+    </div>
+
+  </form>
+
+</div>

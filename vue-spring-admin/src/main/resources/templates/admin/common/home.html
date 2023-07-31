@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html
+  lang="ko"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{/admin/common/layout.html}">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>관리페이지</title>
+    <link rel="stylesheet" th:href="@{/admin/css/common/home.css}">
+  </head>
+
+  <body>
+
+    <header layout:fragment="header" class="index-header-container"  >
+      <!-- GNB -->
+      <div th:replace="~{/admin/fragment/gnb}"></div>
+    </header>
+
+    <main layout:fragment="main" class="index-main-container" >
+
+      <section class="index-section-container">
+
+        <ul class="index-section-list-container">
+          <li class="index-section-list">
+            <a th:href="@{/admin/notice}">공지사항 관리</a>
+          </li>
+          <li class="index-section-list">
+            <a th:href="@{/admin/free}">자유 게시판 관리</a>
+          </li>
+          <li class="index-section-list">
+            <a th:href="@{/admin/gallery}">갤러리 게시판 관리</a>
+          </li>
+          <li class="index-section-list">
+            <a th:href="@{/admin/qna}">문의 게시판 관리</a>
+          </li>
+        </ul>
+
+      </section>
+
+      <div class="index-article-container">
+
+        <!-- 공지사항 -->
+        <article class="index-notice-container">
+          <div class="index-notice-title">공지사항</div>
+          <div class="index-notice-header">
+            <div class="index-notice-header-no">번호</div>
+            <div class="index-notice-header-type">분류</div>
+            <div class="index-notice-header-title">제목</div>
+          </div>
+          <div class="index-article-list">
+            <div th:each="notice, stat : ${noticeList}" class="index-notice-list-container"
+                 th:classappend="${notice.categoryName == '알림' ? 'index-notice-alarm' : ''}"
+                 th:style="${stat.index == noticeList.size() - 1 ? 'border-bottom: none' : ''}">
+              <div th:text="${notice.boardId}" class="index-notice-list-no"></div>
+              <div th:text="${notice.categoryName}" class="index-notice-list-type"></div>
+              <div class="index-notice-list-title-container">
+                <a th:text="${notice.boardTitle}"
+                   th:href="|/admin/notice/${notice.boardId}|"
+                   class="index-notice-list-title" href="#"></a>
+                <span th:if="${notice.newStatus}" class="index-new">new</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 자유 게시판 -->
+        <article class="index-free-container">
+          <div class="index-free-title">자유 게시판</div>
+          <div class="index-free-header">
+            <div class="index-free-header-no">번호</div>
+            <div class="index-free-header-type">분류</div>
+            <div class="index-free-header-title">제목</div>
+          </div>
+          <div class="index-article-list">
+            <div th:each="free, stat : ${freeList}"
+                 th:style="${stat.index == freeList.size() - 1 ? 'border-bottom: none' : ''}"
+                 class="index-free-list-container">
+              <div th:text="${free.boardId}" class="index-free-list-no">번호</div>
+              <div th:text="${free.categoryName}" class="index-free-list-type">분류</div>
+              <div class="index-free-list-title-container">
+                <a th:text="${free.boardTitle}"
+                   th:href="|/admin/free/${free.boardId}|"
+                   class="index-free-list-title">제목</a>
+                <span th:if="${free.replyCnt != 0}"
+                      th:text="|(${free.replyCnt})|"
+                      class="index-free-list-reply">
+                </span>
+                <span th:if="${free.newStatus}" class="index-new">new</span>
+                <i th:if="${free.fileStatus}" class="far fa-file index-free-list-file"></i>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 갤러리 -->
+        <article class="index-gallery-container">
+          <div class="index-gallery-title">갤러리</div>
+          <div class="index-gallery-header">
+            <div class="index-gallery-header-no">번호</div>
+            <div class="index-gallery-header-type">분류</div>
+            <div class="index-gallery-header-title"></div>
+          </div>
+          <div class="index-article-list">
+            <div th:each="gallery, stat : ${galleryList}"
+                 th:style="${stat.index == galleryList.size() - 1 ? 'border-bottom: none' : ''}"
+                 class="index-gallery-list-container">
+              <div th:text="${gallery.boardId}" class="index-gallery-list-no">번호</div>
+              <div th:text="${gallery.categoryName}" class="index-gallery-list-type">분류</div>
+              <div class="index-gallery-list-img-container">
+                <div class="index-gallery-list-img">
+                  <a th:href="|/admin/gallery/${gallery.boardId}|" class="index-gallery-list-link" >
+                    <img class="index-gallery-list-thumbnail" th:src="|/file/image/${gallery.galleryThumbName}|" alt="갤러리 썸네일">
+                  </a>
+                </div>
+                <span th:text="|+${gallery.galleryCnt}|" class="index-gallery-list-size">+4</span>
+                <span th:if="${gallery.newStatus}" class="index-new">new</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 문의 게시판 -->
+        <article class="index-qna-container">
+          <div class="index-qna-title">문의 게시판</div>
+          <div class="index-qna-header">
+            <div class="index-qna-header-no">번호</div>
+            <div class="index-qna-header-title">제목</div>
+          </div>
+          <div class="index-article-list">
+            <div th:each="qna, stat : ${qnaList}"
+                 th:style="${stat.index == qnaList.size() - 1 ? 'border-bottom: none' : ''}"
+                 class="index-qna-list-container">
+              <div th:text="${qna.boardId}" class="index-qna-list-no">번호</div>
+              <div class="index-qna-list-title-container">
+                <a th:text="${qna.boardTitle}"
+                   th:href="|/admin/qna/${qna.boardId}|"
+                   class="index-qna-list-title"></a>
+                <span
+                  th:text="${qna.answerStatus ? '(답변완료)' : '(미답변)'}"
+                  class="index-qna-list-answer">
+              </span>
+                <span th:if="${qna.newStatus}" class="index-new">new</span>
+                <i th:if="${qna.qnaSecret}" class="fas fa-lock index-qna-list-secret"></i>
+              </div>
+            </div>
+          </div>
+
+        </article>
+
+      </div>
+
+    </main>
+
+  </body>
+
+</html>
