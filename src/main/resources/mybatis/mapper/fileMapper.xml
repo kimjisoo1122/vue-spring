@@ -8,12 +8,12 @@
             useGeneratedKeys="true"
             keyProperty="fileId">
         INSERT INTO file
-            (board_id,
-             file_save_name,
-             file_org_name,
-             file_path,
-             file_size,
-             file_ext)
+            (board_id, /* 게시글 번호 */
+             file_save_name, /* 파일 저장 이름 */
+             file_org_name, /* 파일 원본 이름 */
+             file_path, /* 파일 경로 */
+             file_size, /* 파일 크기 */
+             file_ext) /* 파일 확장자 */
         VALUES
             (#{boardId},
              #{fileSaveName},
@@ -43,12 +43,12 @@
         WHERE file_id = #{fileId}
     </select>
 
-    <!-- 갤러리첨부파일을 조회합니다. -->
+    <!-- 갤러리 첨부파일을 조회합니다. -->
     <select id="selectGalleryFile"
             parameterType="long"
             resultType="fileDto">
         SELECT
-            gd.gallery_thumb_name,
+            gd.gallery_thumb_name, /* 갤러리 썸네일 이름 */
             <include refid="selectFile"/>
         FROM file f
         JOIN gallery_detail gd on f.file_id = gd.file_id

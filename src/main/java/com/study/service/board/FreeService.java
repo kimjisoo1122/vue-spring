@@ -4,6 +4,7 @@ import com.study.dto.BoardDto;
 import com.study.dto.BoardForm;
 import com.study.dto.BoardSearchCondition;
 import com.study.dto.FileDto;
+import com.study.enums.BoardType;
 import com.study.repository.FileRepository;
 import com.study.repository.board.BoardRepository;
 import com.study.repository.board.FreeRepository;
@@ -30,10 +31,11 @@ public class FreeService {
     private final FileService fileService;
 
     /**
-     * 자유게시판을 등록합니다.
-     * @param form 등록 폼
-     * @return boardId 등록된 게시판 번호
-     * @throws IOException 파일저장예외
+     * 자유게시글을 등록합니다.
+     *
+     * @param form 자유 게시글 등록 폼
+     * @return 등록된 게시글의 고유 번호
+     * @throws IOException 첨부파일 저장 중 발생한 예외
      */
     @Transactional
     public Long register(BoardForm form) throws IOException {
@@ -44,6 +46,7 @@ public class FreeService {
         // 파일을 생성하고 첨부파일을 등록합니다.
         if (form.getSaveFiles() != null) {
             List<FileDto> files = fileService.createFileList(form.getSaveFiles());
+
             for (FileDto file : files) {
                 file.setBoardId(registeredBoardId);
                 fileService.save(file);
@@ -54,20 +57,46 @@ public class FreeService {
     }
 
     /**
-     * 자유게시판 목록을 조회합니다.
-     * @param condition 검색조건
-     * @return List<BoardDto>
+     * 자유게시글 목록을 조회합니다.
+     *
+     * @param condition 검색 조건
+     * @return 자유게시글 목록
      */
     public List<BoardDto> findFreeList(BoardSearchCondition condition) {
         return freeRepository.selectFreeListByCondition(condition);
     }
 
     /**
-     * 자유게시판을 업데이트합니다.
+     * 검색조건에 맞는 자유게시글 총 개수를 조회합니다.
+     *
+     * @param condition 검색조건
+     * @return 자유 게시글 총 개수
+     */
+    public int getTotalCnt(BoardSearchCondition condition) {
+        return boardRepository.countByCondition(condition);
+    }
+
+    /**
+     * 자유게시글 폼을 조회합니다.
+     *
+     * @param boardId 자유 게시글 번호
+     * @return 자유 게시글 폼
+     */
+    public BoardForm findFreeForm(Long boardId) {
+        BoardDto board = new BoardDto();
+        board.setBoardId(boardId);
+        board.setBoardType(BoardType.FREE);
+
+        return boardRepository.selectForm(board);
+    }
+
+    /**
+     * 자유게시글을 업데이트합니다.
      * 첨부파일 -> 저장
      * 삭제파일 -> 삭제
+     *
      * @param form 수정 폼
-     * @throws IOException 파일저장 예외
+     * @throws IOException 첨부파일 저장 중 발생한 예외
      */
     @Transactional
     public void update(BoardForm form) throws IOException {
@@ -92,6 +121,7 @@ public class FreeService {
 
     /**
      * 자유게시글, 첨부파일을 삭제합니다.
+     *
      * @param boardId 게시글번호
      */
     public void delete(Long boardId) {

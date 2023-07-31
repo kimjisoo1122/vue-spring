@@ -1,16 +1,15 @@
-package com.study.controller.admin.board;
+package com.study.controller.board;
 
+import com.study.constant.Board;
+import com.study.constant.Category;
+import com.study.exception.BoardNotFoundException;
 import com.study.dto.BoardForm;
 import com.study.dto.BoardSearchCondition;
 import com.study.enums.BoardType;
-import com.study.enums.Category;
 import com.study.enums.FormType;
 import com.study.page.PageHandler;
-import com.study.repository.board.BoardRepository;
-import com.study.repository.CategoryRepository;
-import com.study.repository.board.NoticeRepository;
+import com.study.service.CategoryService;
 import com.study.service.board.NoticeService;
-import com.study.util.BoardUtil;
 import com.study.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -32,43 +31,35 @@ public class NoticeController {
      */
     private final String NOTICE_REDIRECT_PATH = "redirect:/admin/notice";;
 
-    private final CategoryRepository categoryRepository;
-    private final BoardRepository boardRepository;
-    private final NoticeRepository noticeRepository;
-
     private final NoticeService noticeService;
+    private final CategoryService categoryService;
 
     /**
      * 공지사항 목록을 조회합니다.
-     * @param page 현재페이지 default: 1
-     * @param limit 페이지사이즈 default: 10
      * @param condition 검색조건
-     * @param model boardList: 공지사항목록, boardType: 게시글타입, categoryList: 카테고리목록
-     * @return board/boardList 게시글목록
+     * @param model boardList: 공지사항 목록, categoryList: 카테고리 목록, pageHandler: 페이징 정보
+     * @return 공지사항 목록 뷰
      */
     @GetMapping()
     public String noticeList(
-            @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "limit", defaultValue = "10") int limit,
             @ModelAttribute("condition") BoardSearchCondition condition,
             Model model) {
 
-        condition.setSearchCondition(BoardType.NOTICE, page, limit);
+        condition.setSearchParams(BoardType.NOTICE);
 
-        model.addAttribute("categoryList",
-                categoryRepository.selectByParentId(Category.NOTICE));
         model.addAttribute("boardList", noticeService.findNoticeList(condition));
+        model.addAttribute("categoryList", categoryService.findByParentId(Category.NOTICE));
         model.addAttribute("pageHandler",
-                new PageHandler(page, boardRepository.countByCondition(condition), limit));
+                new PageHandler(condition, noticeService.getTotalCnt(condition)));
 
-        return BoardUtil.LIST_PATH;
+        return Board.LIST_PATH;
     }
 
     /**
-     * 공지사항 등록폼을 조회합니다.
+     * 공지사항 등록 폼을 조회합니다.
      * @param form 공지사항 등록폼
      * @param condition 검색조건
-     * @return board/boardForm 게시글폼
+     * @return 공지사항 등록 폼 뷰
      */
     @GetMapping("/register")
     public String registerForm(
@@ -76,17 +67,18 @@ public class NoticeController {
             @ModelAttribute("condition") BoardSearchCondition condition) {
 
         form.setBoardFormType(BoardType.NOTICE, FormType.REGISTER);
-        form.setCategoryList(categoryRepository.selectByParentId(Category.NOTICE));
+        form.setCategoryList(categoryService.findByParentId(Category.NOTICE));
 
-        return BoardUtil.FORM_PATH;
+        return Board.FORM_PATH;
     }
 
     /**
-     * 공지사항을 등록합니다
-     * @param form 공지사항 등록폼
-     * @param bindingResult 폼 유효성검증객체
+     * 공지사항을 등록합니다.
+     *
+     * @param form 공지사항 등록 폼
+     * @param bindingResult 유효성검증객체
      * @param condition 검색조건
-     * @return redirect:/admin/notice 공지사항목록 리다이렉트
+     * @return 유효성검증에 실패 한 경우 폼으로, 등록에 성공 한 경우 목록으로 리다이렉트
      */
     @PostMapping("register")
     public String register(
@@ -95,9 +87,9 @@ public class NoticeController {
             @ModelAttribute("condition") BoardSearchCondition condition) {
 
         if (bindingResult.hasErrors()) {
-            form.setCategoryList(categoryRepository.selectByParentId(Category.NOTICE));
+            form.setCategoryList(categoryService.findByParentId(Category.NOTICE));
 
-            return BoardUtil.FORM_PATH;
+            return Board.FORM_PATH;
         }
 
         // 현재 인증된 사용자정보로 유저정보를 설정합니다.
@@ -110,10 +102,11 @@ public class NoticeController {
 
     /**
      * 공지사항 상세페이지를 조회합니다.
+     *
      * @param boardId 공지사항 번호
      * @param condition 검색조건
-     * @param model form 검색한 공지사항, categoryList: 카테고리목록
-     * @return board/boardForm 게시글폼
+     * @param model form 공지사항 수정 폼, categoryList: 카테고리 목록
+     * @return 공지사항 수정 폼 뷰
      */
     @GetMapping("/{boardId}")
     public String noticeDetail(
@@ -121,24 +114,27 @@ public class NoticeController {
             @ModelAttribute("condition") BoardSearchCondition condition,
             Model model) {
 
-        boardRepository.increaseViewCnt(boardId);
+        BoardForm noticeForm = noticeService.findNoticeForm(boardId);
+        if (noticeForm == null) {
+            throw new BoardNotFoundException();
+        }
 
-        BoardForm noticeForm = noticeRepository.selectNoticeForm(boardId);
         noticeForm.setBoardFormType(BoardType.NOTICE, FormType.UPDATE);
-        noticeForm.setCategoryList(categoryRepository.selectByParentId(Category.NOTICE));
+        noticeForm.setCategoryList(categoryService.findByParentId(Category.NOTICE));
 
         model.addAttribute("form", noticeForm);
 
-        return BoardUtil.FORM_PATH;
+        return Board.FORM_PATH;
     }
 
     /**
      * 공지사항을 업데이트 합니다.
+     *
      * @param boardId 공지사항 번호
      * @param condition 검색조건
-     * @param form 공지사항 수정폼
-     * @param bindingResult 유효성검증 객체
-     * @return 수정된 공지사항으로 리다이렉트
+     * @param form 공지사항 수정 폼
+     * @param bindingResult 유효성검증객체
+     * @return 유효성검증에 실패 한 경우 폼으로, 수정에 성공 한 경우 수정된 게시글로 리다이렉트
      */
     @PostMapping("/{boardId}")
     public String update(
@@ -148,9 +144,9 @@ public class NoticeController {
             BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            form.setCategoryList(categoryRepository.selectByParentId(Category.NOTICE));
+            form.setCategoryList(categoryService.findByParentId(Category.NOTICE));
 
-            return BoardUtil.FORM_PATH;
+            return Board.FORM_PATH;
         }
 
         SecurityUtil.setFormUser(form);
@@ -165,7 +161,7 @@ public class NoticeController {
      * 공지사항을 삭제합니다.
      * @param boardId 공지사항 번호
      * @param condition 검색조건
-     * @return redirect:/admin/notice 공지사항목록으로 리다이렉트
+     * @return 공지사항 목록 리다이렉트
      */
     @PostMapping("/{boardId}/delete")
     public String delete(

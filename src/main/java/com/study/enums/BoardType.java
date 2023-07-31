@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
- * 게시글타입 ENUM
+ * 게시글 타입 ENUM
  */
 @Getter
 @RequiredArgsConstructor

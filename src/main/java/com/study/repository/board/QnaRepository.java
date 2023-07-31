@@ -20,6 +20,7 @@ public class QnaRepository {
 
     /**
      * 문의게시글 상세정보를 등록합니다.
+     *
      * @param board 문의게시글상세 정보
      */
     public void insertQnaDetail(BoardDto board) {
@@ -27,9 +28,10 @@ public class QnaRepository {
     }
 
     /**
-     * 문의게시글 목록을 조건에따라 조회합니다.
+     * 문의게시글 목록을 조건에 따라 조회합니다.
+     *
      * @param condition 검색조건
-     * @return List<BoardDto>
+     * @return 문의게시글 목록
      */
     public List<BoardDto> selectByCondition(BoardSearchCondition condition) {
         return qnaMapper.selectByCondition(condition);
@@ -37,8 +39,9 @@ public class QnaRepository {
 
     /**
      * 문의게시글 번호로 문의게시글 폼을 조회합니다.
+     *
      * @param boardId 문의게시글 번호
-     * @return BoardForm
+     * @return 문의게시글 폼
      */
     public BoardForm selectQnaForm(Long boardId) {
         return qnaMapper.selectQnaForm(boardId);

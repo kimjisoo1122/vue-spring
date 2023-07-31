@@ -1,6 +1,6 @@
 package com.study.service;
 
-import com.study.controller.advice.exception.FileNotAllowedExtException;
+import com.study.exception.FileNotAllowedExtException;
 import com.study.dto.FileDto;
 import com.study.repository.FileRepository;
 import com.study.repository.board.GalleryRepository;
@@ -104,11 +104,11 @@ public class FileService {
     }
 
     /**
-     * 게시글번호로 첨부파일을 조회합니다.
-     * @param boardId 게시글번호
-     * @return List<FileDto> 파일정보 리스트
+     * 게시글에 등록된 첨부파일을 조회합니다.
+     *
+     * @param boardId 게시글 번호
+     * @return 게시글에 등록된 첨부파일
      */
-    @Transactional(readOnly = true)
     public List<FileDto> findByBoardId(Long boardId) {
         return fileRepository.selectByBoardId(boardId);
     }
@@ -118,7 +118,6 @@ public class FileService {
      * @param fileId 파일번호
      * @return FileDto 조회한 파일정보 DTO
      */
-    @Transactional(readOnly = true)
     public FileDto findById(Long fileId) {
         return fileRepository.selectById(fileId);
     }

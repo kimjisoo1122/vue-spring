@@ -7,7 +7,7 @@ import org.springframework.web.util.UriUtils;
 import java.nio.charset.StandardCharsets;
 
 /**
- * 게시글 검색 조건을 설정하는 클래스입니다.
+ * 게시글 검색 조건 클래스
  */
 @Data
 public class BoardSearchCondition {
@@ -19,7 +19,7 @@ public class BoardSearchCondition {
     private String search = ""; // 검색어
     private String searchCategory = ""; // 검색 카테고리
     private int page = 1; // 현재 페이지
-    private int newDay; // 최신글 new 조건
+    private int newDay; // 최신글 new 일자 조건 (기본 : 7)
 
 
     // 조회 SQL에 사용합니다.
@@ -31,6 +31,7 @@ public class BoardSearchCondition {
 
     /**
      * 검색조건들을 쿼리스트링으로 변환합니다.
+     *
      * @return 리다이렉트에 사용하는 쿼리스트링
      */
     public String getQueryParam(int page) {
@@ -44,7 +45,7 @@ public class BoardSearchCondition {
     }
 
     /**
-     * 쿼리파라미터중 한글을 인코딩합니다.
+     * 쿼리파라미터의 한글을 인코딩합니다.
      */
     public String getEncodedQueryParam() {
         this.search = UriUtils.encode(search, StandardCharsets.UTF_8);
@@ -54,24 +55,13 @@ public class BoardSearchCondition {
 
     /**
      * 검색조건을 설정합니다.
-     * 게시글타입, new조건, 페이징 설정을합니다.
-     * @param page 현재페이지
-     * @param limit 페이지크기
+     * 게시글 타입, new 조건, 페이징 설정을 합니다.
+     *
      * @param boardType 게시글타입
      */
-    public void setSearchCondition(BoardType boardType, int page, int limit) {
+    public void setSearchParams(BoardType boardType) {
         this.boardType = boardType;
         this.newDay = boardType.getNewDay();
-        setPagination(page, limit);
-    }
-
-    /**
-     * 검색조건 페이징처리를 위한 값을 설정합니다.
-     * @param page 현재 페이지
-     */
-    public void setPagination(int page, int limit) {
-        this.page = page;
-        this.limit = limit;
         this.offset = (page - 1) * limit;
     }
 }

@@ -10,9 +10,9 @@ import java.time.LocalDateTime;
 @Data
 public class ReplyDto {
 
-    private Long replyId; // 댓글번호
-    private Long boardId; // 게시글번호
-    private String replyContent; // 댓글내용
+    private Long replyId; // 댓글 번호
+    private Long boardId; // 게시글 번호
+    private String replyContent; // 댓글 내용
     private LocalDateTime createDate; // 생성일시
     private LocalDateTime updateDate; // 수정일시
 

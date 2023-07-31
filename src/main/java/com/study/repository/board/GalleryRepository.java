@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * 갤러리 게시판 리포지토리
+ * 갤러리게시판 리포지토리
  */
 @Repository
 @RequiredArgsConstructor
@@ -20,8 +20,9 @@ public class GalleryRepository {
     /**
      * 갤러리디테일에서 가장 순서가 빠른 썸네일,
      * 게시글이 포함한 갤러리 갯수를 포함한 갤러리게시글 정보를 조회합니다.
+     *
      * @param condition 검색조건
-     * @return List<BoardDto>
+     * @return 갤러리 게시글 목록
      */
     public List<BoardDto> selectByCondition(BoardSearchCondition condition) {
         return galleryMapper.selectByCondition(condition);
@@ -29,6 +30,7 @@ public class GalleryRepository {
 
     /**
      * 게시글의 마지막오더를 조회한 후 갤러리디테일을 등록합니다.
+     *
      * @param board 게시글 DTO
      */
     public void insertGalleryDetail(BoardDto board) {
@@ -37,8 +39,9 @@ public class GalleryRepository {
 
     /**
      * 파일번호로 등록된 썸네일이름을 조회합니다.
+     *
      * @param fileId 파일번호
-     * @return
+     * @return 썸네일 이름
      */
 
     public String selectThumbNameByFileId(Long fileId) {
@@ -47,6 +50,7 @@ public class GalleryRepository {
 
     /**
      * 파일번호로 삭제합니다.
+     *
      * @param fileId 파일번호
      */
     public void deleteByFileId(Long fileId) {

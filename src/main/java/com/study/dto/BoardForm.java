@@ -16,8 +16,7 @@ import java.util.List;
 @Data
 public class BoardForm {
 
-    private Long categoryId; // 카테고리 번호
-
+    /* 검증값 */
     @NotBlank(message = "{title.notblank}")
     @Size(max = 100, message = "{title.size}")
     private String boardTitle; // 게시글 제목
@@ -29,28 +28,34 @@ public class BoardForm {
     @NotBlank(message = "{answer.notblank}", groups = QnaValidation.class)
     @Size(max = 4000, message = "{answer.size}", groups = QnaValidation.class)
     private String qnaAnswer; // 문의게시글 답변
-    private boolean qnaSecret; // 비밀글 여부
 
+     /* 폼 공통 */
+    private Long categoryId; // 카테고리 번호
     private Long boardId; // 게시글 번호
-
     private String userId; // 사용자 아이디
     private String userName; // 사용자 이름
-
-    private boolean checkAlarm; // 알림글 여부
-
     private BoardType boardType; // 게시글 타입
     private FormType formType; // 폼 타임
 
+    /* 특정게시판 전용 */
+
+    /* 문의게시판 */
+    private boolean qnaSecret; // 비밀글 여부
+
+    /* 공지사항 */
+    private boolean checkAlarm; // 알림글 여부
+
+    /* 자유게시판, 갤러리게시판 멀티파트 */
     private MultipartFile[] saveFiles; // 저장할 파일목록
     private Long[] deleteFiles; // 삭제할 파일목록
 
-    /* 폼으로 전송하는 데이터 */
+    /* 컨트롤러에서 폼으로 전송하는 데이터 */
     private List<CategoryDto> categoryList; // 카테고리 목록
     private List<FileDto> fileList; // 게시글에 등록된 파일 목록
     private List<ReplyDto> replyList; // 게시글에 등록된 댓글 목록
 
     /**
-     * 게시글 폼의 게시글타입과 폼타입을 설정합니다.
+     * 게시글 폼의 게시글 타입과 폼 타입을 설정합니다.
      * @param boardType 게시글 타입
      * @param formType 폼 타입
      */

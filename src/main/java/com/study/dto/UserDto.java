@@ -1,6 +1,5 @@
 package com.study.dto;
 
-import com.study.enums.UserAuth;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -14,7 +13,6 @@ public class UserDto {
     private String userId; // 사용자 아이디
     private String userPw; // 사용자 비밀번호 (스프링 시큐리티 암호화)
     private String userName; // 사용자 이름
-    private UserAuth userAuth; // 사용자 권한
     private LocalDateTime createDate; // 생성일시
     private LocalDateTime updateDate; // 수정일시
 }

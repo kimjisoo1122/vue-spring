@@ -6,7 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
- * 스프링시큐리티 관련 유틸
+ * 스프링 시큐리티 유틸
  */
 public interface SecurityUtil {
 
@@ -48,7 +48,7 @@ public interface SecurityUtil {
 
     /**
      * 스프링 시큐리티 인증객체로부터 사용자정보를 가져와 폼 데이터를 설정합니다.
-     * @param form 게시글폼
+     * @param form 게시글 폼
      */
     static void setFormUser(BoardForm form) {
         form.setUserId(SecurityUtil.getUserId());

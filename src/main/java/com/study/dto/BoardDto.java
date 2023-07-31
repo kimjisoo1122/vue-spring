@@ -17,11 +17,12 @@ public class BoardDto {
     private String boardTitle; // 게시글 제목
     private String boardContent; // 게시글 내용
     private Integer viewCnt; // 조회수
-    private boolean newStatus; // new 여부
+    private boolean newStatus; // new 상태
     private LocalDateTime createDate; // 생성일시
     private LocalDateTime updateDate; // 수정일시
 
-    private String categoryName; // 'category' 테이블 카테고리 이름
+    /* 'category' 테이블 */
+    private String categoryName; // '카테고리 이름
 
     /* 'user' 테이블 */
     private String userId; // 등록자 아이디
@@ -45,5 +46,4 @@ public class BoardDto {
     private String qnaAnswer; // 문의게시글 답변
     private boolean qnaSecret; // 문의게시글 비밀여부
     private boolean answerStatus; // 문의게시글 답변여부
-
 }

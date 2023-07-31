@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 /**
- * 댓글을 처리하는 API 컨트롤러 입니다.
+ * 댓글을 처리하는 API 컨트롤러
  */
 @RestController
 @RequestMapping("/api/reply")
@@ -24,8 +24,9 @@ public class ReplyController {
 
     /**
      * 댓글을 등록합니다.
-     * @param replyDto boardId 게시글번호, replyContent 댓글내용
-     * @return reply 등록된 댓글
+     *
+     * @param replyDto 댓글 정보
+     * @return 등록된 댓글 객체
      */
     @PostMapping
     public ResponseEntity<ResponseDto> register(
@@ -43,6 +44,11 @@ public class ReplyController {
                 .body(response);
     }
 
+    /**
+     * 댓글을 삭제합니다.
+     *
+     * @param replyId 댓글 번호
+     */
     @DeleteMapping("/{replyId}")
     public ResponseEntity<ResponseDto> delete(
             @PathVariable Long replyId) {

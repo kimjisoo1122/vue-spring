@@ -15,10 +15,10 @@ public interface BoardMapper {
 
     void insert(BoardDto board);
     List<BoardDto> selectByCondition(BoardSearchCondition condition);
-    int countByCondition(BoardSearchCondition condition);
-    BoardForm selectForm(Long boardId);
-    void increaseViewCnt(Long boardId);
-    void update(BoardDto boardDto);
+    BoardForm selectForm(BoardDto board);
+    void update(BoardDto board);
     void delete(Long boardId);
+    void increaseViewCnt(Long boardId);
+    int countByCondition(BoardSearchCondition condition);
 
 }

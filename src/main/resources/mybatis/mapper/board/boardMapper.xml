@@ -8,16 +8,14 @@
             useGeneratedKeys="true"
             keyProperty="boardId">
         INSERT INTO board
-            (board_id,       <!-- 게시글 번호 -->
-            category_id,     <!-- 카테고리 번호 -->
-            board_type,      <!-- 게시글 타입 -->
-            board_title,     <!-- 게시글 제목 -->
-            board_content,   <!-- 게시글 내용 -->
-            user_id,         <!-- 등록자 아이디 -->
-            user_name)       <!-- 등록자 이름 -->
+            (category_id, /* 카테고리 번호 */
+            board_type, /* 게시글 타입 */
+            board_title, /* 게시글 제목 */
+            board_content, /* 게시글 내용 */
+            user_id, /*  사용자 아이디 */
+            user_name) /* 사용자 이름 */
         VALUES
-            (#{boardId},
-            #{categoryId},
+            (#{categoryId},
             #{boardType},
             #{boardTitle},
             #{boardContent},
@@ -30,15 +28,13 @@
             parameterType="boardSearchCondition"
             resultType="boardDto">
         SELECT
-            c.category_name,
-            IF (b.create_date >= DATE(NOW()) - INTERVAL #{newDay} DAY, TRUE, FALSE) AS new_status,
+            c.category_name, /* 카테고리 이름 */
+            IF (b.create_date >= DATE(NOW()) - INTERVAL #{newDay} DAY, TRUE, FALSE) AS new_status, /* 신규글 상태 */
             <include refid="selectBoard"/>
         FROM board b
             LEFT JOIN category c ON c.category_id = b.category_id
         <include refid="whereSearchCondition"/>
-
         <include refid="orderBoard"/>
-
         LIMIT #{limit} OFFSET #{offset}
     </select>
 
@@ -53,12 +49,13 @@
 
     <!-- 게시글번호로 폼 DTO를 조회합니다. -->
     <select id="selectForm"
-            parameterType="long"
+            parameterType="boardDto"
             resultType="boardForm">
         SELECT
         <include refid="selectBoard"/>
         FROM board b
         WHERE board_id = #{boardId}
+        AND board_type = #{boardType}
     </select>
 
 
@@ -89,16 +86,16 @@
 
     <!-- 게시글 목록 -->
     <sql id="selectBoard">
-        b.board_id,
-        b.category_id,
-        b.board_type,
-        b.board_title,
-        b.board_content,
-        b.view_cnt,
-        b.user_id,
-        b.user_name,
-        b.create_date,
-        b.update_date
+        b.board_id, /* 게시글 번호 */
+        b.category_id, /* 카테고리 번호 */
+        b.board_type, /* 게시글 타입 */
+        b.board_title, /* 게시글 제목 */
+        b.board_content, /* 게시글 내용 */
+        b.view_cnt, /* 게시글 조회수 */
+        b.user_id, /* 사용자 아이디 */
+        b.user_name, /* 사용자 이름 */
+        b.create_date, /* 생성일시 */
+        b.update_date /* 수정일시 */
     </sql>
     <!-- 게시글 검색조건 -->
     <sql id="whereSearchCondition">
@@ -163,10 +160,10 @@
             </choose>
             <choose>
                 <when test="order == 'asc'">
-                    asc
+                    ASC
                 </when>
                 <otherwise>
-                    desc
+                    DESC
                 </otherwise>
             </choose>
         </trim>

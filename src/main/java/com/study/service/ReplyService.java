@@ -40,11 +40,12 @@ public class ReplyService {
     }
 
     /**
-     * 게시글번호로 댓글을 조회합니다.
+     * 게시글에 등록된 댓글을 조회합니다.
+     *
      * @param boardId 게시글 번호
-     * @return List<ReplyDto> 게시글 댓글정보
+     * @return 등록된 댓글 목록
      */
-    public List<ReplyDto> findAllByBoardId(Long boardId) {
+    public List<ReplyDto> findByBoardId(Long boardId) {
         return replyRepository.selectByBoardId(boardId);
     }
 

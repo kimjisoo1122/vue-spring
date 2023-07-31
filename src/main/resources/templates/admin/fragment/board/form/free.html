@@ -1,17 +1,18 @@
+<!-- 자유게시판 댓글 -->
 <div th:fragment="reply"
      th:if="${form.hasReply()}"
      class="reply-container" >
 
   <!-- 댓글목록 -->
   <div class="reply-list-container">
-    <div class="reply" th:each="reply : ${form.getReplyList()}">
-      <div class="reply-writer" th:text="${reply.getUserName()}"></div>
-      <div class="reply-date" th:text="${#temporals.format(reply.getCreateDate(), 'yyyy-MM-dd HH:mm')}"></div>
-      <button data-th-replyId="${reply.getReplyId()}"
+    <div class="reply" th:each="reply : ${form.replyList}">
+      <div class="reply-writer" th:text="${reply.userName}"></div>
+      <div class="reply-date" th:text="${#temporals.format(reply.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+      <button data-th-replyId="${reply.replyId}"
               onclick="deleteReply(this)"
               type="button"
               class="reply-delete">삭제</button>
-      <div class="reply-content" th:text="${reply.getReplyContent()}"></div>
+      <div class="reply-content" th:text="${reply.replyContent}"></div>
     </div>
   </div>
 
@@ -23,7 +24,7 @@
            placeholder="댓글을 입력해 주세요.">
     <button
       type="button"
-      data-th-boardId="${form.getBoardId()}"
+      data-th-boardId="${form.boardId}"
       class="reply-register-button"
       onclick="registerReply(this.getAttribute('boardId'))">등록
     </button>

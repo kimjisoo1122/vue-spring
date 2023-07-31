@@ -19,6 +19,7 @@ public class NoticeRepository {
 
     /**
      * 공지사항 알림을 등록합니다.
+     *
      * @param boardId 공지사항 번호
      */
     public void insertNoticeAlarm(Long boardId) {
@@ -27,24 +28,27 @@ public class NoticeRepository {
 
     /**
      * 알림으로 등록된 게시글을 limit만큼 최신순으로 조회합니다.
+     *
      * @param limit 알림글갯수
-     * @return List<BoardDto>
+     * @return List<BoardDto> 알림글 목록
      */
     public List<BoardDto> selectNoticeAlarm(int limit) {
         return noticeMapper.selectNoticeAlarm(limit);
     }
 
     /**
-     * 공지사항 폼을 게시글번호로 조회합니다.
-     * @param boardId 공지사항 번호
-     * @return BoardForm
+     * 공지사항 폼을 조회합니다.
+     *
+     * @param board 공지사항 DTO
+     * @return 공지사항 폼
      */
-    public BoardForm selectNoticeForm(Long boardId) {
-        return noticeMapper.selectNoticeForm(boardId);
+    public BoardForm selectNoticeForm(BoardDto board) {
+        return noticeMapper.selectNoticeForm(board);
     }
 
     /**
      * 공지사항 알림을 삭제합니다.
+     *
      * @param boardId 공지사항 번호
      */
     public void deleteNoticeAlarm(Long boardId) {

@@ -13,7 +13,7 @@ public interface FileMapper {
 
     Long insert(FileDto fileDto);
     List<FileDto> selectByBoardId(Long boardId);
+    List<FileDto> selectGalleryFile(Long boardId);
     FileDto selectById(Long fileId);
     void delete(Long fileId);
-    List<FileDto> selectGalleryFile(Long boardId);
 }

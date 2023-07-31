@@ -2,32 +2,39 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.study.mapper.UserMapper">
 
-    <!-- 유저를 조회합니다. -->
+    <!-- 사용자를 조회합니다. -->
     <select id="selectUserById"
             parameterType="string"
             resultType="userDto">
-        SELECT user_id,
-               user_pw,
-               user_name,
-               user_auth,
-               create_date,
-               update_date
-        FROM user
+        SELECT u.user_id,
+               u.user_pw,
+               u.user_name,
+               u.create_date,
+               u.update_date
+        FROM user u
+        WHERE u.user_id = #{userId}
+    </select>
+
+    <!-- 사용자의 권한을 조회합니다. -->
+    <select id="selectUserAuth"
+            parameterType="string"
+            resultType="string">
+        SELECT auth_name
+        FROM auth
         WHERE user_id = #{userId}
     </select>
 
+    <!-- 사용자를 등록합니다. -->
     <insert id="insert"
             parameterType="userDto">
         INSERT INTO user
             (user_id,
             user_pw,
-            user_name,
-            user_auth)
+            user_name)
         VALUES
             (#{userId},
              #{userPw},
-             #{userName},
-             #{userAuth})
+             #{userName})
     </insert>
 
 </mapper>

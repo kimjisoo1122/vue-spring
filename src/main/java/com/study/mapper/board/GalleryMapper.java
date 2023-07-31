@@ -7,14 +7,13 @@ import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 
 /**
- * 갤러리 게시판 매퍼
+ * 갤러리게시판 매퍼
  */
 @Mapper
 public interface GalleryMapper {
 
-    List<BoardDto> selectByCondition(BoardSearchCondition condition);
     void insertGalleryDetail(BoardDto board);
+    List<BoardDto> selectByCondition(BoardSearchCondition condition);
     String selectThumbNameByFileId(Long fileId);
-
     void deleteByFileId(Long fileId);
 }

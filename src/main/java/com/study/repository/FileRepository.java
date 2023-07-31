@@ -15,6 +15,7 @@ public class FileRepository {
 
     /**
      * 파일을 생성합니다.
+     *
      * @param fileDto 파일DTO
      * @return 파일 PK
      */
@@ -24,8 +25,9 @@ public class FileRepository {
 
     /**
      * 게시글에 등록된 파일을 조회합니다.
+     *
      * @param boardId 게시글 번호
-     * @return List<FileDto> 파일 목록
+     * @return 게시글에 등록된 파일 목록
      */
     public List<FileDto> selectByBoardId(Long boardId) {
         return fileMapper.selectByBoardId(boardId);
@@ -33,8 +35,9 @@ public class FileRepository {
 
     /**
      * 갤러리게시판 상세페이지 첨부파일을 조회합니다.
+     *
      * @param boardId 게시글번호
-     * @return List<FileDto>
+     * @return 갤러리 게시글에 등록된 파일 목록
      */
     public List<FileDto> selectGalleryFile(Long boardId) {
         return fileMapper.selectGalleryFile(boardId);
@@ -42,8 +45,9 @@ public class FileRepository {
 
     /**
      * 파일을 조회합니다.
+     *
      * @param fileId 파일 번호
-     * @return FileDto
+     * @return 파일 정보
      */
     public FileDto selectById(Long fileId) {
         return fileMapper.selectById(fileId);
@@ -51,6 +55,7 @@ public class FileRepository {
 
     /**
      * 파일을 삭제합니다.
+     *
      * @param fileId 파일 번호
      */
     public void delete(Long fileId) {

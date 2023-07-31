@@ -6,9 +6,9 @@
     <select id="selectByParentId"
             parameterType="long"
             resultType="categoryDto">
-        SELECT category_id,
-               category_name,
-               parent_id
+        SELECT category_id, /* 카테고리 번호 */
+               category_name, /* 카테고리 이름 */
+               parent_id /* 상위카테고리 이름 */
         FROM category
         WHERE parent_id = #{parentId}
     </select>

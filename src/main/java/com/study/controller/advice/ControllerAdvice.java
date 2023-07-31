@@ -1,6 +1,6 @@
 package com.study.controller.advice;
 
-import com.study.controller.advice.exception.FileNotAllowedExtException;
+import com.study.exception.FileNotAllowedExtException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.ModelAndView;

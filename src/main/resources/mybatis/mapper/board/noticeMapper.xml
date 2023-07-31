@@ -6,7 +6,7 @@
     <insert id="insertNoticeAlarm"
             parameterType="long">
         INSERT INTO notice_alarm
-            (board_id)
+            (board_id) /* 공지사항 번호 */
         VALUES
             (#{boardId})
     </insert>
@@ -16,8 +16,8 @@
             parameterType="int"
             resultType="boardDto">
         SELECT
-            '알림' AS category_name,
-            IF (b.create_date >= DATE(NOW()) - INTERVAL #{newDay} DAY, TRUE, FALSE) AS new_status,
+            '알림' AS category_name, /* 알림 카테고리 이름 */
+            IF (b.create_date >= DATE(NOW()) - INTERVAL #{newDay} DAY, TRUE, FALSE) AS new_status, /* 신규 상태 */
             <include refid="com.study.mapper.board.BoardMapper.selectBoard"/>
         FROM (SELECT board_id
               FROM notice_alarm
@@ -29,15 +29,16 @@
         ORDER BY b.create_date DESC
     </select>
 
-    <!-- 게시글번호로 공지사항 폼데이터를 조회합니다. -->
+    <!-- 공지사항 번호로 공지사항 폼데이터를 조회합니다. -->
     <select id="selectNoticeForm"
-            parameterType="long"
+            parameterType="boardDto"
             resultType="boardForm">
         SELECT
+        EXISTS (SELECT 1 FROM notice_alarm n WHERE n.board_id = b.board_id) AS checkAlarm, /* 알림글 여부 */
         <include refid="com.study.mapper.board.BoardMapper.selectBoard"/>
-        ,EXISTS (SELECT 1 FROM notice_alarm n WHERE n.board_id = b.board_id) AS checkAlarm
         FROM board b
-        WHERE board_id = #{boardId}
+        WHERE b.board_id = #{boardId}
+        AND b.board_type = #{boardType}
     </select>
 
     <!-- 공지사항 알림을 지웁니다. -->

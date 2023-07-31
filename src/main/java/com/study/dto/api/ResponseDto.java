@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * API 응답에 사용되는 DTO 입니다.
+ * API 응답에 사용되는 DTO
  * {
  *     statues : status,
  *     errorMessage : errorMessage,

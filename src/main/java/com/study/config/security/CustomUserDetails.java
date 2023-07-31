@@ -1,9 +1,7 @@
 package com.study.config.security;
 
-import com.study.enums.UserAuth;
-import com.study.dto.UserDto;
+import com.study.dto.AdminDto;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
@@ -20,24 +18,18 @@ public class CustomUserDetails implements UserDetails {
     private final String userPw;
     private final List<GrantedAuthority> authorities = new ArrayList<>();
 
-    public CustomUserDetails(UserDto userDto) {
-        this.userId = userDto.getUserId();
-        this.userName = userDto.getUserName();
-        this.userPw = userDto.getUserPw();
-
-        setAuthorities(userDto.getUserAuth());
-    }
-
-    public void setAuthorities(UserAuth userAuth) {
-        if (userAuth == UserAuth.ADMIN) {
-            authorities.add(new SimpleGrantedAuthority(UserAuth.ADMIN.getValue()));
-        }
-
-        authorities.add(new SimpleGrantedAuthority(UserAuth.USER.getValue()));
+    public CustomUserDetails(AdminDto adminDto) {
+        this.userId = adminDto.getAdminId();
+        this.userName = adminDto.getAdminName();
+        this.userPw = adminDto.getAdminPw();
     }
 
     public String getUserId() {
         return userId;
+    }
+
+    public void setAuthorities(List<GrantedAuthority> authorities) {
+        this.authorities.addAll(authorities);
     }
 
     @Override

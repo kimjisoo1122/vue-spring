@@ -24,11 +24,11 @@
             parameterType="long"
             resultType="ReplyDto">
         SELECT
-            u.user_id,
-            u.user_name,
+            b.user_id,
+            b.user_name,
             <include refid="selectReply"/>
         FROM reply r
-            JOIN user u ON u.user_id = r.user_id
+            JOIN board b ON b.user_id = r.user_id
         WHERE reply_id = #{replyId}
 
     </select>
@@ -38,12 +38,12 @@
             parameterType="long"
             resultType="ReplyDto">
         SELECT
-            u.user_id,
-            u.user_name,
+            b.user_id,
+            b.user_name,
             <include refid="selectReply"/>
         FROM reply r
-            JOIN user u ON u.user_id = r.user_id
-        WHERE board_id = #{boardId}
+            JOIN board b ON b.user_id = r.user_id
+        WHERE b.board_id = #{boardId}
     </select>
 
     <!-- 댓글을 삭제합니다. -->

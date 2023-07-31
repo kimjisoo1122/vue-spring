@@ -3,18 +3,15 @@ package com.study.util;
 import com.study.dto.BoardDto;
 import com.study.dto.BoardForm;
 
+/**
+ * 통합게시판 유틸
+ */
 public interface BoardUtil {
 
     /**
-     * 게시글폼 VIEW 경로
-     */
-    String FORM_PATH = "admin/board/boardForm";
-    String LIST_PATH = "admin/board/boardList";
-
-    /**
-     * 업데이트에 사용되는 게시글 DTO를 생성합니다
-     * @param form 업데이트 폼
-     * @return BoardDto 업데이트에 사용되는 DTO
+     * 업데이트에 사용되는 게시글 DTO를 생성합니다.
+     * @param form 수정 폼
+     * @return 업데이트에 사용되는 DTO
      */
     static BoardDto createUpdateBoard(BoardForm form) {
         BoardDto updateBoard = createCommonBoard(form);
@@ -24,9 +21,9 @@ public interface BoardUtil {
     }
 
     /**
-     * 등록에 사용되는 게시글 DTO를 생성합니다
+     * 등록에 사용되는 게시글 DTO를 생성합니다.
      * @param form 등록 폼
-     * @return BoardDto 등록에 사용되는 DTO
+     * @return 등록에 사용되는 DTO
      */
     static BoardDto createRegisterBoard(BoardForm form) {
         BoardDto registerBoard = createCommonBoard(form);

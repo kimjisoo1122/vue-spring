@@ -20,7 +20,7 @@ import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 
 /**
- * 파일을 처리하는 API 컨트롤러 입니다.
+ * 파일 컨트롤러
  */
 @Controller
 @RequestMapping("/file")
@@ -30,11 +30,11 @@ public class FileController {
     private final FileService fileService;
 
     /**
-     * 파일다운로드를 처리합니다.
+     * 파일 다운로드를 처리합니다.
      * @param fileId 파일번호
-     * @return
-     * @throws MalformedURLException 파일경로가 올바르지 않은경우
-     * @throws FileNotFoundException 파일을 찾지 못했을 경우
+     * @return 파일을 다운로드 합니다.
+     * @throws MalformedURLException 파일경로가 올바르지 않은 경우 발생하는 예외
+     * @throws FileNotFoundException 파일을 찾지 못했을 경우 발생하는 예외
      */
     @GetMapping(value = "/{fileId}", produces = MediaType.TEXT_HTML_VALUE)
     public ResponseEntity<Resource> downloadFile(
@@ -56,14 +56,15 @@ public class FileController {
     }
 
     /**
+     * 이미지를 보여줍니다.
      *
-     * @param imgUrl 이미지 이름
-     * @throws MalformedURLException 파일경로가 올바르지 않은 경우
+     * @param  imgName 이미지파일 이름
+     * @throws MalformedURLException 파일경로가 올바르지 않은 경우 발생하는 예외
      */
     @ResponseBody
     @GetMapping("/image/{imgUrl}")
     public Resource showImage(
-            @PathVariable("imgUrl") String imgUrl) throws MalformedURLException {
-        return new UrlResource("file:" + fileService.getGalleyPath() + imgUrl);
+            @PathVariable("imgUrl") String imgName) throws MalformedURLException {
+        return new UrlResource("file:" + fileService.getGalleyPath() + imgName);
     }
 }

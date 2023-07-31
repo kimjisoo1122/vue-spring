@@ -18,7 +18,8 @@ public class ReplyRepository {
 
     /**
      * 댓글을 등록합니다.
-     * @param reply 댓글DTO
+     *
+     * @param reply 댓글 DTO
      */
     public void insert(ReplyDto reply) {
         replyMapper.insert(reply);
@@ -26,8 +27,9 @@ public class ReplyRepository {
 
     /**
      * 댓글번호로 댓글을 조회합니다.
+     *
      * @param replyId 댓글번호
-     * @return ReplyDto
+     * @return 댓글 정보
      */
     public ReplyDto selectById(Long replyId) {
         return replyMapper.selectById(replyId);
@@ -36,7 +38,7 @@ public class ReplyRepository {
     /**
      * 게시글에 등록된 댓글을 조회합니다.
      * @param boardId 게시글번호
-     * @return List<ReplyDto>
+     * @return 게시글에 등록된 댓글 목록
      */
     public List<ReplyDto> selectByBoardId(Long boardId) {
         return replyMapper.selectByBoardId(boardId);
@@ -44,6 +46,7 @@ public class ReplyRepository {
 
     /**
      * 댓글을 삭제합니다.
+     *
      * @param replyId 댓글번호
      */
     public void delete(Long replyId) {
@@ -52,6 +55,7 @@ public class ReplyRepository {
 
     /**
      * 게시글에 등록된 댓글을 삭제합니다.
+     *
      * @param boardId 게시글 번호
      */
     public void deleteByBoardId(Long boardId) {
