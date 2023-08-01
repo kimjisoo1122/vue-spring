@@ -24,3 +24,8 @@ mybatis:
 file:
   upload-folder: C:/Temp/upload/
   allowed-extensions: jpg,png,gif,zip
+
+jwt:
+  secret-key: kjs
+  access-token-expiration: 1800000 # 30분
+  refresh-token-expiration: 604800000 #7일

@@ -18,7 +18,7 @@
     <!-- 관리자 권한 조회 -->
     <select id="selectAuthById"
             parameterType="string"
-            resultType="string">
+            resultType="com.study.enums.Auth">
         SELECT auth_name
         FROM auth
         WHERE admin_id = #{adminId}

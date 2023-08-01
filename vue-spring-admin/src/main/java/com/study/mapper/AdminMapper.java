@@ -1,6 +1,7 @@
 package com.study.mapper;
 
 import com.study.dto.AdminDto;
+import com.study.enums.Auth;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -12,5 +13,5 @@ import java.util.List;
 public interface AdminMapper {
 
     AdminDto selectById(String adminId);
-    List<String> selectAuthById(String adminId);
+    List<Auth> selectAuthById(String adminId);
 }

@@ -31,7 +31,7 @@ public class CustomUserDetailsService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String adminId) throws UsernameNotFoundException {
-        CustomUserDetails userDetails = adminRepository.selectById(adminId)
+        CustomUserDetails customUserDetails = adminRepository.selectById(adminId)
                 .map(CustomUserDetails::new)
                 .orElseThrow(() -> {
                     throw new UsernameNotFoundException("관리자를 찾을 수 없습니다.");
@@ -39,11 +39,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         List<GrantedAuthority> authorities =
                 adminRepository.selectAuthById(adminId).stream()
-                    .map(SimpleGrantedAuthority::new)
+                    .map(e -> new SimpleGrantedAuthority(e.getRole()))
                     .collect(Collectors.toList());
 
-        userDetails.setAuthorities(authorities);
+        customUserDetails.setAuthorities(authorities);
 
-        return userDetails;
+        return customUserDetails;
     }
 }

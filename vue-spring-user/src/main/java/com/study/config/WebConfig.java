@@ -16,7 +16,7 @@ import org.springframework.web.servlet.resource.PathResourceResolver;
 import java.io.IOException;
 
 /**
- * Web설정 Config
+ * Web Config
  */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
