@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.mapper.board.BoardMapper">
+
+    <!-- 게시글을 등록합니다. -->
+    <insert id="insert"
+            parameterType="boardDto"
+            useGeneratedKeys="true"
+            keyProperty="boardId">
+        INSERT INTO board
+            (category_id, /* 카테고리 번호 */
+            board_type, /* 게시글 타입 */
+            board_title, /* 게시글 제목 */
+            board_content, /* 게시글 내용 */
+            user_id, /*  사용자 아이디 */
+            user_name) /* 사용자 이름 */
+        VALUES
+            (#{categoryId},
+            #{boardType},
+            #{boardTitle},
+            #{boardContent},
+            #{userId},
+            #{userName})
+    </insert>
+
+    <!-- 게시글 조건에 따라 조회합니다. -->
+    <select id="selectByCondition"
+            parameterType="boardSearchCondition"
+            resultType="boardDto">
+        SELECT
+            c.category_name, /* 카테고리 이름 */
+            IF (b.create_date >= DATE(NOW()) - INTERVAL #{newDay} DAY, TRUE, FALSE) AS new_status, /* 신규글 상태 */
+            <include refid="selectBoard"/>
+        FROM board b
+            LEFT JOIN category c ON c.category_id = b.category_id
+        <include refid="whereSearchCondition"/>
+        <include refid="orderBoard"/>
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <!-- 게시글 조건에 따라 카운트를 조회합니다. -->
+    <select id="countByCondition"
+            parameterType="boardSearchCondition"
+            resultType="int">
+        SELECT COUNT(*)
+        FROM board b
+        <include refid="whereSearchCondition"/>
+    </select>
+
+    <!-- 게시글번호로 조회합니다. -->
+    <select id="selectById"
+            parameterType="boardDto"
+            resultType="boardDto">
+        SELECT
+            c.category_name,
+            <include refid="selectBoard"/>
+        FROM board b
+            JOIN category c ON c.category_id = b.category_id
+        WHERE board_id = #{boardId}
+        AND board_type = #{boardType}
+    </select>
+
+
+    <!-- 게시글의 조회수를 1 증가시킵니다. -->
+    <update id="increaseViewCnt"
+            parameterType="long">
+        UPDATE board
+        SET view_cnt = view_cnt + 1
+        WHERE board_id = #{boardId}
+    </update>
+    
+    <!-- 게시글을 업데이트 합니다.-->
+    <update id="update"
+            parameterType="boardDto">
+        UPDATE board
+            <include refid="updateBoard"/>
+        WHERE board_id = #{boardId}
+    </update>
+
+    <!-- 게시글을 삭제합니다. -->
+    <delete id="delete"
+            parameterType="long">
+        DELETE
+        FROM board
+        WHERE board_id = #{boardId}
+    </delete>
+
+
+    <!-- 게시글 목록 -->
+    <sql id="selectBoard">
+        b.board_id, /* 게시글 번호 */
+        b.category_id, /* 카테고리 번호 */
+        b.board_type, /* 게시글 타입 */
+        b.board_title, /* 게시글 제목 */
+        b.board_content, /* 게시글 내용 */
+        b.view_cnt, /* 게시글 조회수 */
+        b.user_id, /* 사용자 아이디 */
+        b.user_name, /* 사용자 이름 */
+        b.create_date, /* 생성일시 */
+        b.update_date /* 수정일시 */
+    </sql>
+    <!-- 게시글 검색조건 -->
+    <sql id="whereSearchCondition">
+        <where>
+            b.board_type = #{boardType} AND
+            <choose>
+                <!-- 검색기간이 존재하지 않으면 지난 1달을 기본으로 조회합니다. -->
+                <when test="(fromDate != null &amp;&amp; fromDate !='') || (toDate != null &amp;&amp; toDate !='')">
+                    DATE_FORMAT(b.create_date, '%Y-%m-%d')
+                    BETWEEN #{fromDate}
+                        AND #{toDate}
+                </when>
+                <otherwise>
+                    DATE_FORMAT(b.create_date, '%Y-%m-%d')
+                    BETWEEN DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m-%d')
+                        AND DATE_FORMAT(NOW(),'%Y-%m-%d')
+                </otherwise>
+            </choose>
+
+            <if test="searchCategory != null &amp;&amp; searchCategory != ''">
+                AND b.category_id = #{searchCategory}
+            </if>
+            <if test="search != null &amp;&amp; search != ''">
+                AND
+                    (b.board_title LIKE CONCAT('%', #{search}, '%')
+                    OR
+                    b.board_content LIKE CONCAT('%', #{search}, '%'))
+            </if>
+        </where>
+    </sql>
+    <!-- 게시글 업데이트 목록 -->
+    <sql id="updateBoard">
+        <set>
+            <if test="categoryId != null">
+                category_id = #{categoryId},
+            </if>
+            <if test="boardType != null and boardType != ''">
+                board_type = #{boardType},
+            </if>
+            <if test="boardTitle != null and boardTitle != ''">
+                board_title = #{boardTitle},
+            </if>
+            <if test="boardContent != null and boardContent != ''">
+                board_content = #{boardContent},
+            </if>
+            update_date = now()
+        </set>
+    </sql>
+    <!-- 게시글 정렬순서 -->
+    <sql id="orderBoard">
+        <trim prefix="ORDER BY" suffix=" ">
+            <choose>
+                <when test="orderCondition == 'title'">
+                    b.board_title
+                </when>
+                <when test="orderCondition == 'viewCnt'">
+                    b.view_cnt
+                </when>
+                <otherwise>
+                    b.create_date
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="order == 'asc'">
+                    ASC
+                </when>
+                <otherwise>
+                    DESC
+                </otherwise>
+            </choose>
+        </trim>
+    </sql>
+
+</mapper>

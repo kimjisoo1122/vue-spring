@@ -33,7 +33,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/api/login", "/api/users/**")
+                .antMatchers("/api/login", "/api/users/**", "/api/file/**", "/api/reply/board/**")
                 .permitAll()
                 .anyRequest()
                 .hasAnyRole("USER", "ADMIN")

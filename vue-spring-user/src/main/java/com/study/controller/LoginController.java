@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 로그인 컨트롤러
+ * 로그인 API 컨트롤러
  */
 @RestController
 @RequestMapping("/api/login")
@@ -29,6 +29,11 @@ public class LoginController {
     private final AuthenticationManager authenticationManager;
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
+    /**
+     * 로그인에 성공시 jwt를 반환합니다.
+     * @param user
+     * @return
+     */
     @PostMapping()
     public ResponseEntity<ResponseDto> login(
             @RequestBody UserDto user) {
@@ -38,6 +43,7 @@ public class LoginController {
 
         try {
             authenticationManager.authenticate(authenticationToken);
+
             String accessJwt = jwtAuthenticationProvider.createJwt(user.getUserId(),
                     jwtAuthenticationProvider.ACCESS_TOKEN_EXPIRATION());
 
@@ -52,9 +58,6 @@ public class LoginController {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
                     .body(failResponse);
-
         }
-
-
     }
 }

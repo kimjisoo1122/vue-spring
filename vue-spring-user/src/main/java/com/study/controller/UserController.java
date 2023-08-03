@@ -14,7 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 사용자 컨트롤러
+ * 사용자 API 컨트롤러
  */
 @RestController
 @RequestMapping("/api/users")

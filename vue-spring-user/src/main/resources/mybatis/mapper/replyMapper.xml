@@ -24,6 +24,8 @@
             parameterType="long"
             resultType="ReplyDto">
         SELECT
+            r.user_id,
+            r.user_name,
             <include refid="selectReply"/>
         FROM reply r
         WHERE reply_id = #{replyId}

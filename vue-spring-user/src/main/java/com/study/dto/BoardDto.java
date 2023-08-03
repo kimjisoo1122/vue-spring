@@ -1,5 +1,6 @@
 package com.study.dto;
 
+import com.study.enums.BoardType;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -12,7 +13,7 @@ public class BoardDto {
 
     private Long boardId; // 게시글 번호
     private Long categoryId; // 카테고리 번호
-//    private BoardType boardType; // 게시글 타입
+    private BoardType boardType; // 게시글 타입
     private String boardTitle; // 게시글 제목
     private String boardContent; // 게시글 내용
     private Integer viewCnt; // 조회수
