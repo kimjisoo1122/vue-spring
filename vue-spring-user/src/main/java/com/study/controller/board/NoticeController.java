@@ -76,13 +76,11 @@ public class NoticeController {
     public ResponseEntity<ResponseDto> noticeDetail(
             @PathVariable("boardId") Long boardId) {
 
+        boardService.increaseViewCnt(boardId);
         ResponseDto response = new ResponseDto(ResponseApiStatus.SUCCESS);
 
         noticeService.findNoticeDetail(boardId)
-                .ifPresentOrElse(board -> {
-                            boardService.increaseViewCnt(boardId);
-                            response.setData(board);
-                        },
+                .ifPresentOrElse(response::setData,
                         () -> {
                             throw new BoardNotFoundException();
                         });

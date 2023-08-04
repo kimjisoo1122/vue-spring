@@ -32,8 +32,7 @@ public interface SecurityUtil {
      */
     static String getUserId() {
         CustomUserDetails user = getAuthenticatedUser();
-
-        return user == null ? "" : user.getUserId();
+        return user == null ? null : user.getUserId();
     }
 
     /**
@@ -42,8 +41,7 @@ public interface SecurityUtil {
      */
     static String getUserName() {
         CustomUserDetails user = getAuthenticatedUser();
-
-        return user == null ? "" : user.getUsername();
+        return user == null ? null : user.getUsername();
     }
 
     /**

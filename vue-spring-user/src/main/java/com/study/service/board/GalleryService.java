@@ -141,6 +141,11 @@ public class GalleryService {
      */
     public void delete(Long boardId) {
         fileService.deleteByBoardId(boardId);
+        List<FileDto> fileList = fileService.findByBoardId(boardId);
+        for (FileDto file : fileList) {
+            fileService.delete(file.getFileId());
+            fileService.deleteThumbFile(file.getFileId());
+        }
         boardRepository.delete(boardId);
     }
 

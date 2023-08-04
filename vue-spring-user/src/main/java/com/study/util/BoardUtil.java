@@ -48,4 +48,16 @@ public interface BoardUtil {
 
         return commonBoard;
     }
+
+    /**
+     * 해당 게시글을 작성한 사용자인지 확인합니다.
+     * @param userId 게시글 작성자 아이디
+     * @return 해당 게시글을 작성한 사용자면 true
+     */
+    static boolean isRegisteredUserId(String userId) {
+        if (SecurityUtil.getUserId() == null || userId == null) {
+            return false;
+        }
+        return userId.equals(SecurityUtil.getUserId());
+    }
 }

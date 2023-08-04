@@ -3,6 +3,7 @@ package com.study.controller;
 import com.study.dto.ReplyDto;
 import com.study.dto.api.ResponseApiStatus;
 import com.study.dto.api.ResponseDto;
+import com.study.exception.NotAuthorisedToReplyException;
 import com.study.service.ReplyService;
 import com.study.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -67,7 +68,12 @@ public class ReplyController {
     public ResponseEntity<ResponseDto> delete(
             @PathVariable Long replyId) {
 
-        replyService.delete(replyId);
+        // 해당 댓글을 작성한 사용자에 한해서 삭제합니다.
+        if (isRegisteredUserId(replyService.findById(replyId))) {
+            replyService.delete(replyId);
+        } else {
+            throw new NotAuthorisedToReplyException();
+        }
 
         ResponseDto response = new ResponseDto();
         response.setStatus(ResponseApiStatus.SUCCESS);
@@ -75,5 +81,17 @@ public class ReplyController {
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .body(response);
+    }
+
+    /**
+     * 해당 댓글을 작성한 사용자인지 확인합니다.
+     * @param reply 댓글
+     * @return 해당 댓글을 작성한 사용자면 true
+     */
+    private boolean isRegisteredUserId(ReplyDto reply) {
+        if (SecurityUtil.getUserId() == null) {
+            return false;
+        }
+        return reply.getUserId().equals(SecurityUtil.getUserId());
     }
 }

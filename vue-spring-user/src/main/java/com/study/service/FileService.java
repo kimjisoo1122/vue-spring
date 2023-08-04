@@ -50,7 +50,7 @@ public class FileService {
      * @return List<FileDto> 파일 DB에 저장하는 DTO 리스트
      * @throws IOException 파일저장에 발생되는 예외
      */
-    public List<FileDto> createFileList(MultipartFile[] multipartFiles, String FILE_PATH) throws IOException {
+    public List<FileDto> createFileList(List<MultipartFile> multipartFiles, String FILE_PATH) throws IOException {
         List<FileDto> files = new ArrayList<>();
         for (MultipartFile file : multipartFiles) {
             if (file.isEmpty()) {
@@ -78,7 +78,7 @@ public class FileService {
         return files;
     }
 
-    public List<FileDto> createFileList(MultipartFile[] multipartFiles) throws IOException {
+    public List<FileDto> createFileList(List<MultipartFile> multipartFiles) throws IOException {
         return createFileList(multipartFiles, FILE_PATH);
     }
 
@@ -88,7 +88,7 @@ public class FileService {
      * @return List<FileDto> 파일 DB에 저장하는 DTO 리스트
      * @throws IOException 파일저장에 발생되는 예외
      */
-    public List<FileDto> createGalleryFileList(MultipartFile[] multipartFiles) throws IOException {
+    public List<FileDto> createGalleryFileList(List<MultipartFile> multipartFiles) throws IOException {
         return createFileList(multipartFiles, GALLERY_PATH);
     }
 
@@ -116,7 +116,7 @@ public class FileService {
     /**
      * 첨부파일을 조회합니다.
      * @param fileId 파일번호
-     * @return FileDto 조회한 파일정보 DTO
+     * @return 조회한 파일정보
      */
     public FileDto findById(Long fileId) {
         return fileRepository.selectById(fileId);
@@ -132,8 +132,6 @@ public class FileService {
         if (uploadedFile.exists()) {
             uploadedFile.delete();
         }
-
-        deleteThumbFile(fileId);
 
         fileRepository.delete(fileId);
     }
@@ -169,7 +167,7 @@ public class FileService {
     /**
      * 파일명을 UUID로 포맷후 확장자를 붇혀 반환합니다.
      * @param ext 파일확장자
-     * @return formattedFileNam
+     * @return UUID로 포맷변환된 파일이름
      */
     private String getFormattedFileName(String ext) {
         return UUID.randomUUID() + "." + ext;
@@ -178,7 +176,7 @@ public class FileService {
     /**
      * 파일의 확장자명을 추출합니다.
      * @param fileName 파일이름
-     * @return fileExt 파일확장자
+     * @return 파일확장자
      */
     private String extractFileExt(String fileName) {
         int dotIdx = fileName.lastIndexOf(".");
