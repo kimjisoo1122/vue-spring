@@ -1,13 +1,14 @@
 <template>
   <div class="main-container">
-    <Login></Login>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 
 import {mapMutations, mapState} from "vuex";
-import Login from "@/views/Login.vue";
+import Login from "@/views/user/Login.vue";
+import SignUp from "@/views/user/SignUp.vue";
 
 export default {
   name: 'App',
@@ -31,7 +32,7 @@ export default {
 :root {
   --title-font-size: 20px;
   --middle-font-size: 15px;
-  --small-font-size: 13px;
+  --small-font-size: 12px;
 
   --main-border: 1px solid #C0C0C0;
   --border-color-gray: #C0C0C0;
@@ -44,4 +45,5 @@ export default {
   width: 1100px;
   margin: 0 auto;
 }
+
 </style>
