@@ -40,11 +40,11 @@ public class QnaRepository {
     /**
      * 문의게시글 번호로 문의게시글 폼을 조회합니다.
      *
-     * @param boardId 문의게시글 번호
+     * @param board 문의게시글 정보
      * @return 문의게시글 폼
      */
-    public BoardForm selectQnaForm(Long boardId) {
-        return qnaMapper.selectQnaForm(boardId);
+    public BoardForm selectQnaForm(BoardDto board) {
+        return qnaMapper.selectQnaForm(board);
     }
 
     /**

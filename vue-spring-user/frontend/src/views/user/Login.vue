@@ -40,10 +40,11 @@ import BaseInput from "@/components/base/BaseInput.vue";
 import {onMounted, ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {login} from "@/api/loginService";
-import InputError from "@/components/InputError.vue";
+import InputError from "@/components/base/BaseInputError.vue";
 import {useStore} from "vuex";
 import {formatJwt} from "@/util/formatUtil";
 import {AUTHORIZATION} from "@/constants";
+import {getUser} from "@/api/userService";
 
 const store = useStore();
 const route = useRoute();
@@ -74,11 +75,13 @@ onMounted(() => {
 async function onLogin() {
   if (validateLoginForm()) {
     try {
+
       const jwt = await login(loginForm.value);
+      const user = await getUser(loginForm.value.userId);
 
       store.commit('loginStore/login',
           {
-            userId: loginForm.value.userId,
+            user: user,
             jwt: jwt
           });
 

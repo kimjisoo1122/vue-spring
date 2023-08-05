@@ -5,14 +5,16 @@
 </template>
 
 <script>
+/**
+ * 게시글 상세페이지의 내용을 나타내는 컴포넌트
+ */
 export default {
   name: "BoardDetailContent",
   props: {
     board: {
       type: Object,
-      default: undefined,
       required: true,
-      description: '게시글'
+      description: '게시글 정보'
     }
   }
 }
@@ -24,7 +26,7 @@ export default {
   padding: 10px;
   border: 1px solid var(--border-color-gray);
   border-radius: 3px;
-  min-height: 200px;
+  min-height: 150px;
   font-size: var(--middle-font-size);
 }
 

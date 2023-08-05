@@ -1,17 +1,21 @@
 <template>
+
   <div class="board-form-title-container">
     <span class="board-form-title-name">{{ name }}</span>
     <span v-if="required" class="board-form-title-required-star">*</span>
   </div>
+
 </template>
 
 <script>
+/**
+ * 등록, 수정 폼에서 사용되는 각 필드의 타이틀 컴포넌트
+ */
 export default {
   name: "BoardFormTitle",
   props: {
     name: {
       type: String,
-      default: '',
       required: true,
       description: '타이틀 이름'
     },
@@ -38,10 +42,7 @@ export default {
   align-items: center;
 }
 
-
 .board-form-title-required-star {
   color: red;
 }
-
-
 </style>

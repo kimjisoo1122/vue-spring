@@ -15,6 +15,6 @@ public interface QnaMapper {
 
     void insertQnaDetail(BoardDto board);
     List<BoardDto> selectByCondition(BoardSearchCondition condition);
-    BoardForm selectQnaForm(Long boardId);
+    BoardForm selectQnaForm(BoardDto board);
     void updateQnaDetail(BoardDto board);
 }

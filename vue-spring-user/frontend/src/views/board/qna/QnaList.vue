@@ -1,6 +1,8 @@
 <template>
 
-  <!-- 게시글 제목 -->
+  <GNB></GNB>
+
+  <!-- 타이틀 -->
   <board-title title="문의 게시판" ></board-title>
 
   <!-- 게시글 검색조건 -->
@@ -10,32 +12,47 @@
       :is-qna="true">
   </board-search-condition>
 
-  <div class="register-btn-container">
+  <!-- 나의 문의내역, 글등록 -->
+  <div class="my-qna-register-container">
+
+    <div class="my-qna-container">
+      <span class="my-qna-span">나의 문의내역만 보기</span>
+      <base-input
+          v-model="condition.myQna"
+          @change="onConditionSearch"
+          type="checkbox"
+          class="my-qna-input">
+      </base-input>
+    </div>
+
     <base-button
         @click="router.push({path: '/qna/register',query: condition})"
-        name="글 등록">
+        name="글 등록"
+        class="my-qna-register-btn">
     </base-button>
+
   </div>
 
+  <!-- 문의게시글 목록 -->
   <div class="qna-list-container">
 
     <!-- 게시글 헤더 -->
     <board-list-header :is-qna="true"></board-list-header>
 
-    <!-- 게시글 -->
+    <!-- 문의게시글 -->
     <board-list
+        @detail-router="onDetailRouter"
         :is-qna="true"
         :board-list="qnaList"
-        :condition="condition"
-        @detail-router="onDetailRouter">
+        :condition="condition">
     </board-list>
 
     <!-- 페이징 처리 -->
     <pagination
+        @page-router="onPageRouter"
         :total-cnt="totalCnt"
         :limit="Number(condition.limit)"
         :page="Number(condition.page)"
-        @page-router="onPageRouter"
         class="paging-container">
     </pagination>
 
@@ -58,6 +75,9 @@ import {FREE_CATEGORY_ID} from "@/constants";
 import {getFreeList} from "@/api/board/freeService";
 import BaseButton from "@/components/base/BaseButton.vue";
 import {getQnaList} from "@/api/board/qnaService";
+import GNB from "@/components/GNB.vue";
+import {getCurrentUserId} from "@/util/authUtil";
+import BaseInput from "@/components/base/BaseInput.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -78,6 +98,14 @@ watch(route, initQnaList); /* 컴포넌트 URL 변경을 감지합니다.(페이
 async function initQnaList() {
   condition.value = createCondition(route.query);
 
+  /* 나의 문의 내역 */
+  if (route.query.myQna === 'true') {
+    condition.value.userId = getCurrentUserId();
+    condition.value.myQna = true;
+  } else {
+    condition.value.myQna = false;
+  }
+
   try {
     const [qnaListResult] = await Promise.all([
       getQnaList(condition.value),
@@ -88,25 +116,20 @@ async function initQnaList() {
 
   } catch ({message}) {
     console.error(message);
-
-    if (message) {
-      // store.commit('logout');
-      // router.push('/login');
-    }
   }
 }
 
 /**
- * 게시글 검색조건으로 재 조회 합니다.
+ * 게시글 검색조건 컴포넌트 핸들러
  * @param searchForm 게시글 검색정보
  */
 function onConditionSearch(searchForm) {
+  searchForm.myQna = condition.value.myQna;
   router.push({
     path: '/qna',
     query: searchForm
   })
 }
-
 /**
  * 페이징처리
  * @param page 해당 페이지
@@ -125,7 +148,7 @@ function onPageRouter(page) {
  * @param board 문의글 정보
  */
 function onDetailRouter(board) {
-  if (board.qnaSecret && board.userId !== store.getters['loginStore/getCurrentUserId']) {
+  if (board.qnaSecret && board.userId !== store.getters['loginStore/getCurrentUser']) {
     alert('해당 문의글은 작성자만 이용가능합니다.');
     return false;
   }
@@ -150,10 +173,31 @@ export default {
   margin-top: 10px;
 }
 
-.register-btn-container {
-  margin-top: 30px;
+.my-qna-register-container {
+  margin: 20px 0;
+  height: 20px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+
+}
+
+.my-qna-container {
+  display: flex;
+  align-items: center;
+  font-size: var(--small-font-size);
+}
+
+.my-qna-span {
+  padding: 0 5px;
+}
+
+.my-qna-input {
+  cursor: pointer;
+  width: 15px;
+}
+
+.my-qna-register-btn {
+  height: 20px;
 }
 
 .paging-container {

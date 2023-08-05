@@ -37,7 +37,7 @@
 
     <!-- 게시글번호로 문의게시글 폼데이터를 조회합니다. -->
     <select id="selectQnaForm"
-            parameterType="long"
+            parameterType="boardDto"
             resultType="boardForm">
         SELECT
             q.qna_answer,
@@ -46,6 +46,7 @@
         FROM board b
             JOIN qna_detail q ON q.board_id = b.board_id
         WHERE b.board_id = #{boardId}
+        AND b.board_type = #{boardType}
 
     </select>
 
@@ -59,6 +60,9 @@
                 </if>
                 <if test="qnaAnswer != null and qnaAnswer != ''">
                     qna_answer = #{qnaAnswer},
+                </if>
+                <if test="answerWriter != null and answerWriter != ''">
+                    answer_writer = #{answerWriter},
                 </if>
                 update_date = now()
              </set>

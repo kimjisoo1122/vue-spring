@@ -28,7 +28,6 @@ import java.util.Map;
 /**
  * 문의게시판 API 컨트롤러
  */
-
 @RestController
 @RequestMapping("/api/qna")
 @RequiredArgsConstructor

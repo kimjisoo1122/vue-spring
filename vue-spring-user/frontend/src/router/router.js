@@ -29,6 +29,10 @@ const routes = [
       requiresAuth: false,
     }
   },
+  {
+    path: '/404',
+    component: (() => import('@/views/error/NotFound.vue')),
+  },
 
   /* 게시글 (공지사항, 자유게시판, 갤러리게시판, 문의게시판) */
   ...noticeRoutes,
@@ -36,10 +40,6 @@ const routes = [
   ...galleryRoutes,
   ...qnaRoutes,
 
-  {
-    path: '/404',
-    component: (() => import('@/views/error/NotFound.vue')),
-  },
   {
     path: '/*',
     component: (() => import('@/views/error/NotFound.vue')),

@@ -1,11 +1,16 @@
 <template>
+
   <textarea
       :value="modelValue"
       @change="onChange">
   </textarea>
+
 </template>
 
 <script>
+/**
+ * 베이스 텍스트 컴포넌트
+ */
 export default {
   name: "BaseTextarea",
   props: {

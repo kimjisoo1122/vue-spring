@@ -1,19 +1,27 @@
 <template>
 
+  <GNB></GNB>
+
+  <!-- 게시글 제목 -->
   <board-title title="자유게시판"></board-title>
 
+  <!-- 게시글 상세 헤더 -->
   <board-detail-header :board="free"></board-detail-header>
 
+  <!-- 게시글 상세 내용 -->
   <board-detail-content :board="free" class="free-detail-content"></board-detail-content>
 
+  <!-- 첨부 파일 목록 -->
   <file-list :file-list="fileList" class="free-detail-file-list"></file-list>
 
+  <!-- 댓글 -->
   <reply
-      :reply-list="replyList"
       @register-reply="onRegisterReply"
-      @delete-reply="onDeleteReply">
+      @delete-reply="onDeleteReply"
+      :reply-list="replyList">
   </reply>
 
+  <!-- 게시글 상세 버튼 목록 -->
   <board-detail-btn-container
       @delete-board="onDelete"
       :board="free"
@@ -25,13 +33,15 @@
 </template>
 
 <script setup>
+/**
+ * 자유게시글 상세페이지 컴포넌트
+ */
 
-import BaseButton from "@/components/base/BaseButton.vue";
 import BoardDetailContent from "@/components/board/BoardDetailContent.vue";
 import BoardDetailHeader from "@/components/board/BoardDetailHeader.vue";
 import BoardTitle from "@/components/board/BoardTitle.vue";
 import {useRoute, useRouter} from "vue-router";
-import {onMounted, ref} from "vue";
+import {ref} from "vue";
 import {createCondition} from "@/util/queryParamUtil";
 import {formatDate} from "@/util/formatUtil";
 import {deleteFree, getFreeDetail} from "@/api/board/freeService";
@@ -39,21 +49,21 @@ import {getBoardReplyList} from "@/api/replyService";
 import {getBoardFileList} from "@/api/fileService";
 import FileList from "@/components/FileList.vue";
 import Reply from "@/components/Reply.vue";
-import {isCurrentUserId} from "@/util/authUtil";
 import BoardDetailBtnContainer from "@/components/board/BoardDetailBtnContainer.vue";
+import GNB from "@/components/GNB.vue";
 
 const route = useRoute();
 const router = useRouter();
-const condition = ref({});
-const free = ref({});
-const fileList = ref([]);
-const replyList = ref([]);
+
+const condition = ref({}); /* 검색조건 */
+const free = ref({}); /* 자유게시글 */
+const fileList = ref([]); /* 파일 목록 */
+const replyList = ref([]); /* 댓글 목록*/
 
 initFreeDetail();
 
 /**
  * 자유게시글 상세컴포넌트를 초기화합니다.
- * @returns {Promise<void>}
  */
 async function initFreeDetail() {
   condition.value = createCondition(route.query);
@@ -72,28 +82,11 @@ async function initFreeDetail() {
     replyList.value.forEach(e => e.createDate = formatDate(e.createDate));
   } catch ({message}) {
     console.error(message);
-
-    if (message) {
-      router.push('/404');
-    }
   }
 }
 
 /**
- * 자유게시글을 삭제합니다.
- */
-async function onDelete() {
-  try {
-    await deleteFree(route.params.boardId);
-    router.push({path: '/frees', query: condition});
-  } catch ({message}) {
-    alert(message);
-  }
-}
-
-
-/**
- * 댓글 컴포넌트에서 등록한 댓글을 추가합니다.
+ * 댓글 컴포넌트에서 등록한 현재 댓글목록에 추가합니다.
  * @param reply 등록된 댓글
  */
 function onRegisterReply(reply) {
@@ -107,6 +100,18 @@ function onRegisterReply(reply) {
  */
 function onDeleteReply(replyId) {
   replyList.value = replyList.value.filter(e => e.replyId !== replyId);
+}
+
+/**
+ * 자유게시글을 삭제합니다.
+ */
+async function onDelete() {
+  try {
+    await deleteFree(route.params.boardId);
+    router.push({path: '/frees', query: condition.value});
+  } catch ({message}) {
+    alert(message);
+  }
 }
 </script>
 
@@ -131,6 +136,5 @@ export default {
 .free-detail-btn-container {
   margin: 30px 0;
 }
-
 
 </style>

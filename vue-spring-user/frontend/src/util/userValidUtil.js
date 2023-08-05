@@ -2,7 +2,6 @@
  * 사용자 아이디를 검증합니다.
  * 4글자 이상, 12글자 미만 이여야 합니다.
  * 영문/숫자를 포함 하여야 합니다.
- *
  * @param userId 사용자 아이디
  */
 export const validateUserId = userId => {

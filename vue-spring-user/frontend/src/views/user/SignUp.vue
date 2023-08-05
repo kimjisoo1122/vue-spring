@@ -60,7 +60,7 @@ import {doubleCheckId, signUp} from "@/api/userService";
 import {validateConfirm, validateUserId, validateUserName, validateUserPw} from "@/util/userValidUtil";
 import {useRouter} from "vue-router";
 import {useStore} from "vuex";
-import InputError from "@/components/InputError.vue";
+import InputError from "@/components/base/BaseInputError.vue";
 import BaseInput from "@/components/base/BaseInput.vue";
 import BaseButton from "@/components/base/BaseButton.vue";
 

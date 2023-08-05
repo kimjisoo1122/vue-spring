@@ -45,6 +45,7 @@
         SELECT COUNT(*)
         FROM board b
         <include refid="whereSearchCondition"/>
+
     </select>
 
     <!-- 게시글번호로 조회합니다. -->
@@ -125,6 +126,9 @@
                     (b.board_title LIKE CONCAT('%', #{search}, '%')
                     OR
                     b.board_content LIKE CONCAT('%', #{search}, '%'))
+            </if>
+            <if test="userId != null and userId !=''">
+                AND b.user_id = #{userId}
             </if>
         </where>
     </sql>

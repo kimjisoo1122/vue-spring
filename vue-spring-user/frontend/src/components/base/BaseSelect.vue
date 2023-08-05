@@ -1,30 +1,38 @@
-\<template>
+<template>
+
   <select @change="onChange" :value="modelValue">
+
     <option
         v-for="option in options"
         :key="option.value"
         :value="option.value">
       {{ option.name }}
     </option>
+
   </select>
+
 </template>
 
 <script>
+/**
+ * 베이스 셀렉트 컴포넌트
+ */
 export default {
   name: "BaseSelect",
   props: {
     modelValue: {
       type: String,
-      default: '',
+      required: true,
       description: '입력 값'
     },
     options: {
       type: Array,
-      default: undefined,
+      required: true,
       description: '옵션 목록'
     }
   },
   methods: {
+    /* 선택한 값이 부모 컴포넌트로 전송됩니다. */
     onChange(event) {
       this.$emit('update:modelValue', event.target.value);
     },

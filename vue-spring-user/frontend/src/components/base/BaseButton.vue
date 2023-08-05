@@ -3,13 +3,15 @@
 </template>
 
 <script>
+/**
+ * 베이스 버튼 컴포넌트
+ */
 export default {
   name: "BaseButton",
 
   props: {
     name: {
       type: String,
-      default: '',
       required: true,
       description: '버튼 이름'
     }

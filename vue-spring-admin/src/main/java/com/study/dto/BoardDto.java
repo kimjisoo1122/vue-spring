@@ -46,4 +46,5 @@ public class BoardDto {
     private String qnaAnswer; // 문의게시글 답변
     private boolean qnaSecret; // 문의게시글 비밀여부
     private boolean answerStatus; // 문의게시글 답변여부
+    private String answerWriter; // 문의게시글 답변자
 }

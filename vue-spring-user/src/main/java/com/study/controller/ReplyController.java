@@ -75,8 +75,7 @@ public class ReplyController {
             throw new NotAuthorisedToReplyException();
         }
 
-        ResponseDto response = new ResponseDto();
-        response.setStatus(ResponseApiStatus.SUCCESS);
+        ResponseDto response = new ResponseDto(ResponseApiStatus.SUCCESS);
 
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)

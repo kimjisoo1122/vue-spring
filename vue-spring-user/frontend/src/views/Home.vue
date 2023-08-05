@@ -1,130 +1,238 @@
 <template>
 
-  <header>
-
-    <h1 class="home-header-title">뷰 스프링 게시판</h1>
-
-    <div class="home-header-nav-container">
-
-      <nav class="home-header-nav">
-        <ul class="home-nav-list">
-          <li class="home-nav-notices">공지사항</li>
-          <li class="home-nav-frees">자유 게시판</li>
-          <li class="home-nav-galleries">갤러리</li>
-          <li class="home-nav-qna">문의 게시판</li>
-        </ul>
-      </nav>
-
-      <div class="home-header-join-container">
-        <div class="home-header-login">로그인</div>
-        <span>/</span>
-        <div class="home-header-signup">회원가입</div>
-      </div>
-
-    </div>
-
-  </header>
+  <GNB></GNB>
 
   <main>
 
-    <div class="home-main-user-container">
-      <div class="home-user-name">유저이름</div>
-      <div class="home-user-logout">로그아웃</div>
-    </div>
-
     <section class="home-main-board-list-container">
 
+      <!-- 공지사항 -->
       <article class="home-notices-container">
+
+        <!-- 공지시항 타이틀 -->
         <div class="home-notices-header">
           <h3 class="home-notices-title">공지사항</h3>
-          <button class="home-board-see-more">더보기+</button>
+          <button
+              @click="router.push('/notices')"
+              class="home-board-see-more">
+            더보기+
+          </button>
         </div>
+
+        <!-- 공지사항 목록 -->
         <div class="home-notices-list-container">
+
+          <!-- 공지사항 헤더 -->
           <div class="notices-header">
             <div class="notices-header-no">번호</div>
             <div class="notices-header-category">분류</div>
             <div class="notices-header-title">제목</div>
           </div>
-          <div class="home-notices">
-            <div class="notices-no">번호</div>
-            <div class="notices-category">분류</div>
+
+          <!-- 공지사항 -->
+          <div
+              v-for="notice in noticeList"
+              :key="notice.boardId"
+              :class="{'notices-alarm' : notice.categoryName === '알림'}"
+              class="home-notices">
+
+            <!-- 공지사항 번호 -->
+            <div class="notices-no">{{ notice.boardId }}</div>
+
+            <!-- 공지사항 카테고리 -->
+            <div class="notices-category">{{ notice.categoryName }}</div>
+
+            <!-- 공지사항 제목 -->
             <div class="notices-title-container">
-              <div class="notices-title">제목</div>
+              <div
+                  @click="onDetailRouter('/notices', notice)"
+                  class="notices-title">
+                {{ notice.boardTitle }}
+              </div>
+
+              <!-- 공지사항 new -->
               <div class="home-board-new">new</div>
             </div>
           </div>
+
         </div>
+
       </article>
 
+      <!-- 자유게시판 -->
       <article class="home-frees-container">
+
+        <!-- 자유게시판 타이틀 -->
         <div class="home-frees-header">
           <h3 class="home-frees-title">자유게시판</h3>
-          <button class="home-board-see-more">더보기+</button>
+          <button
+              @click="router.push('/frees')"
+              class="home-board-see-more">
+            더보기+
+          </button>
         </div>
+
+        <!-- 자유게시글 목록 -->
         <div class="home-frees-list-container">
+
+          <!-- 자유게시글 헤더 -->
           <div class="frees-header">
             <div class="frees-header-no">번호</div>
             <div class="frees-header-category">분류</div>
             <div class="frees-header-title">제목</div>
           </div>
-          <div class="home-frees">
-            <div class="frees-no">번호</div>
-            <div class="frees-category">분류</div>
+
+          <!-- 자유게시글 -->
+          <div
+              v-for="free in freeList"
+              :key="free.boardId"
+              class="home-frees">
+
+            <!-- 자유게시글 번호 -->
+            <div class="frees-no">{{ free.boardId }}</div>
+
+            <!-- 자유게시글 카테고리 -->
+            <div class="frees-category">{{ free.categoryName }}</div>
+
+            <!-- 자유게시글 제목 -->
             <div class="frees-title-container">
-              <div class="frees-title">제목</div>
-              <div class="frees-title-reply-cnt">3</div>
-              <div class="home-board-new"></div>
-              <div class="home-board-file">file</div>
+              <div
+                  @click="onDetailRouter('/frees', free)"
+                  class="frees-title">
+                {{ free.boardTitle }}
+              </div>
+
+              <!-- 자유게시글 댓글 개수 -->
+              <div
+                  v-if="free.replyCnt !== 0"
+                  class="frees-title-reply-cnt">({{ free.replyCnt }})</div>
+              <div class="home-board-new">new</div>
+
+              <!-- 자유게시글 파일상태 -->
+              <font-awesome-icon
+                  v-if="free.fileStatus"
+                  icon="paperclip"
+                  class="frees-title-file" />
             </div>
+
           </div>
+
         </div>
+
       </article>
 
+      <!-- 갤러리 -->
       <article class="home-galleries-container">
+
+        <!-- 갤러리 타이틀 -->
         <div class="home-galleries-header">
           <h3 class="home-galleries-title">갤러리</h3>
-          <button class="home-board-see-more">더보기+</button>
+          <button
+              @click="router.push('/galleries')"
+              class="home-board-see-more">
+            더보기+
+          </button>
         </div>
+
+        <!-- 갤러리 목록 -->
         <div class="home-galleries-list-container">
+
+          <!-- 갤러리 헤더 -->
           <div class="galleries-header">
             <div class="galleries-header-no">번호</div>
             <div class="galleries-header-category">분류</div>
           </div>
-          <div class="home-galleries">
-            <div class="galleries-no">번호</div>
-            <div class="galleries-category">분류</div>
+
+          <!-- 갤러리 -->
+          <div
+              v-for="gallery in galleryList"
+              :key="gallery.boardId"
+              class="home-galleries">
+            <!-- 갤러리 번호 -->
+            <div class="galleries-no">{{ gallery.boardId }}</div>
+
+            <!-- 갤러리 카테고리 -->
+            <div class="galleries-category">{{ gallery.categoryName }}</div>
+
+            <!-- 갤러리 이미지 -->
             <div class="galleries-title-container">
-              <div class="galleries-img-container">
-                <img src="" alt="갤러리 썸네일">
+              <div
+                  @click="onDetailRouter('/galleries', gallery)"
+                  class="galleries-img-container">
+                <img :src="`/api/file/image/${gallery.galleryThumbName}`" alt="갤러리 썸네일">
               </div>
-              <div class="galleries-img-cnt"></div>
-              <div class="home-board-new"></div>
+
+              <!-- 갤러리 개수-->
+              <div
+                  v-if="gallery.galleryCnt !== 1"
+                  class="galleries-img-cnt">+{{ gallery.galleryCnt - 1 }}</div>
+
+              <!-- 갤러리 new -->
+              <div class="home-board-new">new</div>
             </div>
           </div>
+
         </div>
+
       </article>
 
+      <!-- 문의게시판 -->
       <article class="home-qna-container">
+
+        <!-- 문의게시판 타이틀 -->
         <div class="home-qna-header">
-          <button class="home-qna-myqna" >나의 문의 내역</button>
+          <button @click="onMyQnaList" class="home-qna-myqna" >나의 문의 내역</button>
           <h3 class="home-qna-title">문의 게시판</h3>
-          <button class="home-board-see-more">더보기+</button>
+          <button
+              @click="router.push('/qna')"
+              class="home-board-see-more">
+            더보기+
+          </button>
         </div>
+
+        <!-- 문의게시글 목록 -->
         <div class="home-qna-list-container">
+
+          <!-- 문의게시글 헤더 -->
           <div class="qna-header">
             <div class="qna-header-no">번호</div>
             <div class="qna-header-title">제목</div>
           </div>
-          <div class="home-qna">
-            <div class="qna-no">번호</div>
+
+          <!-- 문의게시글 -->
+          <div
+              v-for="qna in qnaList"
+              :key="qna.boardId"
+              class="home-qna">
+            <!-- 문의게시글 번호 -->
+            <div class="qna-no">{{ qna.boardId }}</div>
+
+            <!-- 문의게시글 제목 -->
             <div class="qna-title-container">
-              <div class="qna-title">제목</div>
-              <div class="qna-answer-status">(미답변)</div>
+              <div
+                  @click="onDetailRouter('/qna', qna)"
+                  class="qna-title">
+                {{ qna.boardTitle }}
+              </div>
+
+              <!-- 문의게시글 답변상태 -->
+              <div class="qna-answer-status">
+                ({{ qna.answerStatus ? '답변완료' : '미답변' }})
+              </div>
+
+              <!-- 문의게시글 new-->
               <div class="home-board-new">new</div>
-              <div class="qna-secret">자물쇠</div>
+
+              <!-- 문의게시글 비밀글 -->
+              <font-awesome-icon
+                  v-if="qna.qnaSecret"
+                  icon="lock"
+                  class="qna-secret"/>
             </div>
           </div>
+
         </div>
+
       </article>
 
     </section>
@@ -133,7 +241,78 @@
 
 </template>
 
+<script setup>
+/**
+ * 홈 화면 컴포넌트
+ */
 
+import {ref} from "vue";
+import {getHomeBoardList} from "@/api/homeService";
+import {useRoute, useRouter} from "vue-router";
+import {useStore} from "vuex";
+import {getCurrentUserId, isAuthenticated, isCurrentUserId} from "@/util/authUtil";
+import GNB from "@/components/GNB.vue";
+
+const router = useRouter();
+const route = useRoute();
+const store = useStore();
+
+const noticeList = ref([]);
+const freeList = ref([]);
+const galleryList = ref([]);
+const qnaList = ref([]);
+
+initHome();
+
+/**
+ * 홈 화면 컴포넌트를 초기화합니다.
+ */
+async function initHome() {
+
+  try {
+    const homeBoard = await getHomeBoardList();
+
+    noticeList.value = homeBoard.noticeList;
+    freeList.value = homeBoard.freeList;
+    galleryList.value = homeBoard.galleryList;
+    qnaList.value = homeBoard.qnaList;
+  } catch ({message}) {
+    console.error(message);
+  }
+}
+
+/**
+ * 해당 게시글 상세컴포넌트로 라우팅합니다.
+ * 문의게시글은 작성자만 라우팅 가능합니다.
+ *
+ * @param path 라우팅 경로
+ * @param board 해당게시글
+ */
+function onDetailRouter(path, board) {
+  if (path === '/qna' && !isCurrentUserId(board.userId)) {
+    alert('해당 문의글은 작성자만 이용가능합니다.');
+    return false;
+  }
+
+  router.push(`${path}/${board.boardId}`);
+}
+
+function onMyQnaList() {
+  if (!isAuthenticated()) {
+    router.push('/login');
+
+    return;
+  }
+
+  router.push({
+    path: '/qna',
+    query: {
+      myQna: true
+    }
+  });
+}
+
+</script>
 
 <script>
 export default {
@@ -143,50 +322,6 @@ export default {
 
 <style scoped>
 
-header {
-  padding: 0 10px;
-  align-items: center;
-  border-bottom: var(--main-border);
-}
-
-.home-header-title {
-  margin: 0;
-  font-size: var(--title-font-size);
-  text-align: center;
-}
-
-.home-header-nav-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.home-nav-list {
-  list-style: none;
-  display: flex;
-  padding: 0;
-  align-items: center;
-  justify-content: center;
-}
-
-.home-nav-list > li {
-  border-right: var(--main-border);
-  padding: 0 10px;
-  font-size: var(--middle-font-size);
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.home-header-join-container {
-  display: flex;
-  gap: 5px;
-  font-size: var(--small-font-size);
-}
-
-.home-header-login , .home-header-signup {
-  cursor: pointer;
-}
-
 main {
   padding: 10px;
 }
@@ -195,18 +330,6 @@ button {
   cursor: pointer;
   background: white;
   border: none;
-}
-
-.home-main-user-container {
-  display: flex;
-  justify-content: flex-end;
-  font-size: var(--small-font-size);
-  gap: 30px;
-  margin-bottom: 30px;
-}
-
-.home-user-name, .home-user-logout {
-  cursor: pointer;
 }
 
 section {
@@ -220,7 +343,6 @@ section {
 article {
   flex-basis: 45%;
   height: 270px;
-  border: var(--main-border)
 }
 
 .home-board-see-more {
@@ -242,16 +364,16 @@ article {
   align-items: center;
   justify-content: center;
   position: relative;
+  margin-bottom: 10px;
 }
 
 .notices-header, .frees-header,
 .galleries-header, .qna-header {
-  height: 30px;
+  padding: 3px 0;
   display: flex;
   font-size: var(--middle-font-size);
   font-weight: bold;
   align-items: center;
-  flex-grow: 1;
   border-top: 2px solid var(--border-color-gray);
   border-bottom: 2px solid var(--border-color-gray);
   box-sizing: border-box;
@@ -273,12 +395,25 @@ article {
   align-items: center;
 }
 
+.home-notices-list-container, .home-frees-list-container,
+.home-galleries-list-container, .home-qna-list-container{
+  display: flex;
+  flex-direction: column;
+  height: 230px;
+}
+
 .home-notices, .home-frees {
+  box-sizing: border-box;
   height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-bottom: var(--main-border)
+  border-bottom: var(--main-border);
+  flex-grow: 1;
+}
+
+.notices-alarm {
+  background-color: var(--sub-color-blue);
 }
 
 .notices-title-container, .frees-title-container {
@@ -297,6 +432,19 @@ article {
   margin-right: 10px;
 }
 
+.frees-title {
+  max-width: 280px;
+}
+
+.frees-title-reply-cnt {
+  margin-right: 10px;
+}
+
+.frees-title-file {
+  margin-left: 10px;
+  padding-top: 3px;
+}
+
 .galleries-header-no, .galleries-header-category,
 .galleries-no, .galleries-category {
   flex-basis: 10%;
@@ -310,12 +458,23 @@ article {
   align-items: center;
   height: 60px;
   border-bottom: var(--main-border);
+  flex-grow: 1;
 }
 
 .galleries-title-container {
   display: flex;
   align-items: center;
   margin-left: 15px;
+}
+
+.galleries-img-container {
+  cursor: pointer;
+  margin: 0 20px;
+}
+
+.galleries-img-cnt {
+  margin-right: 20px;
+  font-weight: bold;
 }
 
 .qna-header-no, .qna-no {
@@ -337,6 +496,7 @@ article {
   align-items: center;
   height: 30px;
   border-bottom: var(--main-border);
+  flex-grow: 1;
 }
 
 .qna-title-container {
@@ -346,21 +506,25 @@ article {
 }
 
 .qna-title {
-  max-width: 330px;
+  cursor: pointer;
+  max-width: 260px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
 }
 
+.qna-answer-status {
+  margin: 0 5px
+}
 
+.qna-secret {
+  color: gray;
+  margin-left: 10px;
+}
 
 .home-qna-myqna {
   position: absolute;
   left: 5px;
   font-size: var(--small-font-size);
-
 }
-
-
-
 </style>

@@ -3,9 +3,10 @@ import {MULTIPART_CONFIG} from "@/constants";
 
 /**
  * 갤러리를 등록합니다.
- *
- * @param formData 게시글 등록폼 정보
- * @return 등록된 게시글 번호를 반환하거나 실패한 경우 에러필드에 에러메시지가 담겨 반환합니다.
+ * @param formData 등록 폼
+ * @return {Promise<number>} 등록된 게시글 번호를 반환하거나,
+ * data: 에러필드에 에러메시지가 담겨진 객체를 반환합니다.
+ * message: API 통신 에러메시지
  */
 export function registerGallery (formData) {
   return axios.post('/api/galleries', formData, MULTIPART_CONFIG)
@@ -22,9 +23,8 @@ export function registerGallery (formData) {
 
 /**
  * 갤러리 목록을 조회합니다.
- *
  * @param condition 검색조건
- * @returns {Promise<unknown>}
+ * @returns {Promise<Array>} 갤러리 목록이 배열로 반환됩니다.
  */
 export function getGalleryList(condition) {
   return axios.get('/api/galleries', {
@@ -43,6 +43,7 @@ export function getGalleryList(condition) {
 /**
  * 갤러리 상세정보를 조회합니다.
  * @param boardId 갤러리 번호
+ * @return
  */
 export function getGalleryDetail(boardId) {
   return axios.get(`/api/galleries/${boardId}`)
@@ -58,9 +59,9 @@ export function getGalleryDetail(boardId) {
 
 /**
  * 갤러리를 업데이트합니다.
- * @param boardId 게시글번호
+ * @param boardId 갤러리 번호
  * @param formData 업데이트폼 정보
- * @return boardId
+ * @return {Promise<number>} 갤러리 번호
  */
 export function updateGallery(boardId, formData) {
   return axios.put(`/api/galleries/${boardId}`, formData, MULTIPART_CONFIG)
@@ -76,13 +77,12 @@ export function updateGallery(boardId, formData) {
 
 /**
  * 갤러리를 삭제합니다.
- * @param boardId 게시글번호
- * @return boardId
+ * @param boardId 갤러리 번호
+ * @return {Promise<void>}
  */
 export function deleteGallery(boardId) {
   return axios.delete(`/api/galleries/${boardId}`)
       .then(() => {
-        return boardId;
       })
       .catch(({response: {data: {errorMessage}}}) => {
         throw {

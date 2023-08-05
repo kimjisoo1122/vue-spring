@@ -1,40 +1,50 @@
 <template>
 
+  <GNB></GNB>
+
+  <!-- 게시글 제목 -->
   <board-title title="갤러리"></board-title>
 
+  <!-- 게시글 상세 헤더 -->
   <board-detail-header :board="gallery"></board-detail-header>
 
   <div class="gallery-slide-container">
 
-      <carousel ::mouseDrag="false" class="gallery-carousel-container">
-        <slide v-for="file in fileList" :key="file.fileId">
-          <img class="gallery-slide" :src="`/api/file/image/${file.galleryImgName}`" alt="">
-        </slide>
+    <!-- 이미지 슬라이더  -->
+    <carousel ::mouseDrag="false" class="gallery-carousel-container">
+      <slide v-for="file in fileList" :key="file.fileId">
+        <img class="gallery-slide" :src="`/api/file/image/${file.galleryImgName}`" alt="">
+      </slide>
 
-        <template #addons>
-          <navigation class="gallery-carousel-nav"/>
-          <pagination class="gallery-carousel-page"/>
-        </template>
-      </carousel>
+      <template #addons>
+        <navigation class="gallery-carousel-nav"/>
+        <pagination class="gallery-carousel-page"/>
+      </template>
+    </carousel>
 
   </div>
 
+  <!-- 게시글 상세 내용 -->
   <board-detail-content
       :board="gallery"
       class="board-detail-content">
   </board-detail-content>
 
+  <!-- 게시글 상세 버튼 -->
   <board-detail-btn-container
       @delete-board="onDelete"
       :board="gallery"
-      path="/galleries"
       :condition="condition"
+      path="/galleries"
       class="board-detail-btn-container">
   </board-detail-btn-container>
 
 </template>
 
 <script setup>
+/**
+ * 갤러리 상세 컴포넌트
+ */
 import 'vue3-carousel/dist/carousel.css'
 import {Carousel, Navigation, Pagination, Slide} from 'vue3-carousel'
 import BoardTitle from "@/components/board/BoardTitle.vue";
@@ -46,18 +56,19 @@ import {formatDate} from "@/util/formatUtil";
 import {useRoute, useRouter} from "vue-router";
 import {ref} from "vue";
 import {deleteGallery, getGalleryDetail} from "@/api/board/galleryService";
+import GNB from "@/components/GNB.vue";
 
 const route = useRoute();
 const router = useRouter();
-const condition = ref({});
-const gallery = ref({});
-const fileList = ref({});
+
+const condition = ref({}); /* 검색조건 */
+const gallery = ref({}); /* 갤러리 */
+const fileList = ref({}); /* 파일 목록*/
 
 initGalleryDetail();
 
 /**
  * 갤러리 상세 컴포넌트를 초기화합니다.
- * @returns {Promise<void>}
  */
 async function initGalleryDetail() {
   condition.value = createCondition(route.query);
@@ -73,10 +84,6 @@ async function initGalleryDetail() {
     fileList.value = galleryResult.fileList
   } catch ({message}) {
     console.error(message);
-
-    if (message) {
-      router.push('/404');
-    }
   }
 }
 
@@ -91,8 +98,6 @@ async function onDelete() {
     alert(message);
   }
 }
-
-
 </script>
 
 <script>
@@ -129,4 +134,5 @@ export default {
   border-radius: 5px;
   width: 250px;
 }
+
 </style>

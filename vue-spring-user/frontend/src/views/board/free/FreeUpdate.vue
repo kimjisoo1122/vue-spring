@@ -1,12 +1,17 @@
 <template>
 
+  <GNB></GNB>
+
+  <!-- 타이틀 -->
   <board-title title="자유게시판"></board-title>
+
 
   <div class="update-container">
 
+    <!-- 게시글 카테고리 -->
     <div class="update-category-container">
-      <board-form-title name="분류" class="board-form-title-category">
-      </board-form-title>
+
+      <board-form-title name="분류" class="board-form-title-category"></board-form-title>
 
       <div class="update-category-input-container">
         <category-select
@@ -20,9 +25,11 @@
 
     </div>
 
+    <!-- 게시글 제목 -->
     <div class="update-title-container">
-      <board-form-title name="제목" class="board-form-title-title">
-      </board-form-title>
+
+      <board-form-title name="제목" class="board-form-title-title"></board-form-title>
+
       <div class="update-title-input-container">
         <base-input
             v-model="updateForm.boardTitle"
@@ -32,11 +39,14 @@
         </base-input>
         <input-error :error-msg="errorFields.boardTitle"></input-error>
       </div>
+
     </div>
 
+    <!-- 게시글 내용 -->
     <div class="update-content-container">
-      <board-form-title name="내용" class="board-form-title-content">
-      </board-form-title>
+
+      <board-form-title name="내용" class="board-form-title-content"></board-form-title>
+
       <div class="update-content-input-container">
         <base-textarea
             v-model="updateForm.boardContent"
@@ -47,12 +57,14 @@
       </div>
     </div>
 
+    <!-- 첨부파일 -->
     <div class="update-file-container">
       <board-form-title
           :required="false"
           name="첨부"
           class="board-form-title-file">
       </board-form-title>
+
       <div class="update-file-input-container">
         <board-file-list
             @delete-file="onDeleteFile"
@@ -60,35 +72,33 @@
             :file-list="fileList"></board-file-list>
         <input-error :error-msg="errorFields.saveFiles"></input-error>
       </div>
+
     </div>
 
-    <div class="update-btn-container">
-      <base-button
-          @click="onUpdate"
-          name="수정"
-          class="update-btn-save">
-      </base-button>
-      <base-button
-          @click="onCancel"
-          name="취소"
-          class="update-btn-cancel">
-      </base-button>
-    </div>
+    <!-- 수정 폼 버튼 -->
+    <board-form-btn-container
+        @update="onUpdate"
+        @cancel="onCancel"
+        form-type="update">
+    </board-form-btn-container>
 
   </div>
-</template>
-<script setup>
 
+</template>
+
+<script setup>
+/**
+ * 자유게시글 수정 폼 컴포넌트
+ */
 import BoardTitle from "@/components/board/BoardTitle.vue";
 import BoardFormTitle from "@/components/board/BoardFormTitle.vue";
 import {ref} from "vue";
 import CategorySelect from "@/components/CategorySelect.vue";
-import InputError from "@/components/InputError.vue";
+import InputError from "@/components/base/BaseInputError.vue";
 import BaseInput from "@/components/base/BaseInput.vue";
 import {validateCategory, validateContent, validateTitle} from "@/util/boardValidUtil";
 import BaseTextarea from "@/components/base/BaseTextarea.vue";
 import BoardFileList from "@/components/board/BoardFileList.vue";
-import BaseButton from "@/components/base/BaseButton.vue";
 import {getBoardFileList} from "@/api/fileService";
 import {useRoute, useRouter} from "vue-router";
 import {getFreeDetail, updateFree} from "@/api/board/freeService";
@@ -96,40 +106,46 @@ import {FREE_CATEGORY_ID} from "@/constants";
 import {getCategoryList} from "@/api/categoryService";
 import {useStore} from "vuex";
 import {isCurrentUserId} from "@/util/authUtil";
+import GNB from "@/components/GNB.vue";
+import BoardFormBtnContainer from "@/components/board/BoardFormBtnContainer.vue";
+import {initFormValue} from "@/util/boardUtil";
+import {createCondition} from "@/util/queryParamUtil";
 
 const store = useStore();
 const route = useRoute();
 const router = useRouter();
 
-/* 자유게시글 등록정보 */
+/* 자유게시글 수정정보 */
 const updateForm = ref({
-  categoryId: '',
-  boardTitle: '',
-  boardContent: '',
+  categoryId: '', /* 카테고리 번호 */
+  boardTitle: '', /* 게시글 제목 */
+  boardContent: '', /* 게시글 내용 */
 })
-/* 유효성검증 */
+/* 유효성검증 에러메시지 */
 const errorFields = ref({
-  categoryId: '',
-  boardTitle: '',
-  boardContent: '',
-  saveFiles: '',
+  categoryId: '', /* 카테고리 번호 */
+  boardTitle: '', /* 게시글 제목 */
+  boardContent: '', /* 게시글 내용 */
+  saveFiles: '', /* 첨부파일 */
 })
 
-const free = ref({}); // 해당게시글
+const free = ref({}); // 해당 자유게시글
 const categoryList = ref([]); // 카테고리 목록
-const fileList = ref([]); // 첨부파일 목록
 const condition = ref({}); // 검색조건
-const deleteFiles = ref([]); // 삭제파일 목록
+const fileList = ref([]); // 첨부 파일 목록
+const deleteFiles = ref([]); // 삭제 파일 목록
 
 initFreeUpdate();
 
 /**
- * 자유게시글 수정컴포넌트를 초기화합니다.
- * @returns {Promise<void>}
+ * 자유게시글 수정 컴포넌트를 초기화합니다.
  */
 async function initFreeUpdate() {
+  condition.value = createCondition(route.query);
+
   try {
     const boardId = route.params.boardId;
+
     const [fileListResult, freeResult, categoryResult] =await Promise.all([
       getBoardFileList(boardId),
       getFreeDetail(boardId),
@@ -140,25 +156,19 @@ async function initFreeUpdate() {
     free.value = freeResult;
     categoryList.value = categoryResult;
 
-    for (const field in updateForm.value) {
-      updateForm.value[field] = free.value[field];
-    }
+    initFormValue(updateForm.value, free.value);
   } catch ({message}) {
     console.error(message);
   }
 }
 
-
 /**
- * 게시글을 수정합니다.
+ * 자유게시글을 수정합니다.
  */
 async function onUpdate() {
-  if (confirm('수정 하시겠습니까?')) {
     if (!validateUpdateForm() && !isCurrentUserId(free.value.userId)) {
       return false;
     }
-
-
 
     try {
       const formData = createFormData();
@@ -176,8 +186,6 @@ async function onUpdate() {
       }
       console.error(message);
     }
-  }
-
 }
 
 /**
@@ -190,10 +198,9 @@ function onDeleteFile(fileId) {
   fileList.value = fileList.value.filter(e => e.fileId !== fileId);
 }
 
+/* 수정을 취소합니다. */
 function onCancel() {
-  if (confirm('수정을 취소하시겠습니까?')) {
-    router.push({path: '/frees', query: condition.value});
-  }
+  router.push({path: '/frees', query: condition.value});
 }
 
 /**
@@ -232,6 +239,7 @@ function validateUpdateForm() {
 
   for (const errorMsg of Object.values(errorFields.value)) {
     if (errorMsg) {
+      console.log(errorMsg);
       return false;
     }
   }
@@ -283,22 +291,5 @@ export default {
   width: 95%;
   min-height: 200px;
 }
-
-.update-btn-container {
-  margin: 30px 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-}
-
-.update-btn-save, .update-btn-cancel {
-  width: 70px;
-}
-
-.update-btn-cancel {
-  background-color: var(--sub-color-violet);
-}
-
 
 </style>

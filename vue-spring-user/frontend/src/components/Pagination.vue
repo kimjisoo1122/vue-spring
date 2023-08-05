@@ -38,12 +38,14 @@
 </template>
 
 <script>
+/**
+ * 페이지네이션 컴포넌트
+ */
 export default {
   name: "Pagination",
   props: {
     totalCnt: {
       type: Number,
-      default: 0,
       required: true,
       description: '게시글 총 개수'
     },

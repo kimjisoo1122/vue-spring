@@ -1,12 +1,17 @@
 <template>
 
+  <GNB></GNB>
+
+  <!-- 타이틀 -->
   <board-title title="문의 게시판"></board-title>
 
   <div class="update-container">
 
+    <!-- 게시글 제목 -->
     <div class="update-title-container">
-      <board-form-title name="제목" class="board-form-title-title">
-      </board-form-title>
+
+      <board-form-title name="제목" class="board-form-title-title"></board-form-title>
+
       <div class="update-title-input-container">
         <base-input
             v-model="updateForm.boardTitle"
@@ -16,8 +21,10 @@
         </base-input>
         <input-error :error-msg="errorFields.boardTitle"></input-error>
       </div>
+
     </div>
 
+    <!-- 게시글 내용 -->
     <div class="update-content-container">
       <board-form-title name="내용" class="board-form-title-content">
       </board-form-title>
@@ -31,12 +38,15 @@
       </div>
     </div>
 
+    <!-- 비밀글 체크박스 -->
     <div class="update-secret-container">
+
       <board-form-title
           :required="false"
           name="비밀글"
           class="board-form-title-secret">
       </board-form-title>
+
       <div class="update-secret-input-container">
         <base-input
             v-model="updateForm.qnaSecret"
@@ -44,58 +54,53 @@
             class="update-secret-input">
         </base-input>
       </div>
+
     </div>
 
-    <div class="update-btn-container">
-      <base-button
-          @click="onUpdate"
-          name="수정"
-          class="update-btn-save">
-      </base-button>
-      <base-button
-          @click="onCancel"
-          name="취소"
-          class="update-btn-cancel">
-      </base-button>
-    </div>
+    <!-- 수정 폼 버튼 -->
+    <board-form-btn-container
+        @update="onUpdate"
+        @cancel="router.push({path: '/qna', query: condition});"
+        form-type="update">
+    </board-form-btn-container>
 
   </div>
 </template>
 <script setup>
+/**
+ * 문의게시글 수정 컴포넌트
+ */
 
 import BoardTitle from "@/components/board/BoardTitle.vue";
 import BoardFormTitle from "@/components/board/BoardFormTitle.vue";
 import {ref} from "vue";
-import CategorySelect from "@/components/CategorySelect.vue";
-import InputError from "@/components/InputError.vue";
+import InputError from "@/components/base/BaseInputError.vue";
 import BaseInput from "@/components/base/BaseInput.vue";
-import {validateCategory, validateContent, validateTitle} from "@/util/boardValidUtil";
+import {validateContent, validateTitle} from "@/util/boardValidUtil";
 import BaseTextarea from "@/components/base/BaseTextarea.vue";
-import BoardFileList from "@/components/board/BoardFileList.vue";
-import BaseButton from "@/components/base/BaseButton.vue";
-import {getBoardFileList} from "@/api/fileService";
 import {useRoute, useRouter} from "vue-router";
-import {getFreeDetail, updateFree} from "@/api/board/freeService";
-import {FREE_CATEGORY_ID} from "@/constants";
-import {getCategoryList} from "@/api/categoryService";
 import {useStore} from "vuex";
 import {getQnaDetail, updateQna} from "@/api/board/qnaService";
 import {isCurrentUserId} from "@/util/authUtil";
+import GNB from "@/components/GNB.vue";
+import BoardFormBtnContainer from "@/components/board/BoardFormBtnContainer.vue";
+import {initFormValue} from "@/util/boardUtil";
+import {createCondition} from "@/util/queryParamUtil";
 
 const store = useStore();
 const route = useRoute();
 const router = useRouter();
 
-/* 문의게시글 등록정보 */
+/* 문의게시글 수정 정보 */
 const updateForm = ref({
-  boardTitle: '',
-  boardContent: '',
-  qnaSecret: true,
+  boardTitle: '', /* 게시글 제목 */
+  boardContent: '', /* 게시글 내용 */
+  qnaSecret: true, /* 비밀글 여부 */
 })
-/* 유효성검증 */
+/* 유효성검증 에러메시지 */
 const errorFields = ref({
-  boardTitle: '',
-  boardContent: '',
+  boardTitle: '', /* 게시글 제목*/
+  boardContent: '', /* 게시글 내용*/
 })
 
 const qna = ref({}); // 해당게시글
@@ -108,6 +113,9 @@ initQnaUpdate();
  * @returns {Promise<void>}
  */
 async function initQnaUpdate() {
+  condition.value = createCondition(route.query);
+  condition.value.myQna = route.query.myQna || false;
+
   try {
     const boardId = route.params.boardId;
     const [qnaResult] =await Promise.all([
@@ -116,46 +124,33 @@ async function initQnaUpdate() {
 
     qna.value = qnaResult;
 
-    for (const field in updateForm.value) {
-      updateForm.value[field] = qna.value[field];
-    }
-    console.log(qna.value.qnaSecret);
+    initFormValue(updateForm.value, qna.value)
   } catch ({message}) {
     console.error(message);
   }
 }
 
-
 /**
- * 게시글을 수정합니다.
+ * 문의게시글을 수정합니다.
  */
 async function onUpdate() {
-  if (confirm('수정 하시겠습니까?')) {
-    if (!validateUpdateForm() && !isCurrentUserId(qna.value.userId)) {
-      return false;
-    }
-
-    try {
-      const formData = createFormData();
-
-      const qnaId = await updateQna(route.params.boardId, formData);
-
-      router.push({path: `/qna/${qnaId}`, query: condition.value});
-
-    } catch ({data, message}) {
-      // 유효성검증에 실패한 필드의 에러메시지를 저장합니다.
-      for (const field in data) {
-        errorFields.value[field] = data[field];
-      }
-      console.error(message);
-    }
+  if (!validateUpdateForm() && !isCurrentUserId(qna.value.userId)) {
+    return false;
   }
 
-}
+  try {
+    const formData = createFormData();
 
-function onCancel() {
-  if (confirm('수정을 취소하시겠습니까?')) {
-    router.push({path: '/qna', query: condition.value});
+    const qnaId = await updateQna(route.params.boardId, formData);
+
+    router.push({path: `/qna/${qnaId}`, query: condition.value});
+
+  } catch ({data, message}) {
+    // 유효성검증에 실패한 필드의 에러메시지를 저장합니다.
+    for (const field in data) {
+      errorFields.value[field] = data[field];
+    }
+    console.error(message);
   }
 }
 
@@ -230,22 +225,5 @@ export default {
 .update-secret-input {
   width: 20px;
 }
-
-.update-btn-container {
-  margin: 30px 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-}
-
-.update-btn-save, .update-btn-cancel {
-  width: 70px;
-}
-
-.update-btn-cancel {
-  background-color: var(--sub-color-violet);
-}
-
 
 </style>

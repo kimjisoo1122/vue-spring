@@ -1,28 +1,55 @@
 <template>
 
+  <!-- 공지사항중 알림글인 경우 클래스를 추가합니다. (색상부여) -->
   <div
       v-for="board in boardList"
       :key="board.boardId"
       :class="{'board-list-alarm-container': isAlarm }"
       class="board-list-container">
+
+    <!-- 게시글 번호 -->
     <div class="board-list-id">{{ board.boardId }}</div>
+
+    <!-- 게시글 카테고리 이름, 문의게시글은 카테고리가 표시되지 않습니다. -->
     <div v-if="!isQna" class="board-list-category">{{ board.categoryName }}</div>
+
+    <!-- 게시글 제목 컨테이너 -->
     <div class="board-list-title" id="board-list-title">
+
       <div @click="$emit('detail-router', board);" class="board-list-title-link">{{ board.boardTitle }}</div>
+
+      <!-- 답변상태가 제목에 첨삭됩니다. (문의게시글) -->
       <span v-if="isQna" class="board-list-title-answer">{{ board.answerStatus ? '(답변완료)' : '(미답변)' }}</span>
+
+      <!-- 댓글이 존재하면 개수가 표시됩니다. (자유게시글) -->
       <span v-if="board.replyCnt !== 0" class="board-list-title-reply">({{ board.replyCnt }})</span>
+
+      <!-- 해당 글이 최신상태인지 표시됩니다. -->
       <span v-if="board.newStatus" class="board-list-title-new">new</span>
+
+      <!-- 첨부파일여부를 표시합니다. (자유게시글) -->
       <font-awesome-icon icon="paperclip" v-if="board.fileStatus" class="board-list-title-file" />
+
+      <!-- 비밀글 상태를 표시합니다. (문의게시글) -->
       <font-awesome-icon icon="lock" v-if="board.qnaSecret" class="board-list-title-secret"/>
     </div>
+
+    <!-- 조회수 -->
     <div class="board-list-view">{{ board.viewCnt }}</div>
+
+    <!-- 생성일시 -->
     <div class="board-list-regdate">{{ formatDate(board.createDate) }}</div>
+
+    <!-- 작성자 이름 -->
     <div class="board-list-name"> {{ board.userName }}</div>
   </div>
 
 </template>
 
 <script>
+/**
+ * 게시글목록을 표시하는 컴포넌트
+ */
 import {formatDate} from "@/util/formatUtil";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 

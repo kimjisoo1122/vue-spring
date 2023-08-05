@@ -1,11 +1,17 @@
 <template>
 
+  <GNB></GNB>
+
+  <!-- 타이틀 -->
   <board-title title="문의 게시판"></board-title>
 
+  <!-- 게시글 상세 헤더 -->
   <board-detail-header :is-qna="true" :board="qna"></board-detail-header>
 
+  <!-- 게시글 상세 내용 -->
   <board-detail-content :board="qna" class="qna-detail-content"></board-detail-content>
 
+  <!-- 답변완료 -->
   <div v-if="qna.answerStatus" class="qna-detail-answer-container">
       <div class="qna-answer-header-container">
         <span class="qna-answer-name">{{ qna.answerWriter }}</span>
@@ -14,10 +20,12 @@
       <div class="qna-answer-content">{{ qna.qnaAnswer }}</div>
   </div>
 
+  <!-- 미답변 -->
   <div v-else class="qna-answer-empty-container">
     <div class="qna-answer-empty">아직 등록된 답변이 없습니다.</div>
   </div>
 
+  <!-- 게시글 상세 버튼 -->
   <board-detail-btn-container
       @delete-board="onDelete"
       :board="qna"
@@ -29,6 +37,9 @@
 </template>
 
 <script setup>
+/**
+ * 문의게시글 상세 컴포넌트
+ */
 
 import BoardDetailContent from "@/components/board/BoardDetailContent.vue";
 import BoardDetailHeader from "@/components/board/BoardDetailHeader.vue";
@@ -37,9 +48,10 @@ import {useRoute, useRouter} from "vue-router";
 import {ref} from "vue";
 import {createCondition} from "@/util/queryParamUtil";
 import {formatDate} from "@/util/formatUtil";
-import {deleteFree} from "@/api/board/freeService";
 import BoardDetailBtnContainer from "@/components/board/BoardDetailBtnContainer.vue";
 import {deleteQna, getQnaDetail} from "@/api/board/qnaService";
+import GNB from "@/components/GNB.vue";
+import {getCurrentUserId} from "@/util/authUtil";
 
 const route = useRoute();
 const router = useRouter();
@@ -49,11 +61,11 @@ const qna = ref({});
 initQnaDetail();
 
 /**
- * 문의게시글 상세컴포넌트를 초기화합니다.
- * @returns {Promise<void>}
+ * 문의게시글 상세 컴포넌트를 초기화합니다.
  */
 async function initQnaDetail() {
   condition.value = createCondition(route.query);
+  condition.value.myQna = route.query.myQna || false;
 
   try {
     const boardId = route.params.boardId;
@@ -61,14 +73,9 @@ async function initQnaDetail() {
       getQnaDetail(boardId),
     ]);
     qna.value = qnaResult;
-    console.log(qna.value)
     qna.value.createDate = formatDate(qna.value.createDate);
   } catch ({message}) {
     console.error(message);
-
-    if (message) {
-      // router.push('/404');
-    }
   }
 }
 
@@ -107,7 +114,6 @@ export default {
   min-height: 200px;
 }
 
-
 .qna-answer-header-container {
   height: 30px;
   border-bottom: 1px solid var(--border-color-gray);
@@ -122,12 +128,6 @@ export default {
 
 .qna-answer-content {
   padding-top: 20px;
-}
-
-.qna-answer-no-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .qna-detail-content {

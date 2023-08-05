@@ -2,6 +2,7 @@
 
   <div class="board-list-header-container">
     <div class="board-list-header-id">번호</div>
+    <!-- 문의게시글의 경우 카테고리가 존재하지 않습니다. -->
     <div v-if="!isQna" class="board-list-header-category">분류</div>
     <div class="board-list-header-title">제목</div>
     <div class="board-list-header-view">조회</div>
@@ -12,6 +13,9 @@
 </template>
 
 <script>
+/**
+ * 게시글목록의 헤더 컴포넌트
+ */
 export default {
   name: "BoardListHeader",
   props: {
@@ -19,7 +23,7 @@ export default {
       type: Boolean,
       default: false,
       required: false,
-      description: '문의글 타입 -> 게시글 카테고리 없음'
+      description: '문의글 타입여부'
     }
   }
 }

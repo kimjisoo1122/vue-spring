@@ -1,23 +1,33 @@
 <template>
 
   <div class="file-list-container">
+
     <div
         v-for="file in fileList"
         :key="file.fileId"
         class="file-container">
+
+      <!-- 썸네일이 존재하는 경우 썸네일을 표시합니다. (갤러리) -->
       <img
           v-if="file.galleryThumbName != null"
           :src="`/api/file/image/${file.galleryThumbName}`"
           alt="썸네일 이미지"
           class="file-thumb">
+
+      <!-- 첨부파일 아이콘 -->
       <font-awesome-icon v-else icon="paperclip" class="file-icon" />
-      <a  :href="`/api/file/${file.fileId}`" class="file-link">{{ file.fileOrgName }}</a>
+
+      <!-- 첨부파일 다운로드 링크 -->
+      <a :href="`/api/file/${file.fileId}`" class="file-link">{{ file.fileOrgName }}</a>
+
+      <!-- 첨부파일 삭제 핸들러 버튼 -->
       <base-button
           v-if="isUpdate"
           @click="onDelete(file.fileId)"
           class="file-btn-delete"
           name="X">
       </base-button>
+
     </div>
 
   </div>
@@ -25,6 +35,9 @@
 </template>
 
 <script>
+/**
+ * 게시글의 첨부파일 목록 컴포넌트
+ */
 import BaseButton from "@/components/base/BaseButton.vue";
 
 export default {
@@ -33,7 +46,6 @@ export default {
   props: {
     fileList: {
       type: Array,
-      default: undefined,
       required: true,
       description: '게시글 첨부파일 목록'
     },
@@ -45,6 +57,7 @@ export default {
     }
   },
   methods: {
+    /* 삭제할 첨부파일을 상위컴포넌트에 전송합니다.*/
     onDelete(fileId) {
       this.$emit('delete-file', fileId);
     },

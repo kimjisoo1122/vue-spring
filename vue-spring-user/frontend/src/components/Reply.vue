@@ -1,12 +1,14 @@
-<!-- 댓글 컴포넌트입니다. -->
 <template>
+
   <div class="reply-container">
 
     <!-- 댓글목록 -->
     <div class="reply-list-container">
+
       <div v-for="reply in replyList"
            :key="reply.replyId"
            class="reply">
+
         <div class="reply-left-container">
           <div class="reply-writer-date-container">
             <div class="reply-writer">{{ reply.userName }}</div>
@@ -14,6 +16,8 @@
           </div>
           <div class="reply-content">{{ reply.replyContent }}</div>
         </div>
+
+        <!-- 해당 댓글 작성자만 삭제가 표시됩니다. -->
         <div
             v-if="isCurrentUserId(reply.userId)"
             @click="onDelete(reply.replyId)"
@@ -22,9 +26,10 @@
         </div>
 
       </div>
+
     </div>
 
-    <!-- 댓글등록 (인증된상태에만 노출) -->
+    <!-- 댓글등록 (인증된상태에만 표시합니다.) -->
     <div v-if="isAuthenticated" class="reply-register-container">
       <base-input
           v-model="replyContent"
@@ -38,9 +43,9 @@
 
 <script>
 import {deleteReply, registerReply} from "@/api/replyService";
+import {isAuthenticated, isCurrentUserId} from "@/util/authUtil";
 import BaseButton from "@/components/base/BaseButton.vue";
 import BaseInput from "@/components/base/BaseInput.vue";
-import {isAuthenticated, isCurrentUserId} from "@/util/authUtil";
 
 export default {
   name: "Reply",
@@ -48,8 +53,8 @@ export default {
 
   data() {
     return {
-      replyContent: '', // 댓글내용
-      replyError: '', // 댓글에러
+      replyContent: '', /* 댓글 내용 */
+      replyError: '', /* 댓글 에러 메시지*/
       replyPlaceHolder: '댓글을 입력해 주세요.',
     }
   },
@@ -57,7 +62,6 @@ export default {
   props: {
     replyList: {
       type: Array,
-      default: undefined,
       required: true,
       description: '댓글 목록'
     },
@@ -68,7 +72,7 @@ export default {
     isAuthenticated,
 
     /**
-     * 댓글을 등록하고 등록된댓글을 게시글상세 컴포넌트에 전송합니다.
+     * 댓글을 등록하고 등록된 댓글을 게시글 상세 컴포넌트에 전송합니다.
      */
     onRegister() {
       if (this.validateReply()) {
@@ -90,7 +94,7 @@ export default {
     },
 
     /**
-     * 현재 인증된 유저가 등록한 댓글을 삭제합니다.
+     * 댓글을 삭제합니다.
      */
     async onDelete(replyId) {
       if (confirm('댓글을 삭제하시겠습니까?')) {

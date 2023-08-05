@@ -1,15 +1,18 @@
 <template>
 
+  <GNB></GNB>
+
   <!-- 게시글 제목 -->
   <board-title title="자유게시판" ></board-title>
 
   <!-- 게시글 검색조건 -->
   <board-search-condition
+      @condition-search="onConditionSearch"
       :category-list="categoryList"
-      :condition="condition"
-      @condition-search="onConditionSearch">
+      :condition="condition">
   </board-search-condition>
 
+  <!-- 글 등록 버튼 -->
   <div class="register-btn-container">
     <base-button
         @click="router.push({path: '/frees/register',query: condition})"
@@ -17,24 +20,25 @@
     </base-button>
   </div>
 
+  <!-- 자유게시글 목록 -->
   <div class="free-list-container">
 
-    <!-- 게시글 헤더 -->
+    <!-- 자유게시글 헤더 -->
     <board-list-header></board-list-header>
 
     <!-- 자유게시글 -->
     <board-list
+        @detail-router="onDetailRouter"
         :board-list="freeList"
-        :condition="condition"
-        @detail-router="onDetailRouter">
+        :condition="condition">
     </board-list>
 
     <!-- 페이징 처리 -->
     <pagination
+        @page-router="onPageRouter"
         :total-cnt="totalCnt"
         :limit="Number(condition.limit)"
         :page="Number(condition.page)"
-        @page-router="onPageRouter"
         class="paging-container">
     </pagination>
 
@@ -42,6 +46,9 @@
 
 </template>
 <script setup>
+/**
+ * 자유게시글 목록 컴포넌트
+ */
 
 import BoardTitle from "@/components/board/BoardTitle.vue";
 import BoardSearchCondition from "@/components/board/BoardSearchCondition.vue";
@@ -56,6 +63,7 @@ import {getCategoryList} from "@/api/categoryService";
 import {FREE_CATEGORY_ID} from "@/constants";
 import {getFreeList} from "@/api/board/freeService";
 import BaseButton from "@/components/base/BaseButton.vue";
+import GNB from "@/components/GNB.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -71,8 +79,6 @@ watch(route, initFreeList); /* 컴포넌트 URL 변경을 감지합니다.(페�
 
 /**
  * 자유게시글 목록 컴포넌트를 초기화 합니다.
- *
- * @returns {Promise<void>}
  */
 async function initFreeList() {
   condition.value = createCondition(route.query);
@@ -86,19 +92,13 @@ async function initFreeList() {
     categoryList.value = categoryListResult;
     freeList.value = freeListResult.freeList;
     totalCnt.value = freeList.value.length === 0 ? 0 : freeListResult.totalCnt;
-
   } catch ({message}) {
     console.error(message);
-
-    if (message) {
-      // store.commit('logout');
-      // router.push('/login');
-    }
   }
 }
 
 /**
- * 게시글 검색조건으로 재 조회 합니다.
+ * 게시글 검색조건 컴포넌트 핸들러
  * @param searchForm 게시글 검색정보
  */
 function onConditionSearch(searchForm) {
@@ -109,7 +109,7 @@ function onConditionSearch(searchForm) {
 }
 
 /**
- * 페이징처리
+ * 페이징처리 컴포넌트 핸들러
  * @param page 해당 페이지
  */
 function onPageRouter(page) {

@@ -24,3 +24,6 @@ mybatis:
 file:
   upload-folder: C:/Temp/upload/
   allowed-extensions: jpg,png,gif,zip
+
+server:
+  port: 8081

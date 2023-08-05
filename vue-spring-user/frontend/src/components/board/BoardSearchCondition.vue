@@ -2,9 +2,7 @@
 
   <div class="search-condition-container" >
 
-    <form
-          class="search-form"
-          @submit.prevent="onSearch">
+    <form @submit.prevent="onSearch" class="search-form" >
 
       <div class="search-first-container">
 
@@ -12,19 +10,19 @@
         <div class="search-date-container">
           <span class="search-date-title">등록일시</span>
           <base-input
+              v-model="searchForm.fromDate"
               type="date"
-              class="search-date-from"
-              v-model="searchForm.fromDate">
+              class="search-date-from">
           </base-input>
           <span class="search-date-between"> ~ </span>
           <base-input
+              v-model="searchForm.toDate"
               type="date"
-              class="search-date-to"
-              v-model="searchForm.toDate">
+              class="search-date-to">
           </base-input>
         </div>
 
-        <!-- searchCategory -->
+        <!-- searchCategory 문의게시글인 경우 카테고리가 존재하지 않습니다. -->
         <div class="search-keyword-container">
           <category-select
               v-if="!isQna"
@@ -33,14 +31,16 @@
               class="search-keyword-select">
           </category-select>
 
-          <!-- search -->
+          <!-- search 문의게시글인 경우 검색어 인풋의 크기가 늘어납니다. -->
           <base-input
-              placeholder="제목 OR 내용"
               v-model="searchForm.search"
               :class="{'search-keyword-input-qna' : isQna}"
+              placeholder="제목 OR 내용"
               class="search-keyword-input">
           </base-input>
+
           <base-button @click="onSearch" name="검색" class="search-keyword-btn"></base-button>
+
         </div>
 
       </div>
@@ -60,6 +60,7 @@
 
         <!-- orderCondition, order -->
         <div class="search-order-container">
+
           <span class="search-order-title">정렬</span>
           <base-select
               v-model="searchForm.orderCondition"
@@ -67,12 +68,14 @@
               @change="onSearch"
               class="search-ordercondition-select">
           </base-select>
+
           <base-select
               v-model="searchForm.order"
               :options="options.order"
               @change="onSearch"
               class="search-order-select">
           </base-select>
+
         </div>
 
       </div>
@@ -84,7 +87,9 @@
 </template>
 
 <script>
-
+/**
+ * 게시글 검색조건 컴포넌트
+ */
 import BaseInput from "@/components/base/BaseInput.vue";
 import CategorySelect from "@/components/CategorySelect.vue";
 import BaseButton from "@/components/base/BaseButton.vue";
@@ -121,7 +126,6 @@ export default {
     },
     condition: {
       type: Object,
-      default: undefined,
       required: true,
       description: '게시글 검색조건'
     },
@@ -141,7 +145,7 @@ export default {
       type: Boolean,
       default: false,
       required: false,
-      description: '문의글 타입 -> 게시글 카테고리 없음'
+      description: '문의글 타입여부'
     }
   },
 
@@ -153,9 +157,7 @@ export default {
   },
 
   methods: {
-    /**
-     * 검색조건을 상위컴포넌트에 전송합니다.
-     */
+    /* 검색조건을 상위컴포넌트에 전달하는 핸들러 */
     onSearch() {
       if (!this.validateDate()) {
         return false;
@@ -181,6 +183,7 @@ export default {
         return false;
       }
 
+      /* 날짜조건중 한 쪽에만 존재하는 경우 모두 빈 값으로 설정합니다.*/
       if (fromDate.length * toDate.length === 0) {
         this.searchForm.fromDate = '';
         this.searchForm.toDate = '';
@@ -288,6 +291,10 @@ export default {
 
   .search-date-error {
     border: 1px solid red;
+  }
+
+  .my-qna-container {
+    /*flex-basis: 100%;*/
   }
 
 </style>

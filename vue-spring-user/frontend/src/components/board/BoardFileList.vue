@@ -1,15 +1,22 @@
 <template>
 
   <div class="board-file-list-container">
+
+    <div class="allowed-file-msg">{{ allowedFileMsg }}</div>
+    <!-- 첨부파일 목록 -->
     <file-list
         @delete-file="$emit('delete-file', $event)"
         :file-list="fileList"
-        :is-update="isUpdate"
-    ></file-list>
+        :is-update="isUpdate">
+    </file-list>
+
+    <!-- 새로 첨부할 수 있는 베이스 파일 타입 인풋 -->
     <base-file-input
-        v-for="num in initInputSize"
+        v-for="num in addInputSize"
         :key="num"
-        :file-id="num">
+        :file-id="num"
+        :allowed-extensions="allowedExtensions"
+        :allowed-file-size="allowedFileSize">
     </base-file-input>
 
   </div>
@@ -17,16 +24,25 @@
 </template>
 
 <script>
+/**
+ * 게시글의 등록된 파일목록 + 새롭게 등록할 수 있는 파일인풋 컴포넌트
+ */
 import BaseFileInput from "@/components/base/BaseFileInput.vue";
 import FileList from "@/components/FileList.vue";
 
 export default {
   name: "BoardFileList",
   components: {FileList, BaseFileInput},
+  data() {
+    return {
+      allowedExtensions: ['jpg', 'gif', 'png', 'zip'], /* 허용된 파일 확장자 */
+      allowedFileSize: 1000 * 1000 * 2, /* 허용된 파일 최대 크기 */
+    }
+  },
   props: {
     fileList: {
       type: Array,
-      default: undefined,
+      default: () => ([]),
       required: false,
       description: '게시글에 등록된 첨부파일 목록'
     },
@@ -45,13 +61,25 @@ export default {
   },
 
   computed: {
-    initInputSize() {
+    /* 새로 추가할 인풋 개수 */
+    addInputSize() {
       const fileListLength = this.fileList === undefined ? 0 : this.fileList.length;
       return this.inputSize - fileListLength;
+    },
+    /* 허용 가능한 파일 공지 메시지*/
+    allowedFileMsg() {
+      return `
+        ${this.allowedExtensions.join(', ')}파일만
+        파일사이즈${this.allowedFileSize / (1000 * 1000)}MB까지 업로드 가능합니다.`;
     },
   },
 }
 </script>
 
 <style scoped>
+
+.allowed-file-msg {
+  font-size: var(--small-font-size);
+  margin-left: 5px;
+}
 </style>

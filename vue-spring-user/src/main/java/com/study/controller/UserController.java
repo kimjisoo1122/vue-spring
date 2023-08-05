@@ -4,6 +4,7 @@ import com.study.dto.UserDto;
 import com.study.dto.api.ResponseApiStatus;
 import com.study.dto.api.ResponseDto;
 import com.study.dto.api.ResponseValidFormDto;
+import com.study.exception.UserNotFoundException;
 import com.study.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
-
 
 
     /**
@@ -48,7 +48,6 @@ public class UserController {
         }
 
         ResponseValidFormDto response = new ResponseValidFormDto(ResponseApiStatus.SUCCESS);
-        response.setData(userService.signUp(user));
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -57,7 +56,6 @@ public class UserController {
 
     /**
      * 가입하려는 아이디의 중복체크를 합니다.
-     *
      * @param userId 가입 아이디
      */
     @GetMapping("/exits")
@@ -71,24 +69,20 @@ public class UserController {
     }
 
     /**
-     * 1. 맨먼저 VUE단에서 라우터가드를 통해서 인증이 필요한값에 한해서 로그인 페이지로 보낸다.
-     * 2. 로그인에 성공하면 STORE의 STATE의 현재상태를 저장해놔야 함
-     * 3. 홈페이지간의 이동은 -> VUE의 라우터가드로 검증
-     * 4. API요청은 서버에서 검증
-     * 5. jwt필터에서 아디랑 비번 파싱해서 유저패스워드 토큰을 생성한다
-     * 6. 토큰을 authenticationmanager한테 넘김
-     * 7. authenticationmanager는 유저디테일서비스에서 입력받은 아이디로 실제비밀번호를 조회한다.
-     * 8. 유저디테일서비스에서 조회한 아이디와 비밀번호를 바탕으로 userdetails를 반환하면
-     * 9. 프로바이더는 내가만든 토큰의 비밀번호를 암호화하여 생성된 userdetail와 비교하여 인증을 처리한다.
-     * 10. 인증에성공하면 userdetails가 principal로 저장되고 , 석세스핸들러로 넘어감
-     * @param user
-     * @return
+     * 사용자 아이디로 사용자정보를 조회합니다.
+     *
+     * @param userId 사용자 아이디
      */
-    public ResponseDto login(
-            @RequestBody() UserDto user) {
+    @GetMapping("/{userId}")
+    public ResponseEntity<ResponseDto> userDetail(
+            @PathVariable("userId") String userId) {
 
+        UserDto findUser = userService.findById(userId).orElseThrow(UserNotFoundException::new);
+        findUser.setUserPw("");
 
-        return null;
+        ResponseDto response = new ResponseDto(ResponseApiStatus.SUCCESS, findUser);
+
+        return ResponseEntity.ok(response);
     }
 
     /**

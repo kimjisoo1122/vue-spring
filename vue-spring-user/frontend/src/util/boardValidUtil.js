@@ -33,4 +33,3 @@ export function validateContent(content) {
     return '4000글자 미만 이여야 합니다.';
   }
 }
-

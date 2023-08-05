@@ -50,6 +50,7 @@ public class QnaService {
         BoardDto qnaBoard = new BoardDto();
         qnaBoard.setBoardId(form.getBoardId());
         qnaBoard.setQnaAnswer(form.getQnaAnswer());
+        qnaBoard.setAnswerWriter(form.getUserName());
 
         qnaRepository.updateQnaDetail(qnaBoard);
     }
@@ -68,6 +69,6 @@ public class QnaService {
         board.setBoardId(boardId);
         board.setBoardType(BoardType.QNA);
 
-        return boardRepository.selectForm(board);
+        return qnaRepository.selectQnaForm(board);
     }
 }

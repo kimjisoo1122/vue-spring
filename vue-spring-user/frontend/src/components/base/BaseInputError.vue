@@ -1,10 +1,15 @@
 <template>
+
   <span>{{ errorMsg }}</span>
+
 </template>
 
 <script>
+/**
+ * 인풋 에러 메시지 컴포넌트
+ */
 export default {
-  name: "InputError",
+  name: "BaseInputError",
   props: {
     errorMsg: {
       type: String,

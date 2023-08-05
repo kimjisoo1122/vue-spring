@@ -1,5 +1,7 @@
 <template>
 
+  <GNB></GNB>
+
   <!-- 게시글 제목 -->
   <board-title title="공지사항" ></board-title>
 
@@ -17,26 +19,26 @@
 
     <!-- 알림글 -->
     <board-list
+        @detail-router="onDetailRouter"
         v-if="alarmList"
         :board-list="alarmList"
         :condition="condition"
-        @detail-router="onDetailRouter"
-        is-alarm="true">
+        :is-alarm="true">
     </board-list>
 
     <!-- 공지사항 -->
     <board-list
+        @detail-router="onDetailRouter"
         :board-list="noticeList"
-        :condition="condition"
-        @detail-router="onDetailRouter">
+        :condition="condition">
     </board-list>
 
     <!-- 페이징 처리 -->
     <pagination
+        @page-router="onPageRouter"
         :total-cnt="totalCnt"
         :limit="Number(condition.limit)"
         :page="Number(condition.page)"
-        @page-router="onPageRouter"
         class="paging-container">
     </pagination>
 
@@ -58,6 +60,7 @@ import {useStore} from "vuex";
 import {getAlarmList, getNoticeList} from "@/api/board/noticeService";
 import {createCondition} from "@/util/queryParamUtil";
 import Pagination from "@/components/Pagination.vue";
+import GNB from "@/components/GNB.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -69,16 +72,15 @@ const noticeList = ref([]); /* 공지사항 목록 */
 const totalCnt = ref(0); /* 게시글 총 개수 */
 const condition = ref({}); /* 게시글 검색조건 */
 
-initNoticeList(); /* 컴포넌트 초기화 */
+initNoticeList();
 watch(route, initNoticeList); /* 컴포넌트 URL 변경을 감지합니다.(페이징 처리) */
 
 /**
  * 공지사항 목록 컴포넌트를 초기화 합니다.
- *
- * @returns {Promise<void>}
  */
 async function initNoticeList() {
   condition.value = createCondition(route.query);
+  console.log(condition.value);
 
   try {
     const [categoryListResult, noticeListResult, alarmListResult] = await Promise.all([
@@ -91,19 +93,13 @@ async function initNoticeList() {
     noticeList.value = noticeListResult.noticeList;
     totalCnt.value = noticeList.value.length === 0 ? 0 : noticeListResult.totalCnt;
     alarmList.value = alarmListResult;
-
   } catch ({message}) {
     console.error(message);
-
-    if (message) {
-      // store.commit('logout');
-      // router.push('/login');
-    }
   }
 }
 
 /**
- * 게시글 검색조건으로 재 조회 합니다.
+ * 게시글 검색조건 컴포넌트 핸들러
  * @param searchForm 게시글 검색정보
  */
 function onConditionSearch(searchForm) {

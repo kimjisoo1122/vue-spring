@@ -9,6 +9,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 /**
  * 사용자 서비스
  */
@@ -29,14 +31,12 @@ public class UserService {
      * @return 등록된 사용자 아이디
      */
     @Transactional
-    public String signUp(UserDto user) {
+    public void signUp(UserDto user) {
         UserDto encryptedUser = encryptUserPw(user);
         userRepository.insert(encryptedUser);
 
         encryptedUser.setUserAuth(Auth.USER);
         authRepository.insertUserAuth(encryptedUser);
-
-        return encryptedUser.getUserId();
     }
 
     /**
@@ -47,6 +47,16 @@ public class UserService {
      */
     public boolean doubleCheckId(String userId) {
         return userRepository.selectById(userId) == null;
+    }
+
+    /**
+     * 사용자 정보를 조회합니다.
+     *
+     * @param userId 사용자 아이디
+     * @return 사용자 정보
+     */
+    public Optional<UserDto> findById(String userId) {
+        return Optional.ofNullable(userRepository.selectById(userId));
     }
 
     /**

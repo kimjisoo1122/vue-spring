@@ -5,6 +5,7 @@ import com.study.dto.api.ResponseDto;
 import com.study.exception.BoardNotFoundException;
 import com.study.exception.NotAuthorisedToBoardException;
 import com.study.exception.NotAuthorisedToReplyException;
+import com.study.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,6 +27,21 @@ public class ControllerAdvice {
                 .status(HttpStatus.NOT_FOUND)
                 .body(responseFail);
     }
+
+    /**
+     * 사용자가 존재하지 않는 경우 발생하는 예외처리
+     * @param e UserNotFoundException
+     */
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ResponseDto> handleUserNotFoundEx(UserNotFoundException e) {
+        ResponseDto responseFail = new ResponseDto(ResponseApiStatus.FAIL);
+        responseFail.setErrorMessage(e.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(responseFail);
+    }
+
 
     /**
      * 해당 게시글의 작성자가 아닌 경우 발생하는 예외를 처리하는 핸들러

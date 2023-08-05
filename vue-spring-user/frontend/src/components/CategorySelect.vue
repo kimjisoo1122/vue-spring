@@ -1,4 +1,5 @@
 <template>
+
   <select @change="onChange" :value="modelValue">
     <option value="">전체 분류</option>
     <option
@@ -7,20 +8,23 @@
         :value="category.categoryId">{{ category.categoryName }}
     </option>
   </select>
+
 </template>
 
 <script>
+/**
+ * 카테고리 목록 셀렉트 컴포넌트
+ */
 export default {
   name: "CategorySelect",
   props: {
     modelValue: {
       type: String,
-      default: '',
+      required: true,
       description: '입력 값'
     },
     categoryList: {
       type: Array,
-      default: undefined,
       required: true,
       description: '카테고리 목록'
     }

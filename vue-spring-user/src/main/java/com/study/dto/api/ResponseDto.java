@@ -3,9 +3,6 @@ package com.study.dto.api;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * API 응답에 사용되는 DTO
  * {
@@ -22,6 +19,11 @@ public class ResponseDto {
 
     public ResponseDto(ResponseApiStatus status) {
         this.status = status;
+    }
+
+    public ResponseDto(ResponseApiStatus status, Object data) {
+        this.status = status;
+        this.data = data;
     }
 
     private ResponseApiStatus status; // API 응답상태

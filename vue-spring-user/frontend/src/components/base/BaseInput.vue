@@ -1,14 +1,18 @@
 <template>
+
   <input
-    :type="type"
-    :value="modelValue"
-    :checked="modelValue"
-    :placeholder="placeholder"
-    @change="onChange">
+      @change="onChange"
+      :type="type"
+      :value="modelValue"
+      :checked="modelValue"
+      :placeholder="placeholder">
 
 </template>
 
 <script>
+/**
+ * 베이스 파일 인풋
+ */
 export default {
   name: "BaseInput",
 
@@ -34,6 +38,7 @@ export default {
   },
 
   methods: {
+    /* 값이 변경될때 실행되는 핸들러 */
     onChange(event) {
       if (this.type === 'checkbox') {
         this.$emit('update:modelValue', event.target.checked);

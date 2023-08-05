@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,7 +50,7 @@ public class LoginController {
             response.setData(accessJwt);
 
             return ResponseEntity.ok(response);
-        } catch (AuthenticationException e) {
+        } catch (Exception e) {
             ResponseDto failResponse = new ResponseDto(ResponseApiStatus.FAIL);
             failResponse.setErrorMessage("아이디 또는 비밀번호가 맞지 않습니다.");
 

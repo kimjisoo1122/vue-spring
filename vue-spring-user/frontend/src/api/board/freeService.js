@@ -3,9 +3,11 @@ import {MULTIPART_CONFIG} from "@/constants";
 
 /**
  * 자유게시글을 등록합니다.
- *
- * @param formData 게시글 등록폼 정보
- * @return 등록된 게시글 번호를 반환하거나 실패한 경우 에러필드에 에러메시지가 담겨 반환합니다.
+ * @param formData 등록 폼
+ * @returns {Promise<number>}
+ * 등록된 게시글 번호를 반환하거나,
+ * data: 에러필드에 에러메시지가 담겨진 객체를 반환합니다.
+ * message: API 통신 에러메시지
  */
 export function registerFree (formData) {
   return axios.post('/api/frees', formData, MULTIPART_CONFIG)
@@ -15,17 +17,15 @@ export function registerFree (formData) {
       .catch(({response: {data: {errorFields, errorMessage}}}) => {
         throw {
           data: errorFields,
-          message: errorMessage,
+          message: errorMessage
         }
       });
 }
 
-
 /**
  * 자유게시글 목록을 조회합니다.
- *
  * @param condition 검색조건
- * @returns {Promise<unknown>}
+ * @returns {Promise<Array>} 자유게시글 목록을 배열로 반환합니다.
  */
 export function getFreeList(condition) {
   return axios.get('/api/frees', {
@@ -42,8 +42,9 @@ export function getFreeList(condition) {
 }
 
 /**
- * 게시글번호로 자유게시글 상세정보를 조회합니다.
- * @param boardId
+ * 자유게시글 상세정보를 조회합니다.
+ * @param boardId 자유게시글 번호
+ * @returns {Promise<Object>} 자유게시글 상세정보
  */
 export function getFreeDetail(boardId) {
   return axios.get(`/api/frees/${boardId}`)
@@ -59,9 +60,9 @@ export function getFreeDetail(boardId) {
 
 /**
  * 자유게시글을 업데이트합니다.
- * @param boardId 게시글번호
- * @param formData 업데이트폼 정보
- * @return boardId
+ * @param boardId 자유게시글 번호
+ * @param formData 업데이트 폼
+ * @return {Promise<number>} 자유게시글 번호
  */
 export function updateFree(boardId, formData) {
   return axios.put(`/api/frees/${boardId}`, formData, MULTIPART_CONFIG)
@@ -76,14 +77,13 @@ export function updateFree(boardId, formData) {
 }
 
 /**
- * 자유게시글 삭제합니다.
- * @param boardId 게시글번호
- * @return boardId
+ * 자유게시글을 삭제합니다.
+ * @param boardId 자유게시글 번호
+ * @return {Promise<void>}
  */
 export function deleteFree(boardId) {
   return axios.delete(`/api/frees/${boardId}`)
       .then(() => {
-        return boardId;
       })
       .catch(({response: {data: {errorMessage}}}) => {
         throw {

@@ -1,5 +1,7 @@
 <template>
 
+  <GNB></GNB>
+
   <!-- 게시글 제목 -->
   <board-title title="갤러리" ></board-title>
 
@@ -11,12 +13,14 @@
       @condition-search="onConditionSearch">
   </board-search-condition>
 
+  <!-- 갤러리 등록 버튼 -->
   <div class="register-btn-container">
     <base-button
         @click="router.push({path: '/galleries/register',query: condition})"
         name="갤러리 등록"></base-button>
   </div>
 
+  <!-- 갤러리 목록 -->
   <div class="gallery-list-container">
 
     <div
@@ -24,34 +28,41 @@
         :key="gallery.boardId"
         class="gallery-container">
 
+      <!-- 갤러리 이미지 -->
       <div class="gallery-img-container">
         <img
-            @click="onDetailRouter(gallery.boardId)"
+            @click="onDetailRouter(gallery)"
             :src="`/api/file/image/${gallery.galleryImgName}`"
             alt="갤러리 이미지"
             class="gallery-img">
       </div>
+
+      <!-- 갤러리 정보 -->
       <div class="gallery-info-container">
+
+        <!-- 갤러리 제목 -->
         <div class="gallery-title-container">
           <div
-              @click="onDetailRouter(gallery.boardId)"
+              @click="onDetailRouter(gallery)"
               class="gallery-title">
             {{ gallery.boardTitle }}
           </div>
           <span class="galley-title-new">new</span>
         </div>
 
+        <!-- 갤러리 내용 -->
         <div class="gallery-content">{{ gallery.boardContent }}</div>
+
       </div>
 
     </div>
 
     <!-- 페이징 처리 -->
     <pagination
+        @page-router="onPageRouter"
         :total-cnt="totalCnt"
         :limit="Number(condition.limit)"
         :page="Number(condition.page)"
-        @page-router="onPageRouter"
         class="paging-container">
     </pagination>
 
@@ -59,6 +70,9 @@
 
 </template>
 <script setup>
+/**
+ * 갤러리 목록 컴포넌트
+ */
 
 import BoardTitle from "@/components/board/BoardTitle.vue";
 import BoardSearchCondition from "@/components/board/BoardSearchCondition.vue";
@@ -71,6 +85,7 @@ import {getCategoryList} from "@/api/categoryService";
 import {GALLERY_CATEGORY_ID} from "@/constants";
 import BaseButton from "@/components/base/BaseButton.vue";
 import {getGalleryList} from "@/api/board/galleryService";
+import GNB from "@/components/GNB.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -86,12 +101,9 @@ watch(route, initGalleryList); /* 컴포넌트 URL 변경을 감지합니다.(�
 
 /**
  * 갤러리 목록 컴포넌트를 초기화 합니다.
- *
- * @returns {Promise<void>}
  */
 async function initGalleryList() {
   condition.value = createCondition(route.query, 3);
-  console.log(condition.value);
 
   try {
     const [categoryListResult, galleryListResult] = await Promise.all([
@@ -102,19 +114,13 @@ async function initGalleryList() {
     categoryList.value = categoryListResult;
     galleryList.value = galleryListResult.galleryList;
     totalCnt.value = galleryList.value.length === 0 ? 0 : galleryListResult.totalCnt;
-
   } catch ({message}) {
     console.error(message);
-
-    if (message) {
-      // store.commit('logout');
-      // router.push('/login');
-    }
   }
 }
 
 /**
- * 게시글 검색조건으로 재 조회 합니다.
+ * 게시글 검색조건 컴포넌트 핸들러
  * @param searchForm 게시글 검색정보
  */
 function onConditionSearch(searchForm) {

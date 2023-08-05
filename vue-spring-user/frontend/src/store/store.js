@@ -2,7 +2,6 @@ import {createStore} from 'vuex'
 import createPersistedState from 'vuex-persistedstate';
 import loginStore from "@/store/modules/loginStore";
 import boardFileStore from "@/store/modules/boardfileStore";
-/* store변경은 store에서만 /*/
 const store = createStore({
   state(){
   },
@@ -14,6 +13,7 @@ const store = createStore({
     loginStore, boardFileStore
   },
   plugins: [
+      /* 등록된 모듈은 로컬스토리지에서 영속적으로 관리합니다. */
       createPersistedState({
         paths: ['loginStore']
       })

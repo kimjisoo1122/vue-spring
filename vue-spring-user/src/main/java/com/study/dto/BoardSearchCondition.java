@@ -18,6 +18,8 @@ public class BoardSearchCondition {
     private int page = 1; // 현재 페이지
     private int newDay; // 최신글 new 일자 조건 (기본 : 7)
 
+    /* 문의게시판 나의 문의 내역 */
+    private String userId; // 작성한 아이디
 
     // 조회 SQL에 사용합니다.
     private int offset; // SQL OFFSET
