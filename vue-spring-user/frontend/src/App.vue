@@ -41,6 +41,7 @@ export default {
   --sub-color-blue: #F0F6FA;
   --sub-color-violet: rgb(134 84 246);
 }
+
 .main-container {
   width: 1100px;
   margin: 0 auto;

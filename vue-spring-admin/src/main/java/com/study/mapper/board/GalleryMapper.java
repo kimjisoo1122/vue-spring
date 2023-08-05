@@ -15,5 +15,5 @@ public interface GalleryMapper {
     void insertGalleryDetail(BoardDto board);
     List<BoardDto> selectByCondition(BoardSearchCondition condition);
     String selectThumbNameByFileId(Long fileId);
-    void deleteByFileId(Long fileId);
+    void deleteDetailByFileId(Long fileId);
 }

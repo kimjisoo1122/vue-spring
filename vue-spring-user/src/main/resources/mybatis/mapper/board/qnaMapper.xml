@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.study.mapper.board.QnaMapper">
 
-    <!-- 문의게시글 상세ㄹ 등록합니다. -->
+    <!-- 문의게시글 상세를 등록합니다. -->
     <insert id="insertQnaDetail"
             parameterType="boardDto">
         INSERT INTO qna_detail
@@ -35,13 +35,15 @@
         LIMIT #{limit} OFFSET #{offset}
     </select>
 
-    <!-- 게시글번호로 문의게시글 폼데이터를 조회합니다. -->
-    <select id="selectQnaForm"
+    <!-- 게시글번호로 문의게시글을 조회합니다. -->
+    <select id="selectDetailById"
             parameterType="long"
-            resultType="boardForm">
+            resultType="boardDto">
         SELECT
             q.qna_answer,
+            q.answer_writer,
             q.qna_secret,
+            q.qna_answer IS NOT NULL AS answer_status,
             <include refid="com.study.mapper.board.BoardMapper.selectBoard"/>
         FROM board b
             JOIN qna_detail q ON q.board_id = b.board_id
@@ -54,7 +56,7 @@
             parameterType="boardDto">
         UPDATE qna_detail
             <set>
-                <if test="qnaSecret != null and qnaSecret != ''">
+                <if test="qnaSecret != null">
                     qna_secret = #{qnaSecret},
                 </if>
                 <if test="qnaAnswer != null and qnaAnswer != ''">

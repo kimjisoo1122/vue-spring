@@ -3,15 +3,14 @@ package com.study.controller.board;
 import com.study.dto.BoardDto;
 import com.study.dto.BoardForm;
 import com.study.dto.BoardSearchCondition;
+import com.study.dto.FileDto;
 import com.study.dto.api.ResponseApiStatus;
 import com.study.dto.api.ResponseDto;
 import com.study.dto.api.ResponseValidFormDto;
 import com.study.enums.BoardType;
 import com.study.exception.BoardNotFoundException;
-import com.study.exception.NotAuthorisedToBoardException;
 import com.study.service.board.BoardService;
-import com.study.service.board.FreeService;
-import com.study.util.BoardUtil;
+import com.study.service.board.GalleryService;
 import com.study.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,21 +25,21 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 자유게시판 API 컨트롤러
+ * 갤러리게시판 API 컨트롤러
  */
 
 @RestController
-@RequestMapping("/api/frees")
+@RequestMapping("/api/galleries")
 @RequiredArgsConstructor
-public class FreeController {
+public class GalleryController {
 
-    private final FreeService freeService;
+    private final GalleryService galleryService;
     private final BoardService boardService;
 
     /**
-     * 자유게시글을 등록 합니다.
+     * 갤러리를 등록 합니다.
      *
-     * @param form 자유게시글 등록 폼
+     * @param form 갤러리 등록 폼
      * @param bindingResult 유효성검증객체
      * @throws IOException 첨부파일을 저장하는데 발생하는 예외
      */
@@ -56,10 +55,10 @@ public class FreeController {
         }
 
         SecurityUtil.setFormUser(form);
-        form.setBoardType(BoardType.FREE);
+        form.setBoardType(BoardType.GALLERY);
 
         ResponseValidFormDto response = new ResponseValidFormDto(ResponseApiStatus.SUCCESS);
-        response.setData(freeService.register(form));
+        response.setData(galleryService.register(form));
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -67,30 +66,30 @@ public class FreeController {
     }
 
     /**
-     * 자유게시글 목록을 조회합니다.
+     * 갤러리 목록을 조회합니다.
      *
      * @param condition 검색조건
-     * @return freeList: 자유게시글 목록, totalCnt: 자유게시글 총 개수
+     * @return galleryList: 갤러리 목록, totalCnt: 갤러리 총 개수
      */
     @GetMapping
-    public ResponseEntity<ResponseDto> freeList(
+    public ResponseEntity<ResponseDto> galleyList(
             @ModelAttribute BoardSearchCondition condition) {
 
-        condition.setSearchParams(BoardType.FREE);
+        condition.setSearchParams(BoardType.GALLERY);
 
-        List<BoardDto> freeList = freeService.findFreeList(condition);
-        int totalCnt = freeService.getTotalCnt(condition);
+        List<BoardDto> galleryList = galleryService.findGalleryList(condition);
+        int totalCnt = galleryService.getTotalCnt(condition);
 
         ResponseDto response = new ResponseDto(ResponseApiStatus.SUCCESS);
-        response.setData(Map.of("freeList", freeList, "totalCnt", totalCnt));
+        response.setData(Map.of("galleryList", galleryList, "totalCnt", totalCnt));
 
         return ResponseEntity.ok(response);
     }
 
     /**
-     * 자유게시글 상세정보를 조회합니다.
+     * 갤러리 상세정보를 조회합니다.
      *
-     * @param boardId 자유게시글 번호
+     * @param boardId 갤러리 번호
      * @throws BoardNotFoundException 게시글이 존재하지 않는 경우 발생하는 예외
      */
     @GetMapping("/{boardId}")
@@ -98,21 +97,22 @@ public class FreeController {
             @PathVariable("boardId") Long boardId) {
 
         boardService.increaseViewCnt(boardId);
-        ResponseDto response = new ResponseDto(ResponseApiStatus.SUCCESS);
 
-        freeService.findFreeDetail(boardId)
-                .ifPresentOrElse(response::setData,
-                        () -> {
-                            throw new BoardNotFoundException();
-                        });
+        BoardDto galleryBoard =
+                galleryService.findGallery(boardId).orElseThrow(BoardNotFoundException::new);
+
+        List<FileDto> fileList = galleryService.findGalleryFileList(boardId);
+
+        ResponseDto response = new ResponseDto(ResponseApiStatus.SUCCESS);
+        response.setData(Map.of("gallery", galleryBoard, "fileList", fileList));
 
         return ResponseEntity.ok(response);
     }
 
     /**
-     * 자유게시글을 업데이트 합니다.
+     * 갤러리를 업데이트 합니다.
      *
-     * @param form 자유게시글 업데이트 폼
+     * @param form 갤러리 업데이트 폼
      * @param bindingResult 유효성검증객체
      * @throws IOException 첨부파일을 저장하는데 발생하는 예외
      */
@@ -134,7 +134,7 @@ public class FreeController {
         form.setBoardId(boardId);
 
         ResponseValidFormDto response = new ResponseValidFormDto(ResponseApiStatus.SUCCESS);
-        freeService.update(form);
+        galleryService.update(form);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -142,7 +142,7 @@ public class FreeController {
     }
 
     /**
-     * 자유게시글을 삭제합니다.
+     * 갤러리를 삭제합니다.
      * @param boardId 게시글번호
      */
     @DeleteMapping("/{boardId}")
@@ -151,7 +151,7 @@ public class FreeController {
 
         checkRegisteredUserId(boardId);
 
-        freeService.delete(boardId);
+        galleryService.delete(boardId);
 
         ResponseDto response = new ResponseDto(ResponseApiStatus.SUCCESS);
 
@@ -166,14 +166,14 @@ public class FreeController {
      * @param boardId 게시글번호
      */
     private void checkRegisteredUserId(Long boardId) {
-        freeService.findFreeDetail(boardId)
-                .ifPresentOrElse(b -> {
-                    if (!BoardUtil.isRegisteredUserId(b.getUserId())) {
-                        throw new NotAuthorisedToBoardException();
-                    }
-                }, () -> {
-                    throw new BoardNotFoundException();
-                });
+//        galleryService.findFreeDetail(boardId)
+//                .ifPresentOrElse(b -> {
+//                    if (!BoardUtil.isRegisteredUserId(b.getUserId())) {
+//                        throw new NotAuthorisedToBoardException();
+//                    }
+//                }, () -> {
+//                    throw new BoardNotFoundException();
+//                });
     }
 
     /**

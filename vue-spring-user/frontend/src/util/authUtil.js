@@ -1,7 +1,7 @@
 import store from "@/store/store";
 
 /**
- * 전역스토어에서 인증상태를 반환합니다.
+ *로그인스토어에서 인증상태를 반환합니다.
  * @returns {any}
  */
 export function isAuthenticated() {

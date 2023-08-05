@@ -1,6 +1,6 @@
 <template>
 
-  <board-title title="자유게시판"></board-title>
+  <board-title title="갤러리"></board-title>
 
   <div class="register-container">
 
@@ -50,7 +50,7 @@
     <div class="register-file-container">
       <board-form-title
           :required="false"
-          name="첨부"
+          name="갤러리 이미지"
           class="board-form-title-file">
       </board-form-title>
       <div class="register-file-input-container">
@@ -88,12 +88,13 @@ import {ref} from "vue";
 import BaseButton from "@/components/base/BaseButton.vue";
 import {createCondition} from "@/util/queryParamUtil";
 import {useRoute, useRouter} from "vue-router";
-import {FREE_CATEGORY_ID} from "@/constants";
+import {GALLERY_CATEGORY_ID} from "@/constants";
 import {getCategoryList} from "@/api/categoryService";
 import BoardFileList from "@/components/board/BoardFileList.vue";
 import {validateCategory, validateContent, validateTitle} from "@/util/boardValidUtil";
 import {useStore} from "vuex";
 import {registerFree} from "@/api/board/freeService";
+import {registerGallery} from "@/api/board/galleryService";
 
 const route = useRoute();
 const router = useRouter();
@@ -104,6 +105,7 @@ const registerForm = ref({
   categoryId: '',
   boardTitle: '',
   boardContent: '',
+  saveFiles: [],
 })
 /* 유효성검증 */
 const errorFields = ref({
@@ -115,17 +117,17 @@ const errorFields = ref({
 const categoryList = ref([]); // 카테고리 목록
 const condition = ref({}); // 검색조건
 
-initFreeRegister();
+initGalleryRegister();
 
 /**
- * 자유게시글 등록 컴포넌트를 초기화합니다.
+ * 갤러리 등록 컴포넌트를 초기화합니다.
  * @returns {Promise<void>}
  */
-async function initFreeRegister() {
-  condition.value = createCondition(route.query);
+async function initGalleryRegister() {
+  condition.value = createCondition(route.query, 3);
 
   try {
-    categoryList.value = await getCategoryList(FREE_CATEGORY_ID);
+    categoryList.value = await getCategoryList(GALLERY_CATEGORY_ID);
   } catch ({message}) {
     console.error(message);
   }
@@ -142,12 +144,12 @@ async function onRegister() {
   try {
     const formData = createFormData();
 
-    const freeId = await registerFree(formData);
+    const freeId = await registerGallery(formData);
 
     store.commit('boardFileStore/clearFile');
 
     router.push({
-      path: `/frees/${freeId}`,
+      path: `/galleries/${freeId}`,
       query: condition.value
     })
   } catch ({data, message}) {
@@ -202,7 +204,7 @@ function validateRegisterForm() {
  */
 function onCancel() {
   if (confirm('작성을 취소하시겠습니까?')) {
-    router.push({path: '/frees', query: condition.value});
+    router.push({path: '/galleries', query: condition.value});
   }
 }
 
@@ -211,7 +213,7 @@ function onCancel() {
 
 <script>
 export default {
-  name: "FreeRegister"
+  name: "GalleryRegister"
 }
 </script>
 

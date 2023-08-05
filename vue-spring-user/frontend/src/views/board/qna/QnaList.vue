@@ -1,32 +1,31 @@
 <template>
 
   <!-- 게시글 제목 -->
-  <board-title title="공지사항" ></board-title>
+  <board-title title="문의 게시판" ></board-title>
 
   <!-- 게시글 검색조건 -->
   <board-search-condition
-      :category-list="categoryList"
+      @condition-search="onConditionSearch"
       :condition="condition"
-      @condition-search="onConditionSearch">
+      :is-qna="true">
   </board-search-condition>
 
-  <div class="notice-list-container">
+  <div class="register-btn-container">
+    <base-button
+        @click="router.push({path: '/qna/register',query: condition})"
+        name="글 등록">
+    </base-button>
+  </div>
+
+  <div class="qna-list-container">
 
     <!-- 게시글 헤더 -->
-    <board-list-header></board-list-header>
+    <board-list-header :is-qna="true"></board-list-header>
 
-    <!-- 알림글 -->
+    <!-- 게시글 -->
     <board-list
-        v-if="alarmList"
-        :board-list="alarmList"
-        :condition="condition"
-        @detail-router="onDetailRouter"
-        is-alarm="true">
-    </board-list>
-
-    <!-- 공지사항 -->
-    <board-list
-        :board-list="noticeList"
+        :is-qna="true"
+        :board-list="qnaList"
         :condition="condition"
         @detail-router="onDetailRouter">
     </board-list>
@@ -43,54 +42,49 @@
   </div>
 
 </template>
-
-
 <script setup>
-import BoardSearchCondition from "@/components/board/BoardSearchCondition.vue";
+
 import BoardTitle from "@/components/board/BoardTitle.vue";
+import BoardSearchCondition from "@/components/board/BoardSearchCondition.vue";
 import BoardListHeader from "@/components/board/BoardListHeader.vue";
+import Pagination from "@/components/Pagination.vue";
 import BoardList from "@/components/board/BoardList.vue";
-import {ALARM_LIST_LIMIT, NOTICE_CATEGORY_ID} from "@/constants";
-import {getCategoryList} from "@/api/categoryService";
-import {ref, watch} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {useStore} from "vuex";
-import {getAlarmList, getNoticeList} from "@/api/board/noticeService";
+import {ref, watch} from "vue";
 import {createCondition} from "@/util/queryParamUtil";
-import Pagination from "@/components/Pagination.vue";
+import {getCategoryList} from "@/api/categoryService";
+import {FREE_CATEGORY_ID} from "@/constants";
+import {getFreeList} from "@/api/board/freeService";
+import BaseButton from "@/components/base/BaseButton.vue";
+import {getQnaList} from "@/api/board/qnaService";
 
 const router = useRouter();
 const route = useRoute();
 const store = useStore();
 
-const categoryList = ref([]); /* 카테고리 목록 */
-const alarmList = ref([]); /* 알림글 목록 */
-const noticeList = ref([]); /* 공지사항 목록 */
+const qnaList = ref([]); /* 문의게시글 목록 */
 const totalCnt = ref(0); /* 게시글 총 개수 */
 const condition = ref({}); /* 게시글 검색조건 */
 
-initNoticeList(); /* 컴포넌트 초기화 */
-watch(route, initNoticeList); /* 컴포넌트 URL 변경을 감지합니다.(페이징 처리) */
+initQnaList(); /* 컴포넌트 초기화 */
+watch(route, initQnaList); /* 컴포넌트 URL 변경을 감지합니다.(페이징 처리) */
 
 /**
- * 공지사항 목록 컴포넌트를 초기화 합니다.
+ * 문의게시글 목록 컴포넌트를 초기화 합니다.
  *
  * @returns {Promise<void>}
  */
-async function initNoticeList() {
+async function initQnaList() {
   condition.value = createCondition(route.query);
 
   try {
-    const [categoryListResult, noticeListResult, alarmListResult] = await Promise.all([
-      getCategoryList(NOTICE_CATEGORY_ID),
-      getNoticeList(condition.value),
-      getAlarmList(ALARM_LIST_LIMIT)
+    const [qnaListResult] = await Promise.all([
+      getQnaList(condition.value),
     ]);
 
-    categoryList.value = categoryListResult;
-    noticeList.value = noticeListResult.noticeList;
-    totalCnt.value = noticeList.value.length === 0 ? 0 : noticeListResult.totalCnt;
-    alarmList.value = alarmListResult;
+    qnaList.value = qnaListResult.qnaList;
+    totalCnt.value = qnaList.value.length === 0 ? 0 : qnaListResult.totalCnt;
 
   } catch ({message}) {
     console.error(message);
@@ -108,7 +102,7 @@ async function initNoticeList() {
  */
 function onConditionSearch(searchForm) {
   router.push({
-    path: '/notices',
+    path: '/qna',
     query: searchForm
   })
 }
@@ -121,18 +115,23 @@ function onPageRouter(page) {
   condition.value.page = page;
 
   router.push({
-    path: `/notices/`,
+    path: `/qna`,
     query: condition.value
   });
 }
 
 /**
- * 공지사항 상세페이지로 라우팅합니다.
- * @param board 공지사항 정보
+ * 문의게시글 상세페이지로 라우팅합니다.
+ * @param board 문의글 정보
  */
 function onDetailRouter(board) {
+  if (board.qnaSecret && board.userId !== store.getters['loginStore/getCurrentUserId']) {
+    alert('해당 문의글은 작성자만 이용가능합니다.');
+    return false;
+  }
+
   router.push({
-    path: `/notices/${board.boardId}`,
+    path: `/qna/${board.boardId}`,
     query: condition.value
   });
 }
@@ -141,14 +140,20 @@ function onDetailRouter(board) {
 
 <script>
 export default {
-  name: "NoticeList"
+  name: "QnaList"
 }
 </script>
 
 <style scoped>
 
-.notice-list-container {
+.qna-list-container {
+  margin-top: 10px;
+}
+
+.register-btn-container {
   margin-top: 30px;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .paging-container {

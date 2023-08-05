@@ -1,8 +1,11 @@
 <template>
 
   <div class="board-detail-header-container">
-    <div class="board-detail-category">{{ board.categoryName }}</div>
-    <div class="board-detail-title">{{ board.boardTitle }}</div>
+    <div v-if="!isQna" class="board-detail-category">{{ board.categoryName }}</div>
+    <div class="board-detail-title-container">
+      <div class="board-detail-title">{{ board.boardTitle }}</div>
+      <span v-if="isQna" class="board-detail-title-answer">{{ answerStatus }}</span>
+    </div>
     <div class="board-detail-regdate">{{ board.createDate }}</div>
     <div class="board-detail-username">{{ board.userName }}</div>
   </div>
@@ -20,8 +23,20 @@ export default {
       default: undefined,
       required: true,
       description: '게시글'
+    },
+    isQna: {
+      type: Boolean,
+      default: false,
+      required: false,
+      description: '문의글 타입 -> 게시글 카테고리 없음'
     }
+  },
+  computed: {
+    answerStatus() {
+      return this.board.answerStatus ? '(답변완료)' : '(미답변)'
+    },
   }
+
 }
 </script>
 
@@ -42,9 +57,14 @@ export default {
   padding-left: 10px;
 }
 
-.board-detail-title {
+.board-detail-title-container {
+  display: flex;
   flex-grow: 1;
   text-align: left;
+}
+
+.board-detail-title-answer {
+  margin-left: 10px;
 }
 
 .board-detail-regdate {

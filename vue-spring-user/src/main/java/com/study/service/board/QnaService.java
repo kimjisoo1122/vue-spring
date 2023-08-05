@@ -6,10 +6,12 @@ import com.study.dto.BoardSearchCondition;
 import com.study.enums.BoardType;
 import com.study.repository.board.BoardRepository;
 import com.study.repository.board.QnaRepository;
+import com.study.util.BoardUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 문의게시판 서비스
@@ -55,6 +57,19 @@ public class QnaService {
     }
 
     /**
+     * 문의게시글을 수정합니다.
+     *
+     * @param form 수정 폼
+     */
+    public void update(BoardForm form) {
+        BoardDto updateBoard = BoardUtil.createUpdateBoard(form);
+        boardRepository.update(updateBoard);
+
+        updateBoard.setQnaSecret(form.isQnaSecret());
+        qnaRepository.updateQnaDetail(updateBoard);
+    }
+
+    /**
      * 문의게시글을 삭제합니다.
      *
      * @param boardId 게시글번호
@@ -63,11 +78,29 @@ public class QnaService {
         boardRepository.delete(boardId);
     }
 
-    public BoardDto findQnaForm(Long boardId) {
+    public Optional<BoardDto> findQnaDetail(Long boardId) {
         BoardDto board = new BoardDto();
         board.setBoardId(boardId);
         board.setBoardType(BoardType.QNA);
 
-        return boardRepository.selectById(board);
+        return Optional.ofNullable(qnaRepository.selectDetailById(boardId));
+    }
+
+    /**
+     * 문의게시글을 등록합니다.
+     *
+     * @param form 등록 폼
+     * @return 등록된 문의게시글 번호
+     */
+    public Long register(BoardForm form) {
+        BoardDto registerBoard = BoardUtil.createRegisterBoard(form);
+        registerBoard.setBoardType(BoardType.QNA);
+
+        boardRepository.insert(registerBoard);
+
+        registerBoard.setQnaSecret(form.isQnaSecret());
+        qnaRepository.insertQnaDetail(registerBoard);
+
+        return registerBoard.getBoardId();
     }
 }

@@ -36,7 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      * 필터제외 요청
      */
     private final List<String> AUTH_REQUIRED_PATHS =
-            Arrays.asList("/api/reply", "/api/free", "/api/gallery", "/api/qna");
+            Arrays.asList("/api/replies", "/api/frees", "/api/galleries", "/api/qna");
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,

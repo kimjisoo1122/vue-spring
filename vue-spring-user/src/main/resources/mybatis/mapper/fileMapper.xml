@@ -49,6 +49,7 @@
             resultType="fileDto">
         SELECT
             gd.gallery_thumb_name, /* 갤러리 썸네일 이름 */
+            gd.gallery_img_name, /* 갤러리 썸네일 이름 */
             <include refid="selectFile"/>
         FROM file f
         JOIN gallery_detail gd on f.file_id = gd.file_id

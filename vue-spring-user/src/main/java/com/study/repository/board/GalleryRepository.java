@@ -49,11 +49,11 @@ public class GalleryRepository {
     }
 
     /**
-     * 파일번호로 삭제합니다.
+     * 파일번호로 갤러리디테일을 삭제합니다.
      *
      * @param fileId 파일번호
      */
-    public void deleteByFileId(Long fileId) {
-        galleryMapper.deleteByFileId(fileId);
+    public void deleteDetailByFileId(Long fileId) {
+        galleryMapper.deleteDetailByFileId(fileId);
     }
 }

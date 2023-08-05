@@ -1,7 +1,6 @@
 package com.study.repository.board;
 
 import com.study.dto.BoardDto;
-import com.study.dto.BoardForm;
 import com.study.dto.BoardSearchCondition;
 import com.study.mapper.board.QnaMapper;
 import lombok.RequiredArgsConstructor;
@@ -38,13 +37,13 @@ public class QnaRepository {
     }
 
     /**
-     * 문의게시글 번호로 문의게시글 폼을 조회합니다.
+     * 문의게시글 번호로 문의게시글 상세를 조회합니다.
      *
      * @param boardId 문의게시글 번호
-     * @return 문의게시글 폼
+     * @return 문의게시글 상세정보
      */
-    public BoardForm selectQnaForm(Long boardId) {
-        return qnaMapper.selectQnaForm(boardId);
+    public BoardDto selectDetailById(Long boardId) {
+        return qnaMapper.selectDetailById(boardId);
     }
 
     /**

@@ -2,6 +2,7 @@
   <input
     :type="type"
     :value="modelValue"
+    :checked="modelValue"
     :placeholder="placeholder"
     @change="onChange">
 
@@ -34,7 +35,11 @@ export default {
 
   methods: {
     onChange(event) {
-      this.$emit('update:modelValue', event.target.value);
+      if (this.type === 'checkbox') {
+        this.$emit('update:modelValue', event.target.checked);
+      } else {
+        this.$emit('update:modelValue', event.target.value);
+      }
     },
   }
 }

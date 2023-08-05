@@ -22,7 +22,7 @@ export default {
   },
   getters: {
     isAuthenticated(state) {
-      return state.authState && state.currentUserId !== '';
+      return state.authState && state.currentUserId !== '' && localStorage.getItem(AUTHORIZATION);
     },
     getCurrentUserId(state) {
       return state.currentUserId;

@@ -1,8 +1,10 @@
 import {createRouter, createWebHistory} from "vue-router";
-import store from "@/store/store";
 import Home from "@/views/Home.vue";
 import freeRoutes from "@/router/board/free";
 import noticeRoutes from "@/router/board/notice";
+import galleryRoutes from "@/router/board/gallery";
+import qnaRoutes from "@/router/board/qna";
+
 import {isAuthenticated} from "@/util/authUtil";
 
 const routes = [
@@ -31,6 +33,8 @@ const routes = [
   /* 게시글 (공지사항, 자유게시판, 갤러리게시판, 문의게시판) */
   ...noticeRoutes,
   ...freeRoutes,
+  ...galleryRoutes,
+  ...qnaRoutes,
 
   {
     path: '/404',

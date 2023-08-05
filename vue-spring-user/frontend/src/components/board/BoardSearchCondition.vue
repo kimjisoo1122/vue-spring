@@ -27,6 +27,7 @@
         <!-- searchCategory -->
         <div class="search-keyword-container">
           <category-select
+              v-if="!isQna"
               v-model="searchForm.searchCategory"
               :category-list="categoryList"
               class="search-keyword-select">
@@ -36,6 +37,7 @@
           <base-input
               placeholder="제목 OR 내용"
               v-model="searchForm.search"
+              :class="{'search-keyword-input-qna' : isQna}"
               class="search-keyword-input">
           </base-input>
           <base-button @click="onSearch" name="검색" class="search-keyword-btn"></base-button>
@@ -49,7 +51,7 @@
         <div class="search-limit-container">
           <base-select
               v-model="searchForm.limit"
-              :options="options.limit"
+              :options="isGalleryLimit ? options.galleryLimit : options.limit"
               @change="onSearch"
               class="search-limit-select">
           </base-select>
@@ -114,7 +116,7 @@ export default {
     categoryList: {
       type: Array,
       default: undefined,
-      required: true,
+      required: false,
       description: '카테고리 목록'
     },
     condition: {
@@ -128,6 +130,18 @@ export default {
       default: 365,
       required: false,
       description: '날짜검색 최대 기간'
+    },
+    isGalleryLimit: {
+      type: Boolean,
+      default: false,
+      required: false,
+      description: '갤러리 게시판 리밋옵션여부'
+    },
+    isQna: {
+      type: Boolean,
+      default: false,
+      required: false,
+      description: '문의글 타입 -> 게시글 카테고리 없음'
     }
   },
 

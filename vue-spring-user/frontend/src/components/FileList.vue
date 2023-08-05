@@ -5,8 +5,13 @@
         v-for="file in fileList"
         :key="file.fileId"
         class="file-container">
-      <font-awesome-icon icon="paperclip" class="file-icon" />
-      <a :href="`/api/file/${file.fileId}`" class="file-link">{{ file.fileOrgName }}</a>
+      <img
+          v-if="file.galleryThumbName != null"
+          :src="`/api/file/image/${file.galleryThumbName}`"
+          alt="썸네일 이미지"
+          class="file-thumb">
+      <font-awesome-icon v-else icon="paperclip" class="file-icon" />
+      <a  :href="`/api/file/${file.fileId}`" class="file-link">{{ file.fileOrgName }}</a>
       <base-button
           v-if="isUpdate"
           @click="onDelete(file.fileId)"
@@ -59,6 +64,10 @@ export default {
   align-items: center;
 }
 
+.file-thumb {
+  border-radius: 3px;
+  margin-right: 10px;
+}
 .file-icon {
   margin-right: 5px;
 }

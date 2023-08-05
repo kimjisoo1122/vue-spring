@@ -2,7 +2,7 @@
 
   <div class="board-list-header-container">
     <div class="board-list-header-id">번호</div>
-    <div class="board-list-header-category">분류</div>
+    <div v-if="!isQna" class="board-list-header-category">분류</div>
     <div class="board-list-header-title">제목</div>
     <div class="board-list-header-view">조회</div>
     <div class="board-list-header-regdate">등록일시</div>
@@ -13,7 +13,15 @@
 
 <script>
 export default {
-  name: "BoardListHeader"
+  name: "BoardListHeader",
+  props: {
+    isQna: {
+      type: Boolean,
+      default: false,
+      required: false,
+      description: '문의글 타입 -> 게시글 카테고리 없음'
+    }
+  }
 }
 </script>
 

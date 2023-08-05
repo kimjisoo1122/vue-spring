@@ -112,7 +112,7 @@ public class FreeService {
         // 삭제파일이 있는 경우 삭제합니다.
         if (form.getDeleteFiles() != null) {
             for (Long fileId : form.getDeleteFiles()) {
-                fileService.delete(fileId);
+                fileService.deleteById(fileId);
             }
         }
 

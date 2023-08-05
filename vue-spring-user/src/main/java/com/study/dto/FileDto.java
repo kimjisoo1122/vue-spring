@@ -21,6 +21,7 @@ public class FileDto {
 
     /* 갤러리 게시판 첨부파일*/
     private String galleryThumbName; // 갤러리 썸네일 이미지
+    private String galleryImgName; // 갤러리 이미지
 
     /**
      * 파일의 실제 저장된 경로를 반환합니다.

@@ -40,13 +40,7 @@
 import {deleteReply, registerReply} from "@/api/replyService";
 import BaseButton from "@/components/base/BaseButton.vue";
 import BaseInput from "@/components/base/BaseInput.vue";
-import {
-  checkAuthentication,
-  isCurrentUserId,
-  isAuthenticated,
-  isAuthentication,
-  isRequiredLogin
-} from "@/util/authUtil";
+import {isAuthenticated, isCurrentUserId} from "@/util/authUtil";
 
 export default {
   name: "Reply",

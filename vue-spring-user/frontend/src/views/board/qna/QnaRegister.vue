@@ -1,24 +1,8 @@
 <template>
 
-  <board-title title="자유게시판"></board-title>
+  <board-title title="문의 게시판"></board-title>
 
   <div class="register-container">
-
-    <div class="register-category-container">
-      <board-form-title name="분류" class="board-form-title-category">
-      </board-form-title>
-
-      <div class="register-category-input-container">
-        <category-select
-            v-model="registerForm.categoryId"
-            @change="errorFields.categoryId = validateCategory(registerForm.categoryId)"
-            :category-list="categoryList"
-            class="register-category">
-        </category-select>
-        <input-error :error-msg="errorFields.categoryId"></input-error>
-      </div>
-
-    </div>
 
     <div class="register-title-container">
       <board-form-title name="제목" class="board-form-title-title">
@@ -47,15 +31,18 @@
       </div>
     </div>
 
-    <div class="register-file-container">
+    <div class="register-secret-container">
       <board-form-title
           :required="false"
-          name="첨부"
-          class="board-form-title-file">
+          name="비밀글"
+          class="board-form-title-secret">
       </board-form-title>
-      <div class="register-file-input-container">
-        <board-file-list></board-file-list>
-        <input-error :error-msg="errorFields.saveFiles"></input-error>
+      <div class="register-secret-input-container">
+        <base-input
+            v-model="registerForm.qnaSecret"
+            type="checkbox"
+            class="register-secret-input">
+        </base-input>
       </div>
     </div>
 
@@ -82,57 +69,45 @@ import BoardTitle from "@/components/board/BoardTitle.vue";
 import BoardFormTitle from "@/components/board/BoardFormTitle.vue";
 import BaseInput from "@/components/base/BaseInput.vue";
 import InputError from "@/components/InputError.vue";
-import CategorySelect from "@/components/CategorySelect.vue";
 import BaseTextarea from "@/components/base/BaseTextarea.vue";
 import {ref} from "vue";
 import BaseButton from "@/components/base/BaseButton.vue";
 import {createCondition} from "@/util/queryParamUtil";
 import {useRoute, useRouter} from "vue-router";
-import {FREE_CATEGORY_ID} from "@/constants";
-import {getCategoryList} from "@/api/categoryService";
-import BoardFileList from "@/components/board/BoardFileList.vue";
-import {validateCategory, validateContent, validateTitle} from "@/util/boardValidUtil";
+import {validateContent, validateTitle} from "@/util/boardValidUtil";
 import {useStore} from "vuex";
-import {registerFree} from "@/api/board/freeService";
+import {registerQna} from "@/api/board/qnaService";
 
 const route = useRoute();
 const router = useRouter();
 const store = useStore();
 
-/* 자유게시글 등록정보 */
+/* 문의게시글 등록정보 */
 const registerForm = ref({
-  categoryId: '',
   boardTitle: '',
   boardContent: '',
+  qnaSecret: false,
 })
 /* 유효성검증 */
 const errorFields = ref({
-  categoryId: '',
   boardTitle: '',
   boardContent: '',
-  saveFiles: '',
 })
-const categoryList = ref([]); // 카테고리 목록
+
 const condition = ref({}); // 검색조건
 
-initFreeRegister();
+initQnaRegister();
 
 /**
- * 자유게시글 등록 컴포넌트를 초기화합니다.
+ * 문의게시글 등록 컴포넌트를 초기화합니다.
  * @returns {Promise<void>}
  */
-async function initFreeRegister() {
+function initQnaRegister() {
   condition.value = createCondition(route.query);
-
-  try {
-    categoryList.value = await getCategoryList(FREE_CATEGORY_ID);
-  } catch ({message}) {
-    console.error(message);
-  }
 }
 
 /**
- * 게시글을 등록합니다.
+ * 문의게시글을 등록합니다.
  */
 async function onRegister() {
   if (!validateRegisterForm()) {
@@ -142,12 +117,10 @@ async function onRegister() {
   try {
     const formData = createFormData();
 
-    const freeId = await registerFree(formData);
-
-    store.commit('boardFileStore/clearFile');
+    const qnaId = await registerQna(formData);
 
     router.push({
-      path: `/frees/${freeId}`,
+      path: `/qna/${qnaId}`,
       query: condition.value
     })
   } catch ({data, message}) {
@@ -161,20 +134,15 @@ async function onRegister() {
 
 /**
  * FormData를 생성합니다
- * @returns FormData 게시글form정보
+ * @returns FormData
  */
 function createFormData() {
   const formData = new FormData();
 
   for (const field in registerForm.value) {
     formData.append(field, registerForm.value[field]);
+    console.log(field, registerForm.value[field]);
   }
-
-  /* 첨부파일 추가 */
-  store.getters['boardFileStore/getSaveFiles']
-      .forEach(file => {
-        formData.append('saveFiles', file);
-      })
 
   return formData;
 }
@@ -186,7 +154,6 @@ function createFormData() {
 function validateRegisterForm() {
   errorFields.value.boardTitle = validateTitle(registerForm.value.boardTitle);
   errorFields.value.boardContent = validateContent(registerForm.value.boardContent);
-  errorFields.value.categoryId = validateCategory(registerForm.value.categoryId);
 
   for (const errorMsg of Object.values(errorFields.value)) {
     if (errorMsg) {
@@ -202,7 +169,7 @@ function validateRegisterForm() {
  */
 function onCancel() {
   if (confirm('작성을 취소하시겠습니까?')) {
-    router.push({path: '/frees', query: condition.value});
+    router.push({path: '/qna', query: condition.value});
   }
 }
 
@@ -211,21 +178,21 @@ function onCancel() {
 
 <script>
 export default {
-  name: "FreeRegister"
+  name: "QnaRegister"
 }
 </script>
 
 <style scoped>
 
-.register-category-container, .register-title-container,
-.register-content-container, .register-file-container {
+.register-title-container, .register-content-container,
+.register-secret-container {
   border-bottom: 1px solid var(--border-color-gray);
   height: 100%;
   display: flex;
 }
 
-.register-category-input-container, .register-title-input-container,
-.register-content-input-container, .register-file-input-container {
+.register-title-input-container, .register-content-input-container,
+.register-secret-input-container {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -233,12 +200,8 @@ export default {
   margin: 5px 0 5px 10px;
 }
 
-.register-category-container {
-  border-top: 1px solid var(--border-color-gray);
-}
-
-.register-category {
-  width: 200px;
+.register-title-container {
+  border-top: var(--main-border);
 }
 
 .register-title {
@@ -249,6 +212,10 @@ export default {
 .register-content {
   width: 95%;
   min-height: 200px;
+}
+
+.register-secret-input {
+  width: 20px;
 }
 
 .register-btn-container {

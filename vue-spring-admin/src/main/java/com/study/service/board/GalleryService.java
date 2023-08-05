@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -124,14 +125,44 @@ public class GalleryService {
             }
         }
 
-        // 삭제파일이 있는 경우 삭제합니다.
+        /**
+         * 1.갤러리 디테일을 삭제합니다.
+         * 2.파일을 삭제합니다.
+         */
         if (form.getDeleteFiles() != null) {
             for (Long fileId : form.getDeleteFiles()) {
-                fileService.delete(fileId);
+                deleteDetailByFileId(fileId);
+                fileService.deleteById(fileId);
             }
         }
 
         boardRepository.update(BoardUtil.createUpdateBoard(form));
+    }
+
+    /**
+     * 디테일에 등록된 썸네일 경로를 조회하여 삭제 후
+     * 디테일 정보를 삭제합니다.
+     *
+     * @param fileId 파일번호
+     */
+    public void deleteDetailByFileId(Long fileId) {
+        deleteThumbFile(fileId);
+        galleryRepository.deleteDetailByFileId(fileId);
+    }
+
+    /**
+     * 파일번호로 등록된 썸네일 업로드파일을 삭제합니다.
+     * @param fileId 썸네일이 등록된 파일번호
+     */
+    public void deleteThumbFile(Long fileId) {
+        String thumbName = galleryRepository.selectThumbNameByFileId(fileId);
+
+        if (StringUtils.hasText(thumbName)) {
+            File thumbFile = new File(fileService.getGalleyPath() + thumbName);
+            if (thumbFile.exists()) {
+                thumbFile.delete();
+            }
+        }
     }
 
     /**

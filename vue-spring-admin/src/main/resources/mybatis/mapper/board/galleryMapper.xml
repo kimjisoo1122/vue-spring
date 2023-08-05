@@ -66,7 +66,7 @@
     </select>
 
     <!-- 파일번호로 삭제합니다. -->
-    <delete id="deleteByFileId"
+    <delete id="deleteDetailByFileId"
             parameterType="long">
         DELETE
         FROM gallery_detail

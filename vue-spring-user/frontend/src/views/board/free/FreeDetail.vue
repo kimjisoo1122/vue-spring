@@ -14,22 +14,13 @@
       @delete-reply="onDeleteReply">
   </reply>
 
-  <div class="free-detail-btn-container">
-    <base-button
-        @click="router.push({path: '/frees', query: condition})"
-        class="free-detail-btn-list" name="목록">
-    </base-button>
-    <base-button
-        v-if="isCurrentUserId(free.userId)"
-        @click="router.push({path: `/frees/update/${free.boardId}`, query: condition})"
-        class="free-detail-btn-update" name="수정">
-    </base-button>
-    <base-button
-        v-if="isCurrentUserId(free.userId)"
-        @click="onDelete"
-        class="free-detail-btn-delete" name="삭제">
-    </base-button>
-  </div>
+  <board-detail-btn-container
+      @delete-board="onDelete"
+      :board="free"
+      :condition="condition"
+      path="/frees"
+      class="free-detail-btn-container">
+  </board-detail-btn-container>
 
 </template>
 
@@ -49,6 +40,7 @@ import {getBoardFileList} from "@/api/fileService";
 import FileList from "@/components/FileList.vue";
 import Reply from "@/components/Reply.vue";
 import {isCurrentUserId} from "@/util/authUtil";
+import BoardDetailBtnContainer from "@/components/board/BoardDetailBtnContainer.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -91,13 +83,11 @@ async function initFreeDetail() {
  * 자유게시글을 삭제합니다.
  */
 async function onDelete() {
-  if (confirm('삭제 하시겠습니까?')) {
-    try {
-      await deleteFree(route.params.boardId);
-      router.push({path: '/frees', query: condition});
-    } catch ({message}) {
-      alert(message);
-    }
+  try {
+    await deleteFree(route.params.boardId);
+    router.push({path: '/frees', query: condition});
+  } catch ({message}) {
+    alert(message);
   }
 }
 
@@ -139,25 +129,8 @@ export default {
 }
 
 .free-detail-btn-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   margin: 30px 0;
-  gap: 20px;
 }
 
-.free-detail-btn-container button {
-  width: 70px;
-}
-
-.free-detail-btn-list {
-  background-color: var(--sub-color-violet)
-}
-
-.free-detail-btn-delete {
-  color: black;
-  background-color: white;
-  border: var(--main-border);
-}
 
 </style>

@@ -5,7 +5,7 @@ import axios from "@/api/config/axios";
  * @param boardId 게시글번호
  */
 export function getBoardReplyList(boardId) {
-  return axios.get(`/api/reply/board/${boardId}`)
+  return axios.get(`/api/replies/board/${boardId}`)
       .then(({data: {data}}) => {
         return data;
       })
@@ -23,7 +23,7 @@ export function getBoardReplyList(boardId) {
  * @return reply 등록된 댓글
  */
 export function registerReply(replyDto) {
-  return axios.post('/api/reply', replyDto)
+  return axios.post('/api/replies', replyDto)
       .then(({data: {data}}) => {
         return data;
       })
@@ -41,7 +41,7 @@ export function registerReply(replyDto) {
  * @returns {Promise<axios.AxiosResponse<any>>}
  */
 export function deleteReply(replyId) {
-  return axios.delete(`/api/reply/${replyId}`)
+  return axios.delete(`/api/replies/${replyId}`)
       .then(data => {
         return data;
       })

@@ -1,6 +1,11 @@
 <template>
 
   <div class="file-input-container">
+    <img
+        v-if="fileThumbSrc"
+        :src="fileThumbSrc"
+        alt="업로드 파일 썸내일"
+        class="file-thumb">
     <input type="text"
            class="file-input-disabled"
            v-model="fileName"
@@ -24,8 +29,9 @@ export default {
 
   data() {
     return {
-      fileName: '', // 파일이름
-      fileError: '', // 파일에러
+      fileName: '', /* 파일이름 */
+      fileError: '', /* 파일에러 */
+      fileThumbSrc: '' /* 이미지파일 썸네일 Src 속성 */
     }
   },
 
@@ -72,6 +78,8 @@ export default {
         return false;
       }
 
+      this.showThumb(file, event.target.result);
+
       this.fileError = '';
       file.fileId = this.fileId;
 
@@ -104,7 +112,29 @@ export default {
 
       return true;
     },
+
+    /**
+     * 첨부한 이미지파일의 썸네일을 보여줍니다.
+     * @param file 파일객체
+     */
+    showThumb(file) {
+      const dotIdx = file.name.lastIndexOf('.')
+      const fileExt = file.name.substring(dotIdx + 1);
+
+      if (fileExt !== 'zip') {
+        const fileReader = new FileReader();
+
+        fileReader.onload = e => {
+          this.fileThumbSrc = e.target.result;
+        }
+
+        fileReader.readAsDataURL(file);
+      }
+
+    }
   },
+
+
 }
 </script>
 
@@ -141,6 +171,11 @@ export default {
     padding: 10px;
   }
 
+  .file-thumb {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+  }
   .file-input {
     display: none;
   }

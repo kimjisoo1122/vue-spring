@@ -6,12 +6,14 @@
       :class="{'board-list-alarm-container': isAlarm }"
       class="board-list-container">
     <div class="board-list-id">{{ board.boardId }}</div>
-    <div class="board-list-category">{{ board.categoryName }}</div>
+    <div v-if="!isQna" class="board-list-category">{{ board.categoryName }}</div>
     <div class="board-list-title" id="board-list-title">
-      <div @click="$emit('detail-router', board.boardId);" class="board-list-title-link">{{ board.boardTitle }}</div>
+      <div @click="$emit('detail-router', board);" class="board-list-title-link">{{ board.boardTitle }}</div>
+      <span v-if="isQna" class="board-list-title-answer">{{ board.answerStatus ? '(답변완료)' : '(미답변)' }}</span>
       <span v-if="board.replyCnt !== 0" class="board-list-title-reply">({{ board.replyCnt }})</span>
       <span v-if="board.newStatus" class="board-list-title-new">new</span>
       <font-awesome-icon icon="paperclip" v-if="board.fileStatus" class="board-list-title-file" />
+      <font-awesome-icon icon="lock" v-if="board.qnaSecret" class="board-list-title-secret"/>
     </div>
     <div class="board-list-view">{{ board.viewCnt }}</div>
     <div class="board-list-regdate">{{ formatDate(board.createDate) }}</div>
@@ -50,12 +52,12 @@ export default {
       type: Boolean,
       default: false,
       required: false,
-      description: '문의글 타입 -> 게시글 카테고리 없음'
+      description: '문의글 타입'
     }
   },
   methods: {
     formatDate,
-  }
+  },
 }
 </script>
 
@@ -101,6 +103,11 @@ export default {
   margin-right: 5px;
 }
 
+.board-list-title-answer {
+  margin: 0 10px;
+  font-size: var(--small-font-size);
+}
+
 .board-list-title-reply {
   margin-right: 5px;
 }
@@ -114,6 +121,11 @@ export default {
   margin-left: 5px;
   display: block;
   padding-top: 3px;
+}
+
+.board-list-title-secret {
+  color: gray;
+  margin-left: 10px;
 }
 
 .board-list-regdate {

@@ -23,6 +23,7 @@ export default {
 .board-detail-content {
   padding: 10px;
   border: 1px solid var(--border-color-gray);
+  border-radius: 3px;
   min-height: 200px;
   font-size: var(--middle-font-size);
 }

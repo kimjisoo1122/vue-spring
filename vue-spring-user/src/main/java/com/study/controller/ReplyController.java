@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  * 댓글을 처리하는 API 컨트롤러
  */
 @RestController
-@RequestMapping("/api/reply")
+@RequestMapping("/api/replies")
 @RequiredArgsConstructor
 public class ReplyController {
 

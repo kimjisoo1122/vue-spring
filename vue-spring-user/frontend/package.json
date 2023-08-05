@@ -16,8 +16,10 @@
     "axios": "^1.4.0",
     "core-js": "^3.8.3",
     "moment": "^2.29.4",
+    "swiper": "^8.4.7",
     "vue": "^3.2.13",
     "vue-router": "^4.2.4",
+    "vue3-carousel": "^0.3.1",
     "vuex": "^4.0.2",
     "vuex-persistedstate": "^4.1.0"
   },

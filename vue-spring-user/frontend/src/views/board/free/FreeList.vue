@@ -10,8 +10,11 @@
       @condition-search="onConditionSearch">
   </board-search-condition>
 
-  <div class="update-container">
-    <base-button @click="onRegisterRouter" name="글 등록"></base-button>
+  <div class="register-btn-container">
+    <base-button
+        @click="router.push({path: '/frees/register',query: condition})"
+        name="글 등록">
+    </base-button>
   </div>
 
   <div class="free-list-container">
@@ -67,7 +70,7 @@ initFreeList(); /* 컴포넌트 초기화 */
 watch(route, initFreeList); /* 컴포넌트 URL 변경을 감지합니다.(페이징 처리) */
 
 /**
- * 공지사항 목록 컴포넌트를 초기화 합니다.
+ * 자유게시글 목록 컴포넌트를 초기화 합니다.
  *
  * @returns {Promise<void>}
  */
@@ -120,24 +123,15 @@ function onPageRouter(page) {
 
 /**
  * 자유게시글 상세페이지로 라우팅합니다.
- * @param boardId 자유게시글 번호
+ * @param board 자유게시글 번호
  */
-function onDetailRouter(boardId) {
+function onDetailRouter(board) {
   router.push({
-    path: `/frees/${boardId}`,
+    path: `/frees/${board.boardId}`,
     query: condition.value
   });
 }
 
-/**
- * 자유게시글 등록페이지로 라우팅합니다.
- */
-function onRegisterRouter() {
-  router.push({
-    path: '/frees/register',
-    query: condition.value
-  });
-}
 </script>
 
 <script>
@@ -152,7 +146,7 @@ export default {
   margin-top: 10px;
 }
 
-.update-container {
+.register-btn-container {
   margin-top: 30px;
   display: flex;
   justify-content: flex-end;

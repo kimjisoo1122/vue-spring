@@ -10,7 +10,7 @@ import com.study.enums.BoardType;
 import com.study.exception.BoardNotFoundException;
 import com.study.exception.NotAuthorisedToBoardException;
 import com.study.service.board.BoardService;
-import com.study.service.board.FreeService;
+import com.study.service.board.QnaService;
 import com.study.util.BoardUtil;
 import com.study.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -26,28 +26,27 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 자유게시판 API 컨트롤러
+ * 문의게시판 API 컨트롤러
  */
 
 @RestController
-@RequestMapping("/api/frees")
+@RequestMapping("/api/qna")
 @RequiredArgsConstructor
-public class FreeController {
+public class QnaController {
 
-    private final FreeService freeService;
     private final BoardService boardService;
+    private final QnaService qnaService;
 
     /**
-     * 자유게시글을 등록 합니다.
+     * 문의게시글을 등록 합니다.
      *
-     * @param form 자유게시글 등록 폼
+     * @param form 문의게시글 등록 폼
      * @param bindingResult 유효성검증객체
-     * @throws IOException 첨부파일을 저장하는데 발생하는 예외
      */
     @PostMapping()
     public ResponseEntity<ResponseValidFormDto> register(
             @Validated @ModelAttribute BoardForm form,
-            BindingResult bindingResult) throws IOException {
+            BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             return ResponseEntity
@@ -56,10 +55,10 @@ public class FreeController {
         }
 
         SecurityUtil.setFormUser(form);
-        form.setBoardType(BoardType.FREE);
+        form.setBoardType(BoardType.QNA);
 
         ResponseValidFormDto response = new ResponseValidFormDto(ResponseApiStatus.SUCCESS);
-        response.setData(freeService.register(form));
+        response.setData(qnaService.register(form));
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -67,30 +66,30 @@ public class FreeController {
     }
 
     /**
-     * 자유게시글 목록을 조회합니다.
+     * 문의게시글 목록을 조회합니다.
      *
      * @param condition 검색조건
-     * @return freeList: 자유게시글 목록, totalCnt: 자유게시글 총 개수
+     * @return qnaList: 문의게시글 목록, totalCnt: 자유게시글 총 개수
      */
     @GetMapping
-    public ResponseEntity<ResponseDto> freeList(
+    public ResponseEntity<ResponseDto> qnaList(
             @ModelAttribute BoardSearchCondition condition) {
 
-        condition.setSearchParams(BoardType.FREE);
+        condition.setSearchParams(BoardType.QNA);
 
-        List<BoardDto> freeList = freeService.findFreeList(condition);
-        int totalCnt = freeService.getTotalCnt(condition);
+        List<BoardDto> qnaList = qnaService.findQnaList(condition);
+        int totalCnt = qnaService.getTotalCnt(condition);
 
         ResponseDto response = new ResponseDto(ResponseApiStatus.SUCCESS);
-        response.setData(Map.of("freeList", freeList, "totalCnt", totalCnt));
+        response.setData(Map.of("qnaList", qnaList, "totalCnt", totalCnt));
 
         return ResponseEntity.ok(response);
     }
 
     /**
-     * 자유게시글 상세정보를 조회합니다.
+     * 문의게시글 상세정보를 조회합니다.
      *
-     * @param boardId 자유게시글 번호
+     * @param boardId 문의게시글 번호
      * @throws BoardNotFoundException 게시글이 존재하지 않는 경우 발생하는 예외
      */
     @GetMapping("/{boardId}")
@@ -98,9 +97,10 @@ public class FreeController {
             @PathVariable("boardId") Long boardId) {
 
         boardService.increaseViewCnt(boardId);
+
         ResponseDto response = new ResponseDto(ResponseApiStatus.SUCCESS);
 
-        freeService.findFreeDetail(boardId)
+        qnaService.findQnaDetail(boardId)
                 .ifPresentOrElse(response::setData,
                         () -> {
                             throw new BoardNotFoundException();
@@ -110,9 +110,9 @@ public class FreeController {
     }
 
     /**
-     * 자유게시글을 업데이트 합니다.
+     * 문의게시글을 업데이트 합니다.
      *
-     * @param form 자유게시글 업데이트 폼
+     * @param form 문의게시글 업데이트 폼
      * @param bindingResult 유효성검증객체
      * @throws IOException 첨부파일을 저장하는데 발생하는 예외
      */
@@ -134,7 +134,7 @@ public class FreeController {
         form.setBoardId(boardId);
 
         ResponseValidFormDto response = new ResponseValidFormDto(ResponseApiStatus.SUCCESS);
-        freeService.update(form);
+        qnaService.update(form);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -142,7 +142,7 @@ public class FreeController {
     }
 
     /**
-     * 자유게시글을 삭제합니다.
+     * 문의게시글을 삭제합니다.
      * @param boardId 게시글번호
      */
     @DeleteMapping("/{boardId}")
@@ -151,7 +151,7 @@ public class FreeController {
 
         checkRegisteredUserId(boardId);
 
-        freeService.delete(boardId);
+        qnaService.delete(boardId);
 
         ResponseDto response = new ResponseDto(ResponseApiStatus.SUCCESS);
 
@@ -166,7 +166,7 @@ public class FreeController {
      * @param boardId 게시글번호
      */
     private void checkRegisteredUserId(Long boardId) {
-        freeService.findFreeDetail(boardId)
+        qnaService.findQnaDetail(boardId)
                 .ifPresentOrElse(b -> {
                     if (!BoardUtil.isRegisteredUserId(b.getUserId())) {
                         throw new NotAuthorisedToBoardException();

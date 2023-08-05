@@ -1,6 +1,6 @@
 <template>
 
-  <board-title title="자유게시판"></board-title>
+  <board-title title="갤러리"></board-title>
 
   <div class="update-container">
 
@@ -92,9 +92,11 @@ import BaseButton from "@/components/base/BaseButton.vue";
 import {getBoardFileList} from "@/api/fileService";
 import {useRoute, useRouter} from "vue-router";
 import {getFreeDetail, updateFree} from "@/api/board/freeService";
-import {FREE_CATEGORY_ID} from "@/constants";
+import {FREE_CATEGORY_ID, GALLERY_CATEGORY_ID} from "@/constants";
 import {getCategoryList} from "@/api/categoryService";
 import {useStore} from "vuex";
+import {getGalleryDetail, updateGallery} from "@/api/board/galleryService";
+import {formatDate} from "@/util/formatUtil";
 import {isCurrentUserId} from "@/util/authUtil";
 
 const store = useStore();
@@ -115,33 +117,32 @@ const errorFields = ref({
   saveFiles: '',
 })
 
-const free = ref({}); // 해당게시글
+const gallery = ref({}); // 해당게시글
 const categoryList = ref([]); // 카테고리 목록
 const fileList = ref([]); // 첨부파일 목록
 const condition = ref({}); // 검색조건
 const deleteFiles = ref([]); // 삭제파일 목록
 
-initFreeUpdate();
+initGalleryUpdate();
 
 /**
  * 자유게시글 수정컴포넌트를 초기화합니다.
  * @returns {Promise<void>}
  */
-async function initFreeUpdate() {
+async function initGalleryUpdate() {
   try {
     const boardId = route.params.boardId;
-    const [fileListResult, freeResult, categoryResult] =await Promise.all([
-      getBoardFileList(boardId),
-      getFreeDetail(boardId),
-      getCategoryList(FREE_CATEGORY_ID)
+    const [galleryResult, categoryResult] =await Promise.all([
+      getGalleryDetail(boardId),
+      getCategoryList(GALLERY_CATEGORY_ID)
     ])
 
-    fileList.value = fileListResult;
-    free.value = freeResult;
+    gallery.value = galleryResult.gallery;
+    fileList.value = galleryResult.fileList;
     categoryList.value = categoryResult;
 
     for (const field in updateForm.value) {
-      updateForm.value[field] = free.value[field];
+      updateForm.value[field] = gallery.value[field];
     }
   } catch ({message}) {
     console.error(message);
@@ -154,20 +155,18 @@ async function initFreeUpdate() {
  */
 async function onUpdate() {
   if (confirm('수정 하시겠습니까?')) {
-    if (!validateUpdateForm() && !isCurrentUserId(free.value.userId)) {
+    if (!validateUpdateForm() && !isCurrentUserId(gallery.value.userId)) {
       return false;
     }
-
-
 
     try {
       const formData = createFormData();
 
-      const boardId = await updateFree(route.params.boardId, formData);
+      const boardId = await updateGallery(route.params.boardId, formData);
 
       store.commit('boardFileStore/clearFile');
 
-      router.push({path: `/frees/${boardId}`, query: condition.value});
+      router.push({path: `/galleries/${boardId}`, query: condition.value});
 
     } catch ({data, message}) {
       // 유효성검증에 실패한 필드의 에러메시지를 저장합니다.
@@ -192,7 +191,7 @@ function onDeleteFile(fileId) {
 
 function onCancel() {
   if (confirm('수정을 취소하시겠습니까?')) {
-    router.push({path: '/frees', query: condition.value});
+    router.push({path: '/galleries', query: condition});
   }
 }
 
@@ -244,7 +243,7 @@ function validateUpdateForm() {
 
 <script>
 export default {
-  name: "FreeUpdate"
+  name: "GalleryUpdate"
 }
 </script>
 

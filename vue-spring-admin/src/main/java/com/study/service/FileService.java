@@ -126,7 +126,7 @@ public class FileService {
      * 첨부파일과 업로드된 실제파일도 삭제합니다
      * @param fileId 파일번호
      */
-    public void delete(Long fileId) {
+    public void deleteById(Long fileId) {
         FileDto findFile = fileRepository.selectById(fileId);
         File uploadedFile = new File(findFile.getFullPath());
         if (uploadedFile.exists()) {
@@ -145,7 +145,7 @@ public class FileService {
     public void deleteByBoardId(Long boardId) {
         fileRepository.selectByBoardId(boardId)
                 .forEach(e -> {
-                    delete(e.getFileId());
+                    deleteById(e.getFileId());
                 });
     }
 
@@ -163,7 +163,7 @@ public class FileService {
             }
         }
 
-        galleryRepository.deleteByFileId(fileId);
+        galleryRepository.deleteDetailByFileId(fileId);
     }
 
     /**

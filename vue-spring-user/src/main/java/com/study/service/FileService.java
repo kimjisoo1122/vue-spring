@@ -3,11 +3,9 @@ package com.study.service;
 import com.study.dto.FileDto;
 import com.study.exception.FileNotAllowedExtException;
 import com.study.repository.FileRepository;
-import com.study.repository.board.GalleryRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -28,18 +26,15 @@ public class FileService {
     private final String GALLERY_PATH; // 갤러리 파일경로
 
     private final FileRepository fileRepository;
-    private final GalleryRepository galleryRepository;
 
     public FileService(
             @Value("${file.upload-folder}") String FILE_PATH,
             @Value("#{'${file.allowed-extensions}'.split(',')}") List<String> allowedExtensions,
-            FileRepository fileRepository,
-            GalleryRepository galleryRepository) {
+            FileRepository fileRepository) {
         this.FILE_PATH = FILE_PATH;
         this.GALLERY_PATH = FILE_PATH + "gallery/";
         this.allowedExtensions = allowedExtensions;
         this.fileRepository = fileRepository;
-        this.galleryRepository = galleryRepository;
 
         initPathFolder();
     }
@@ -123,17 +118,19 @@ public class FileService {
     }
 
     /**
-     * 첨부파일과 업로드된 실제파일도 삭제합니다
+     * 파일번호로 파일을 조회 후 삭제한 후
+     * 해당파일의 실제 업로드 파일을 삭제합니다.
+     *
      * @param fileId 파일번호
      */
-    public void delete(Long fileId) {
+    public void deleteById(Long fileId) {
         FileDto findFile = fileRepository.selectById(fileId);
+        fileRepository.delete(fileId);
+
         File uploadedFile = new File(findFile.getFullPath());
         if (uploadedFile.exists()) {
             uploadedFile.delete();
         }
-
-        fileRepository.delete(fileId);
     }
 
     /**
@@ -143,26 +140,10 @@ public class FileService {
     public void deleteByBoardId(Long boardId) {
         fileRepository.selectByBoardId(boardId)
                 .forEach(e -> {
-                    delete(e.getFileId());
+                    deleteById(e.getFileId());
                 });
     }
 
-    /**
-     * 파일번호로 등록된 썸네일파일을 삭제합니다.
-     * @param fileId
-     */
-    public void deleteThumbFile(Long fileId) {
-        String thumbName = galleryRepository.selectThumbNameByFileId(fileId);
-
-        if (StringUtils.hasText(thumbName)) {
-            File thumbFile = new File(GALLERY_PATH + thumbName);
-            if (thumbFile.exists()) {
-                thumbFile.delete();
-            }
-        }
-
-        galleryRepository.deleteByFileId(fileId);
-    }
 
     /**
      * 파일명을 UUID로 포맷후 확장자를 붇혀 반환합니다.

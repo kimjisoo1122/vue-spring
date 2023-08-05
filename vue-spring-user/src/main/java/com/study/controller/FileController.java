@@ -44,7 +44,6 @@ public class FileController {
         return ResponseEntity.ok(response);
     }
 
-
     /**
      * 파일 다운로드를 처리합니다.
      * @param fileId 파일번호
@@ -78,9 +77,9 @@ public class FileController {
      * @throws MalformedURLException 파일경로가 올바르지 않은 경우 발생하는 예외
      */
     @ResponseBody
-    @GetMapping("/image/{imgUrl}")
+    @GetMapping("/image/{imgName}")
     public Resource showImage(
-            @PathVariable("imgUrl") String imgName) throws MalformedURLException {
+            @PathVariable("imgName") String imgName) throws MalformedURLException {
         return new UrlResource("file:" + fileService.getGalleyPath() + imgName);
     }
 }
