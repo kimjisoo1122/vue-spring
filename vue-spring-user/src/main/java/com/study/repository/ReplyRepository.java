@@ -37,6 +37,7 @@ public class ReplyRepository {
 
     /**
      * 게시글에 등록된 댓글을 조회합니다.
+     *
      * @param boardId 게시글번호
      * @return 게시글에 등록된 댓글 목록
      */
@@ -51,14 +52,5 @@ public class ReplyRepository {
      */
     public void delete(Long replyId) {
         replyMapper.delete(replyId);
-    }
-
-    /**
-     * 게시글에 등록된 댓글을 삭제합니다.
-     *
-     * @param boardId 게시글 번호
-     */
-    public void deleteByBoardId(Long boardId) {
-        replyMapper.deleteByBoardId(boardId);
     }
 }

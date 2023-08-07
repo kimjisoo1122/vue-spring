@@ -2,15 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.study.mapper.board.NoticeMapper">
 
-    <!-- 공지글 알림을 등록합니다. -->
-    <insert id="insertNoticeAlarm"
-            parameterType="long">
-        INSERT INTO notice_alarm
-            (board_id) /* 공지사항 번호 */
-        VALUES
-            (#{boardId})
-    </insert>
-
     <!-- 공지글 알림을 조회합니다.-->
     <select id="selectNoticeAlarm"
             parameterType="int"
@@ -42,11 +33,4 @@
         AND b.board_type = #{boardType}
     </select>
 
-    <!-- 공지사항 알림을 지웁니다. -->
-    <delete id="deleteNoticeAlarm"
-            parameterType="long">
-        DELETE
-        FROM notice_alarm
-        WHERE board_id = #{boardId}
-    </delete>
 </mapper>

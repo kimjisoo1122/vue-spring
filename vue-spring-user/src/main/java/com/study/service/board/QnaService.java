@@ -44,19 +44,6 @@ public class QnaService {
     }
 
     /**
-     * 문의게시글의 답변을 등록/수정합니다.
-     *
-     * @param form 답변 폼
-     */
-    public void registerAnswer(BoardForm form) {
-        BoardDto qnaBoard = new BoardDto();
-        qnaBoard.setBoardId(form.getBoardId());
-        qnaBoard.setQnaAnswer(form.getQnaAnswer());
-
-        qnaRepository.updateQnaDetail(qnaBoard);
-    }
-
-    /**
      * 문의게시글을 수정합니다.
      *
      * @param form 수정 폼

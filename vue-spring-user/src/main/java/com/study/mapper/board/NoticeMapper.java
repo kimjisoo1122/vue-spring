@@ -10,8 +10,6 @@ import java.util.List;
  */
 @Mapper
 public interface NoticeMapper {
-    void insertNoticeAlarm(Long boardId);
     List<BoardDto> selectNoticeAlarm(int limit);
     BoardDto selectNoticeDetail(BoardDto board);
-    void deleteNoticeAlarm(Long boardId);
 }

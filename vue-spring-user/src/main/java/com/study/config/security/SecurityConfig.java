@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import java.util.Collections;
 
 /**
- * Security Config
+ * 스프링 시큐리티 설정
  */
 @Configuration
 @EnableWebSecurity
@@ -41,6 +41,7 @@ public class SecurityConfig {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+
                 .httpBasic().disable()
                 .csrf().disable()
                 .formLogin().disable();
@@ -57,16 +58,17 @@ public class SecurityConfig {
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 
+    /**
+     * @return 스프링 시큐리티 암호화 Encoder
+     */
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager() {
-        return new ProviderManager(Collections.singletonList(authenticationProvider()));
-    }
-
+    /**
+     * @return 스프링 시큐리티 UserDetailsService를 등록해 실제 인증을 담당하는 프로바이더
+     */
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -74,4 +76,13 @@ public class SecurityConfig {
         provider.setPasswordEncoder(bCryptPasswordEncoder());
         return provider;
     }
+
+    /**
+     * @return 스프링 시큐리티 인증을 담당하는 매니저
+     */
+    @Bean
+    public AuthenticationManager authenticationManager() {
+        return new ProviderManager(Collections.singletonList(authenticationProvider()));
+    }
+
 }

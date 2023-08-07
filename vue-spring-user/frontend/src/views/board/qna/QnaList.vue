@@ -19,7 +19,7 @@
       <span class="my-qna-span">나의 문의내역만 보기</span>
       <base-input
           v-model="condition.myQna"
-          @change="onConditionSearch"
+          @change="onMyQnaSearch"
           type="checkbox"
           class="my-qna-input">
       </base-input>
@@ -76,7 +76,7 @@ import {getFreeList} from "@/api/board/freeService";
 import BaseButton from "@/components/base/BaseButton.vue";
 import {getQnaList} from "@/api/board/qnaService";
 import GNB from "@/components/GNB.vue";
-import {getCurrentUserId} from "@/util/authUtil";
+import {getCurrentUserId, isAuthenticated} from "@/util/authUtil";
 import BaseInput from "@/components/base/BaseInput.vue";
 
 const router = useRouter();
@@ -125,6 +125,7 @@ async function initQnaList() {
  */
 function onConditionSearch(searchForm) {
   searchForm.myQna = condition.value.myQna;
+  console.log(searchForm);
   router.push({
     path: '/qna',
     query: searchForm
@@ -157,6 +158,18 @@ function onDetailRouter(board) {
     path: `/qna/${board.boardId}`,
     query: condition.value
   });
+}
+
+/**
+ * 나의문의내역 핸들러
+ */
+function onMyQnaSearch() {
+  if (!isAuthenticated()) {
+    router.push('/login');
+    return;
+  }
+
+  router.push({path: '/qna', query: condition.value});
 }
 
 </script>
@@ -197,7 +210,7 @@ export default {
 }
 
 .my-qna-register-btn {
-  height: 20px;
+  display: flex;
 }
 
 .paging-container {

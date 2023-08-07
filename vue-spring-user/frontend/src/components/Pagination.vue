@@ -3,13 +3,21 @@
   <div class="paging-container" >
 
     <!-- 이전 전체페이지 -->
-    <div v-if="isPreviousTotal" class="paging-prev-total-container">
-      <div @click="onPage(this.beginPage - 1)" class="paging-prev-total">&lt;&lt;</div>
+    <div class="paging-prev-total-container">
+      <div v-if="isPreviousTotal"
+           @click="onPage(this.beginPage - 1)"
+           class="paging-prev-total">
+        &lt;&lt;
+      </div>
     </div>
 
     <!-- 이전 페이지 -->
-    <div v-if="isPrevious" class="paging-prev-container">
-      <div @click="onPage(this.page - 1)" class="paging-prev">&lt;</div>
+    <div class="paging-prev-container">
+      <div v-if="isPrevious"
+           @click="onPage(this.page - 1)"
+           class="paging-prev">
+        &lt;
+      </div>
     </div>
 
     <!-- 페이지 -->
@@ -24,13 +32,23 @@
     </div>
 
     <!-- 다음 페이지 -->
-    <div v-if="isNext" class="paging-next-container">
-      <div @click="onPage( this.page + 1)" class="paging-next">&gt;</div>
+    <div class="paging-next-container">
+      <div
+          v-if="isNext"
+          @click="onPage( this.page + 1)"
+          class="paging-next">
+        &gt;
+      </div>
     </div>
 
     <!-- 다음 전체페이지 -->
-    <div v-if="isNextTotal" class="paging-next-total-container">
-      <div @click="onPage(this.endPage + 1)" class="paging-next-total">&gt;&gt;</div>
+    <div class="paging-next-total-container">
+      <div
+          v-if="isNextTotal"
+          @click="onPage(this.endPage + 1)"
+          class="paging-next-total">
+        &gt;&gt;
+      </div>
     </div>
 
   </div>

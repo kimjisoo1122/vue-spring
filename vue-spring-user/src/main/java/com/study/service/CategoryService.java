@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * 카테고리 서비스입니다.
+ * 카테고리 서비스
  */
 @Service
 @RequiredArgsConstructor

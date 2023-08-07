@@ -42,12 +42,12 @@
             <include refid="com.study.mapper.board.BoardMapper.selectBoard"/>
         FROM board b
             JOIN category c ON c.category_id = b.category_id
-            JOIN (SELECT
-                      board_id,
-                      MIN(gallery_order) AS min_order /* 순서가 빠른 썸네일 번호 */
-                  FROM gallery_detail
-                  GROUP BY board_id) gd ON b.board_id = gd.board_id
-            JOIN gallery_detail g ON b.board_id = g.board_id AND g.gallery_order = min_order
+            LEFT JOIN (SELECT
+                          board_id,
+                          MIN(gallery_order) AS min_order /* 순서가 빠른 썸네일 번호 */
+                      FROM gallery_detail
+                      GROUP BY board_id) gd ON b.board_id = gd.board_id
+            LEFT JOIN gallery_detail g ON b.board_id = g.board_id AND g.gallery_order = min_order
 
         <include refid="com.study.mapper.board.BoardMapper.whereSearchCondition"/>
 

@@ -97,7 +97,6 @@ export default {
       this.fileName = file.name;
 
       this.$store.commit('boardFileStore/uploadFile', {fileId: this.fileId, file: file});
-      this.$emit('upload-file', file);
     },
 
     /**

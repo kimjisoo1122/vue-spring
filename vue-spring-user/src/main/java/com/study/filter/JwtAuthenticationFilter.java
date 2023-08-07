@@ -51,7 +51,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     throw new JwtException("토큰이 존재하지 않습니다.");
                 }
 
-                Authentication authentication = jwtAuthenticationProvider.getAuthentication(jwt);
+                Authentication authentication = jwtAuthenticationProvider.createAuthentication(jwt);
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (JwtException e) {
@@ -71,17 +71,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
-
-
     /**
-     * Jwt인증필터가 필요한지 체크합니다.
-     *
+     * Jwt필터가 필요한지 체크합니다.
+     * // todo 보안 필요 스프링 시큐리티 예외 url과 함께
      * @param request
      * @return
      */
     private boolean isRequiredJwtAuth(HttpServletRequest request) {
-        boolean isAuthPath = AUTH_REQUIRED_PATHS.stream().anyMatch(e -> request.getRequestURI().startsWith(e));
+        boolean isAuthPath = AUTH_REQUIRED_PATHS.stream()
+                .anyMatch(e -> request.getRequestURI().startsWith(e));
+
         boolean isGet = "GET".equalsIgnoreCase(request.getMethod());
+
         return isAuthPath && !isGet;
     }
 

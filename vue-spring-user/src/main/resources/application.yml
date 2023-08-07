@@ -29,4 +29,4 @@ jwt:
   secret-key: kjs
 #  access-token-expiration: 1800000 # 30분
   access-token-expiration: 604800000 # 30분
-  refresh-token-expiration: 604800000 #7일
+#  refresh-token-expiration: 604800000 #7일

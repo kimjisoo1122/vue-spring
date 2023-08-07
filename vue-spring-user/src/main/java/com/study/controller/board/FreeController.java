@@ -28,7 +28,6 @@ import java.util.Map;
 /**
  * 자유게시판 API 컨트롤러
  */
-
 @RestController
 @RequestMapping("/api/frees")
 @RequiredArgsConstructor

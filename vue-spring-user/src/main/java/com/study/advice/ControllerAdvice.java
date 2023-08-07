@@ -11,6 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+/**
+ * API 예외를 처리하는 어드바이스
+ */
 @RestControllerAdvice
 public class ControllerAdvice {
 
@@ -72,7 +75,10 @@ public class ControllerAdvice {
     }
 
 
-
+    /**
+     * API 통신에 에러가 발생한 경우 처리한느 핸들러
+     * @param e Exception
+     */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseDto> handleEx(Exception e) {
         ResponseDto responseFail = new ResponseDto(ResponseApiStatus.FAIL);

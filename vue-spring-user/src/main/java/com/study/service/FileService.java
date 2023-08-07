@@ -45,7 +45,7 @@ public class FileService {
      * @return List<FileDto> 파일 DB에 저장하는 DTO 리스트
      * @throws IOException 파일저장에 발생되는 예외
      */
-    public List<FileDto> createFileList(List<MultipartFile> multipartFiles, String FILE_PATH) throws IOException {
+    public List<FileDto> createFileList(MultipartFile[] multipartFiles, String FILE_PATH) throws IOException {
         List<FileDto> files = new ArrayList<>();
         for (MultipartFile file : multipartFiles) {
             if (file.isEmpty()) {
@@ -73,7 +73,7 @@ public class FileService {
         return files;
     }
 
-    public List<FileDto> createFileList(List<MultipartFile> multipartFiles) throws IOException {
+    public List<FileDto> createFileList(MultipartFile[] multipartFiles) throws IOException {
         return createFileList(multipartFiles, FILE_PATH);
     }
 
@@ -83,7 +83,7 @@ public class FileService {
      * @return List<FileDto> 파일 DB에 저장하는 DTO 리스트
      * @throws IOException 파일저장에 발생되는 예외
      */
-    public List<FileDto> createGalleryFileList(List<MultipartFile> multipartFiles) throws IOException {
+    public List<FileDto> createGalleryFileList(MultipartFile[] multipartFiles) throws IOException {
         return createFileList(multipartFiles, GALLERY_PATH);
     }
 

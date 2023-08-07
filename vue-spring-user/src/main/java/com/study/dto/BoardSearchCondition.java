@@ -4,7 +4,7 @@ import com.study.enums.BoardType;
 import lombok.Data;
 
 /**
- * 게시글 검색 조건 클래스
+ * 게시글 검색 조건
  */
 @Data
 public class BoardSearchCondition {

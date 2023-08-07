@@ -9,8 +9,10 @@ import com.study.dto.api.ResponseDto;
 import com.study.dto.api.ResponseValidFormDto;
 import com.study.enums.BoardType;
 import com.study.exception.BoardNotFoundException;
+import com.study.exception.NotAuthorisedToBoardException;
 import com.study.service.board.BoardService;
 import com.study.service.board.GalleryService;
+import com.study.util.BoardUtil;
 import com.study.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -166,14 +168,14 @@ public class GalleryController {
      * @param boardId 게시글번호
      */
     private void checkRegisteredUserId(Long boardId) {
-//        galleryService.findFreeDetail(boardId)
-//                .ifPresentOrElse(b -> {
-//                    if (!BoardUtil.isRegisteredUserId(b.getUserId())) {
-//                        throw new NotAuthorisedToBoardException();
-//                    }
-//                }, () -> {
-//                    throw new BoardNotFoundException();
-//                });
+        galleryService.findGallery(boardId)
+                .ifPresentOrElse(b -> {
+                    if (!BoardUtil.isRegisteredUserId(b.getUserId())) {
+                        throw new NotAuthorisedToBoardException();
+                    }
+                }, () -> {
+                    throw new BoardNotFoundException();
+                });
     }
 
     /**

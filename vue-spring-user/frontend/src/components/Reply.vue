@@ -30,7 +30,7 @@
     </div>
 
     <!-- 댓글등록 (인증된상태에만 표시합니다.) -->
-    <div v-if="isAuthenticated" class="reply-register-container">
+    <div v-if="isAuthenticated()" class="reply-register-container">
       <base-input
           v-model="replyContent"
           :placeholder="replyPlaceHolder"
@@ -75,6 +75,7 @@ export default {
      * 댓글을 등록하고 등록된 댓글을 게시글 상세 컴포넌트에 전송합니다.
      */
     onRegister() {
+      console.log(isAuthenticated());
       if (this.validateReply()) {
         const replyDto = {
           boardId: this.$route.params.boardId,
@@ -127,6 +128,7 @@ export default {
 .reply-container {
   background-color: antiquewhite;
   padding: 10px;
+  border-radius: 3px;
 }
 
 .reply {

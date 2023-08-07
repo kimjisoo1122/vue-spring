@@ -56,6 +56,7 @@ public class UserController {
 
     /**
      * 가입하려는 아이디의 중복체크를 합니다.
+     * /TODO 관리자, 사용자 아이디 더블체크
      * @param userId 가입 아이디
      */
     @GetMapping("/exits")

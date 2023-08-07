@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * 댓글의 비즈니스로직을 처리하는 서비스 입니다.
+ * 댓글울 처리하는 서비스
  */
 @Service
 @RequiredArgsConstructor

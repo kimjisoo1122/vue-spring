@@ -151,6 +151,12 @@ async function onRegister() {
   try {
     const formData = createFormData();
 
+    if (formData.get('saveFiles') === null) {
+      alert('이미지를 첨부해주세요.');
+
+      return false;
+    }
+
     const freeId = await registerGallery(formData);
 
     store.commit('boardFileStore/clearFile');
@@ -204,6 +210,10 @@ function validateRegisterForm() {
   }
 
   return true;
+}
+
+function validateGalleryFile() {
+
 }
 
 </script>

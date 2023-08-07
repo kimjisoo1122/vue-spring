@@ -18,7 +18,6 @@ import java.util.Map;
 /**
  * 공지사항 API 컨트롤러
  */
-
 @RestController
 @RequestMapping("/api/notices")
 @RequiredArgsConstructor

@@ -9,21 +9,20 @@ import org.springframework.core.io.Resource;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.resource.PathResourceResolver;
 
 import java.io.IOException;
 
 /**
- * Web Config
+ * 웹 설정
  */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
     /**
      * 서버로 들어온 정적자원요청에 한해
-     * 해당 로케이션에서 찾아보고 없을경우에 /static/vue/index.html 자원을 반환한다.
+     * 해당 로케이션에서 찾아보고 없을 경우에 /static/ndex.html 자원을 반환합니다.
      * @param registry 정적자원에 대한 핸들러
      */
     @Override

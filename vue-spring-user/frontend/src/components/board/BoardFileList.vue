@@ -70,9 +70,14 @@ export default {
     allowedFileMsg() {
       return `
         ${this.allowedExtensions.join(', ')}파일만
-        파일사이즈${this.allowedFileSize / (1000 * 1000)}MB까지 업로드 가능합니다.`;
+        파일사이즈 ${this.allowedFileSize / (1000 * 1000)}MB 까지 업로드 가능합니다.`;
     },
   },
+  methods: {
+    onUpload(file) {
+      console.log(file);
+    },
+  }
 }
 </script>
 
@@ -80,6 +85,7 @@ export default {
 
 .allowed-file-msg {
   font-size: var(--small-font-size);
-  margin-left: 5px;
+  font-weight: bold;
+  margin-left: 3px;
 }
 </style>

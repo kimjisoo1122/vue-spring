@@ -1,13 +1,11 @@
 package com.study.dto;
 
 import com.study.enums.BoardType;
-import com.study.enums.FormType;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.List;
 
 /**
  * 통합게시글 Form DTO
@@ -24,17 +22,12 @@ public class BoardForm {
     @Size(max = 4000, message = "{content.size}")
     private String boardContent; // 게시글 내용
 
-    @NotBlank(message = "{answer.notblank}", groups = QnaValidation.class)
-    @Size(max = 4000, message = "{answer.size}", groups = QnaValidation.class)
-    private String qnaAnswer; // 문의게시글 답변
-
      /* 폼 공통 */
     private Long categoryId; // 카테고리 번호
     private Long boardId; // 게시글 번호
     private String userId; // 사용자 아이디
     private String userName; // 사용자 이름
     private BoardType boardType; // 게시글 타입
-    private FormType formType; // 폼 타임
 
 
 
@@ -47,6 +40,6 @@ public class BoardForm {
     private boolean checkAlarm; // 알림글 여부
 
     /* 자유게시판, 갤러리게시판 멀티파트 */
-    private List<MultipartFile> saveFiles; // 저장할 파일목록
+    private MultipartFile[] saveFiles; // 저장할 파일목록
     private Long[] deleteFiles; // 삭제할 파일목록
 }
