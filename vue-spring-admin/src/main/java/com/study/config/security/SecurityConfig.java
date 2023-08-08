@@ -19,8 +19,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/admin/css/**", "/admin/js/**", "/vue/**")
-                    .permitAll()
                 .antMatchers("/admin/**")
                     .hasRole("ADMIN")
                 .and()
@@ -39,6 +37,7 @@ public class SecurityConfig {
                     .invalidateHttpSession(true)
                 .and()
 
+                // TODO CSRF 설정
                 .csrf().disable();
 
         return http.build();
@@ -50,6 +49,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
+                .antMatchers("/admin/css/**", "/admin/js/**")
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 

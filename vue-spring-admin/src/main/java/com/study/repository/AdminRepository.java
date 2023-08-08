@@ -34,7 +34,7 @@ public class AdminRepository {
      * @param adminId 관리자 아이디
      * @return 관리자 권한목록
      */
-    public List<Auth> selectAuthById(String adminId) {
-        return adminMapper.selectAuthById(adminId);
+    public List<Auth> selectAuthListById(String adminId) {
+        return adminMapper.selectAuthListById(adminId);
     }
 }

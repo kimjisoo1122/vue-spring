@@ -8,10 +8,8 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Board {
-    /**
-     * 게시글폼 VIEW 경로
-     */
-    public static final String FORM_PATH = "admin/board/boardForm";
-    public static final String LIST_PATH = "admin/board/boardList";
+
+    public static final String FORM_PATH = "admin/board/boardForm"; /* 게시글 등록/수정 폼 VIEW */
+    public static final String LIST_PATH = "admin/board/boardList"; /* 게시글 목록 VIEW */
 
 }

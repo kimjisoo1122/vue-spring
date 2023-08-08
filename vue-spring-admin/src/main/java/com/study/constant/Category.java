@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Category {
+
     public static final Long NOTICE = 1L;
     public static final Long FREE = 2L;
     public static final Long GALLERY = 3L;

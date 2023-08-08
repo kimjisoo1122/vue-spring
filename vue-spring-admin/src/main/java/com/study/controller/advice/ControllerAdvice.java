@@ -11,12 +11,12 @@ public class ControllerAdvice {
     //TODO 파일업로드용량 초과하는 경우 에러처리
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ModelAndView maxUploadExHandler(MaxUploadSizeExceededException e) {
-        return new ModelAndView("error");
+        return new ModelAndView("admin/error/error");
     }
 
     //TODO 파일확장자 에러처리
     @ExceptionHandler(FileNotAllowedExtException.class)
     public ModelAndView fileExtExHandler(FileNotAllowedExtException e) {
-        return new ModelAndView("error");
+        return new ModelAndView("admin/error/error");
     }
 }

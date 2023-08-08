@@ -9,7 +9,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * Web설정 Config
+ * Web 설정 Config
  */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {

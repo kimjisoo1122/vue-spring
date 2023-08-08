@@ -24,8 +24,6 @@
               ORDER BY create_date DESC
               LIMIT #{limit}) a
             JOIN board b ON b.board_id = a.board_id
-            JOIN user u ON b.user_id = u.user_id
-            JOIN category c ON b.category_id = c.category_id
         ORDER BY b.create_date DESC
     </select>
 
@@ -41,7 +39,7 @@
         AND b.board_type = #{boardType}
     </select>
 
-    <!-- 공지사항 알림을 지웁니다. -->
+    <!-- 공지사항 알림을 삭제합니다. -->
     <delete id="deleteNoticeAlarm"
             parameterType="long">
         DELETE

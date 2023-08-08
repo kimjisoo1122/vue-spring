@@ -16,7 +16,7 @@
     </select>
 
     <!-- 관리자 권한 조회 -->
-    <select id="selectAuthById"
+    <select id="selectAuthListById"
             parameterType="string"
             resultType="com.study.enums.Auth">
         SELECT auth_name

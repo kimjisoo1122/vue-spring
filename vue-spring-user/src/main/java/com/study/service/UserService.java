@@ -30,12 +30,14 @@ public class UserService {
      * @return 등록된 사용자 아이디
      */
     @Transactional
-    public void signUp(UserDto user) {
+    public String signUp(UserDto user) {
         UserDto encryptedUser = encryptUserPw(user);
         userRepository.insert(encryptedUser);
 
         encryptedUser.setUserAuth(Auth.USER);
         authRepository.insertUserAuth(encryptedUser);
+
+        return user.getUserId();
     }
 
     /**

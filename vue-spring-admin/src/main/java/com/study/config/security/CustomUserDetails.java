@@ -9,14 +9,14 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * 스프링 시큐리티 인증객체
+ * 스프링 시큐리티 인증된 관리자 정보 객체
  */
 public class CustomUserDetails implements UserDetails {
 
-    private final String userId;
-    private final String userName;
-    private final String userPw;
-    private final List<GrantedAuthority> authorities = new ArrayList<>();
+    private final String userId; /* 관리자 아이디 */
+    private final String userName; /* 관리자 이름 */
+    private final String userPw;  /* 관리자 비밀번호 */
+    private final List<GrantedAuthority> authorities = new ArrayList<>(); /* 관리자 권한 목록 */
 
     public CustomUserDetails(AdminDto adminDto) {
         this.userId = adminDto.getAdminId();

@@ -9,7 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * 스프링 시큐리티 인증에 실패할경우 처리하는 핸들러
+ * 스프링 시큐리티 인증에 실패 할 경우 처리하는 핸들러
+ * 로그인 컨트롤러로 리다이렉트 하여 로그인 폼으로 리다이렉트 합니다.
  */
 public class CustomFailureHandler implements AuthenticationFailureHandler {
     @Override
@@ -18,7 +19,7 @@ public class CustomFailureHandler implements AuthenticationFailureHandler {
             HttpServletResponse response,
             AuthenticationException exception) throws IOException, ServletException {
 
-        // LoginController로 입력했던 ID를 넘겨줍니다.
+        // 로그인 Form에 입력했던 아이디 재전송
         request.getSession().setAttribute("userId", request.getParameter("userId"));
 
         response.sendRedirect("/admin/login");

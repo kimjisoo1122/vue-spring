@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 /**
- * 자유 게시판 컨트롤러
+ * 자유게시판 컨트롤러
  */
 @Controller
 @RequestMapping("/admin/free")
@@ -82,6 +82,7 @@ public class FreeController {
 
     /**
      * 자유게시글 상세페이지를 조회합니다.
+     *
      * @param boardId 자유게시글 번호
      * @param condition 검색조건
      * @param model form 자유게시글 수정 폼

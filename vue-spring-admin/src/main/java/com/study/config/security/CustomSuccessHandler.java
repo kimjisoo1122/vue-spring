@@ -9,7 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * 스프링 시큐리티 인증에 성공할경우 처리하는 핸들러
+ * 스프링 시큐리티 인증에 성공 할 경우 처리하는 핸들러
+ * 메인 화면으로 리다이렉트 합니다.
  */
 public class CustomSuccessHandler implements AuthenticationSuccessHandler {
     @Override

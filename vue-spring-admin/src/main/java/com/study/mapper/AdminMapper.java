@@ -13,5 +13,5 @@ import java.util.List;
 public interface AdminMapper {
 
     AdminDto selectById(String adminId);
-    List<Auth> selectAuthById(String adminId);
+    List<Auth> selectAuthListById(String adminId);
 }

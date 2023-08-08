@@ -45,5 +45,4 @@ public enum BoardType {
     public boolean isFreeType() {
         return this == BoardType.FREE;
     }
-
 }

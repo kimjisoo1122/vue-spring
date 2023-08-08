@@ -62,9 +62,9 @@ public class FileController {
      * @throws MalformedURLException 파일경로가 올바르지 않은 경우 발생하는 예외
      */
     @ResponseBody
-    @GetMapping("/image/{imgUrl}")
+    @GetMapping("/image/{imgName}")
     public Resource showImage(
-            @PathVariable("imgUrl") String imgName) throws MalformedURLException {
+            @PathVariable("imgName") String imgName) throws MalformedURLException {
         return new UrlResource("file:" + fileService.getGalleyPath() + imgName);
     }
 }
