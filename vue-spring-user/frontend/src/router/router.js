@@ -29,17 +29,16 @@ const routes = [
       requiresAuth: false,
     }
   },
-  {
-    path: '/404',
-    component: (() => import('@/views/error/NotFound.vue')),
-  },
-
   /* 게시글 (공지사항, 자유게시판, 갤러리게시판, 문의게시판) */
   ...noticeRoutes,
   ...freeRoutes,
   ...galleryRoutes,
   ...qnaRoutes,
 
+  {
+    path: '/404',
+    component: (() => import('@/views/error/NotFound.vue')),
+  },
   {
     path: '/*',
     component: (() => import('@/views/error/NotFound.vue')),
@@ -56,22 +55,23 @@ router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth); // 라우터 인증필요여부
   const authenticated = isAuthenticated() // 전역 인증상태
 
+  /* 로그인 상태에서 로그인 접근방지 */
   if (to.path === '/login' && authenticated) {
     next('/');
   }
 
-  if (!requiresAuth) {
+  /* 인증이 필요 없거나 인증상태 */
+  if (!requiresAuth || authenticated) {
     next();
   }
 
-  if (authenticated) {
-    next();
-  } else {
-    next({
-      path: '/login',
-      query: {redirect: to.fullPath}
-    });
-  }
-})
+  /* 비 인증 상태 -> 기존 주소 포함하여 로그인 라우팅 */
+  next({
+    path: '/login',
+    query: {redirect: to.fullPath}
+  });
+
+});
+
 
 export default router;

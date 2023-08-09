@@ -51,7 +51,7 @@ export default {
      * @param state
      * @return {{}}
      */
-    getCurrentUser(state) {
+    currentUser(state) {
       return state.currentUser;
     },
   }

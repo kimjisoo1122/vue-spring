@@ -70,15 +70,4 @@ export default {
   margin-top: 50px;
 }
 
-.notice-detail-btn-container {
-  margin: 30px 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.notice-detail-btn-list {
-  width: 100px;
-  background-color: var(--sub-color-violet);
-}
 </style>

@@ -3,7 +3,7 @@
     lang="ko"
     xmlns:th="http://www.thymeleaf.org"
     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{/admin/common/layout.html}">
+    layout:decorate="~{admin/common/layout.html}">
 
   <head>
     <meta charset="UTF-8">
@@ -24,12 +24,12 @@
         <h1 th:text="${condition.boardType.title}" class="boardlist-header-title"></h1>
       </div>
       <!-- GNB -->
-      <div th:replace="~{/admin/fragment/gnb}"></div>
+      <div th:replace="~{admin/fragment/gnb}"></div>
     </header>
 
     <main layout:fragment="main" >
       <!-- 검색조건 -->
-      <div th:replace="~{/admin/fragment/board/list/searchCondition}"></div>
+      <div th:replace="~{admin/fragment/board/list/searchCondition}"></div>
 
       <!-- 글 등록 -->
       <div th:if="${!condition.boardType.isQnaType()}" class="boardlist-register-container">
@@ -64,25 +64,25 @@
           <div class="board-title">
 
             <!-- 갤러리게시판 제목 (썸네일, 갤러리 갯수) -->
-            <div th:replace="~{/admin/fragment/board/list/gallery :: title}"></div>
+            <div th:replace="~{admin/fragment/board/list/gallery :: title}"></div>
 
             <!-- 통합게시글 공통제목 -->
             <a th:text="${board.boardTitle}"
-               th:href="@{|${#httpServletRequest.getRequestURI()}/${board.boardId}${condition.getQueryParam()}|}"
+               th:href="@{/|${#httpServletRequest.getRequestURI()}/${board.boardId}${condition.getQueryParam()}|}"
                class="board-title-link">
             </a>
 
             <!-- 문의게시글 답글상태 -->
-            <span th:replace="~{/admin/fragment/board/list/qna :: answerStatus}"></span>
+            <span th:replace="~{admin/fragment/board/list/qna :: answerStatus}"></span>
 
             <!-- 통합게시글 NEW -->
             <p th:if="${board.newStatus}" class="board-title-new">new</p>
 
             <!-- 자유게시판 제목(댓글수, 파일) -->
-            <div th:replace="~{/admin/fragment/board/list/free :: title}"></div>
+            <div th:replace="~{admin/fragment/board/list/free :: title}"></div>
 
             <!-- 문의게시판 제목(답변여부, 비밀글여부) -->
-            <div th:replace="~{/admin/fragment/board/list/qna :: qnaSecret}"></div>
+            <div th:replace="~{admin/fragment/board/list/qna :: qnaSecret}"></div>
 
           </div>
 
@@ -93,7 +93,7 @@
       </div>
 
       <!-- 페이징처리 -->
-      <div th:replace="~{/admin/fragment/board/list/pagination}"></div>
+      <div th:replace="~{admin/fragment/board/list/pagination}"></div>
 
     </main>
 

@@ -2,12 +2,14 @@
 
   <div class="login-container" >
 
+    <!-- 타이틀 -->
     <div class="login-title-container">
       <h1 class="login-title">로그인</h1>
     </div>
 
     <div class="login-input-container">
 
+      <!-- 아이디 인풋 -->
       <base-input
           v-model="loginForm.userId"
           placeholder="아이디"
@@ -15,6 +17,7 @@
       </base-input>
       <input-error :error-msg="errorFields.userId" class="login-id-error"></input-error>
 
+      <!-- 비밀번호 인풋 -->
       <base-input
           v-model="loginForm.userPw"
           type="password"
@@ -25,9 +28,21 @@
 
     </div>
 
+    <!-- 로그인 폼 버튼 -->
     <div class="login-btn-container">
-      <base-button @click="onLogin" name="로그인" class="login-btn-submit"></base-button>
-      <base-button @click="$router.push('/signup')" name="회원가입" class="login-btn-signup"></base-button>
+
+      <base-button
+          @click="onLogin"
+          name="로그인"
+          class="login-btn-submit">
+      </base-button>
+
+      <base-button
+          @click="$router.push('/signup')"
+          name="회원가입"
+          class="login-btn-signup">
+      </base-button>
+
     </div>
 
   </div>
@@ -35,16 +50,16 @@
 </template>
 
 <script setup>
+/**
+ * 로그인 컴포넌트
+ */
 import BaseButton from "@/components/base/BaseButton.vue";
 import BaseInput from "@/components/base/BaseInput.vue";
+import InputError from "@/components/base/BaseInputError.vue";
 import {onMounted, ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {login} from "@/api/loginService";
-import InputError from "@/components/base/BaseInputError.vue";
 import {useStore} from "vuex";
-import {formatJwt} from "@/util/formatUtil";
-import {AUTHORIZATION} from "@/constants";
-import {getUser} from "@/api/userService";
 
 const store = useStore();
 const route = useRoute();
@@ -68,16 +83,13 @@ onMounted(() => {
 
 /**
  * 로그인을 요청하여 성공시 로컬스토리지에 JWT를 저장합니다.
- * 전역스토어에 인증상태를 true로 변경, 현재 아이디를 저장합니다.
- *
- * @returns {Promise<void>}
+ * 전역스토어에 인증상태를 true 변경, 로그인된 유저정보를 저장합니다.
  */
 async function onLogin() {
   if (validateLoginForm()) {
     try {
 
-      const jwt = await login(loginForm.value);
-      const user = await getUser(loginForm.value.userId);
+      const {jwt, user} = await login(loginForm.value);
 
       store.commit('loginStore/login',
           {
@@ -86,7 +98,6 @@ async function onLogin() {
           });
 
       router.push(route.query.redirect || '/');
-
     } catch ({message}) {
       loginForm.value.userPw = '';
       alert(message);
@@ -98,12 +109,12 @@ async function onLogin() {
  * 로그인 요청 값을 검증합니다.
  * @returns {boolean}
  */
-const fieldErrors = {
-  userId: '아이디를 입력해주세요.',
-  userPw: '비밀번호를 입력해주세요.'
-};
-
 function validateLoginForm() {
+  const fieldErrors = {
+    userId: '아이디를 입력해주세요.',
+    userPw: '비밀번호를 입력해주세요.'
+  };
+
   for (const field in loginForm.value) {
     if (!loginForm.value[field]) {
       errorFields.value[field] = fieldErrors[field];

@@ -8,6 +8,7 @@ import axios from "@/api/config/axios";
 export function getCategoryList(categoryId) {
   return axios.get(`/api/categories/${categoryId}`)
       .then(({data: {data}}) => {
+        console.log(data);
         return data;
       })
       .catch(({response: {data: {errorMessage}}}) => {

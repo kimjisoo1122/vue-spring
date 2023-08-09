@@ -92,6 +92,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         boolean isGet = "GET".equalsIgnoreCase(request.getMethod());
 
+        log.info("처리 중인 HTTP METHOD : {}", request.getMethod());
+
         return isAuthPath && !isGet;
     }
 }

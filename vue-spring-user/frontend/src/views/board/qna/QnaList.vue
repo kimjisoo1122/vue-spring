@@ -149,7 +149,7 @@ function onPageRouter(page) {
  * @param board 문의글 정보
  */
 function onDetailRouter(board) {
-  if (board.qnaSecret && board.userId !== store.getters['loginStore/getCurrentUser']) {
+  if (board.qnaSecret && !isAuthenticated()) {
     alert('해당 문의글은 작성자만 이용가능합니다.');
     return false;
   }

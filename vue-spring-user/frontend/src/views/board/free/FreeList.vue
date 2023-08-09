@@ -55,15 +55,15 @@ import BoardSearchCondition from "@/components/board/BoardSearchCondition.vue";
 import BoardListHeader from "@/components/board/BoardListHeader.vue";
 import Pagination from "@/components/Pagination.vue";
 import BoardList from "@/components/board/BoardList.vue";
+import BaseButton from "@/components/base/BaseButton.vue";
+import GNB from "@/components/GNB.vue";
+import {FREE_CATEGORY_ID} from "@/constants";
 import {useRoute, useRouter} from "vue-router";
 import {useStore} from "vuex";
 import {ref, watch} from "vue";
 import {createCondition} from "@/util/queryParamUtil";
 import {getCategoryList} from "@/api/categoryService";
-import {FREE_CATEGORY_ID} from "@/constants";
 import {getFreeList} from "@/api/board/freeService";
-import BaseButton from "@/components/base/BaseButton.vue";
-import GNB from "@/components/GNB.vue";
 
 const router = useRouter();
 const route = useRoute();

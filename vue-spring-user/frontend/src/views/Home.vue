@@ -268,8 +268,8 @@ initHome();
  * 홈 화면 컴포넌트를 초기화합니다.
  */
 async function initHome() {
-
   try {
+    console.log(process.env.VUE_APP_API_ENDPOINT)
     const homeBoard = await getHomeBoardList();
 
     noticeList.value = homeBoard.noticeList;

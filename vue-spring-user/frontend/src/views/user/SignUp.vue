@@ -8,20 +8,26 @@
 
     <div class="signup-input-container">
 
+      <!-- 아이디 인풋 -->
       <div class="signup-id-container">
+
         <base-input v-model="user.userId"
                @change="errorFields.userId = validateUserId($event.target.value)"
                placeholder="아이디"
                :readonly="checkedId"
                class="signup-input-id">
         </base-input>
+
+        <!-- 중복확인 -->
         <base-button @click="onDoubleCheckId"
                 name="중복확인"
                 class="signup-id-check-btn">
         </base-button>
+
       </div>
       <input-error :error-msg="errorFields.userId" class="signup-id-error"></input-error>
 
+      <!-- 비밀번호 인풋 -->
       <base-input v-model="user.userPw"
              type="password"
              @change="errorFields.userPw = validateUserPw($event.target.value, user.userId)"
@@ -30,6 +36,7 @@
       </base-input>
       <input-error :error-msg="errorFields.userPw" class="signup-pw-error"></input-error>
 
+      <!-- 비밀번호 확인 -->
       <base-input v-model="user.confirmPw"
              type="password"
              placeholder="비밀번호 확인"
@@ -37,6 +44,7 @@
       </base-input>
       <input-error :error-msg="errorFields.confirmPw" class="signup-confirm-error"></input-error>
 
+      <!-- 이름 인풋 -->
       <base-input v-model="user.userName"
              @change="errorFields.userName = validateUserName($event.target.value)"
              placeholder="이름"
@@ -46,6 +54,7 @@
 
     </div>
 
+    <!-- 회원가입 버튼 -->
     <div class="signup-btn-container">
       <base-button @click="onSignUp" name="회원가입" class="signup-btn-submit"></base-button>
     </div>
@@ -55,6 +64,9 @@
 </template>
 
 <script setup>
+/**
+ * 회원가입 컴포넌트
+ */
 import {ref} from "vue";
 import {doubleCheckId, signUp} from "@/api/userService";
 import {validateConfirm, validateUserId, validateUserName, validateUserPw} from "@/util/userValidUtil";
@@ -88,6 +100,7 @@ const checkedId = ref(false);
 
 /**
  * 아이디를 중복확인 합니다.
+ *
  * @returns {Promise<boolean>}
  */
 const onDoubleCheckId = async () => {
@@ -111,10 +124,12 @@ const onDoubleCheckId = async () => {
 
 /**
  * 회원가입을 서버에 요청합니다.
+ * 로그인 폼으로 아이디를 포함하여 라우팅합니다.
+ *
  * @returns {Promise<boolean>}
  */
 const onSignUp = async () => {
-  if (validateForm()) {
+  if (!validateForm()) {
     return false;
   } else if (!checkedId.value) {
     alert('중복확인이 필요합니다.');
@@ -128,14 +143,12 @@ const onSignUp = async () => {
       path: '/login',
       query: {userId: signUpId}
     });
-
   } catch ({data}) {
     for (const field in data) {
       errorFields.value[field] = data[field];
     }
   }
 };
-
 
 /**
  * 폼 데이터를 검증합니다.
@@ -148,7 +161,7 @@ const validateForm = () => {
   errorFields.value.userName = validateUserName(user.value.userName);
 
   for (const field in errorFields.value) {
-    if (field.length > 0) {
+    if (errorFields.value[field].length > 0) {
       return false;
     }
   }

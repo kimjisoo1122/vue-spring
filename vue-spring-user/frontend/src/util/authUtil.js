@@ -20,12 +20,12 @@ export function isCurrentUserId(userId) {
  * 로그인스토어에서 현재 ID를 반환합니다.
  */
 export function getCurrentUserId() {
-  return store.getters['loginStore/getCurrentUser'].userId;
+  return store.getters['loginStore/currentUser'].userId;
 }
 
 /**
  * 로그인스토어에서 현재 이름을 반환합니다.
  */
 export function getCurrentUserName() {
-  return store.getters['loginStore/getCurrentUser'].userName;
+  return store.getters['loginStore/currentUser'].userName;
 }

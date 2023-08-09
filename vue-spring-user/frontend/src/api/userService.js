@@ -8,7 +8,9 @@ import axios from "@/api/config/axios";
  */
 export function signUp(user) {
   return axios.post('/api/users', user)
-      .then()
+      .then(({data: {data}}) => {
+        return data;
+      })
       .catch(({response: {data: {errorFields}}}) => {
         throw {
           data: errorFields

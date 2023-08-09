@@ -3,7 +3,7 @@
   lang="ko"
   xmlns:th="http://www.thymeleaf.org"
   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="~{/admin/common/layout.html}">
+  layout:decorate="~{admin/common/layout.html}">
 
   <head>
     <meta charset="UTF-8">
@@ -18,7 +18,7 @@
       <!-- 타이틀 -->
       <h1 th:text="${form.boardType.title}" class="form-header-title"></h1>
       <!-- GNB -->
-      <div th:replace="~{/admin/fragment/gnb}"></div>
+      <div th:replace="~{admin/fragment/gnb}"></div>
     </header>
 
     <main layout:fragment="main">
@@ -86,7 +86,7 @@
           </div>
 
           <!-- 문의게시판 답변 -->
-          <div th:replace="~{/admin/fragment/board/form/qna :: answer}"></div>
+          <div th:replace="~{admin/fragment/board/form/qna :: answer}"></div>
 
           <!-- 자유게시판, 갤러리게시판 첨부파일 -->
           <div th:if="${form.hasFileInput()}" class="form-main-file-container">
@@ -96,10 +96,10 @@
               <p class="form-file-notice">jpg, gif, png, zip파일만 파일사이즈 2MB까지 업로드 가능합니다.</p>
 
               <!-- 파일등록 폼 -->
-              <div th:replace="~{/admin/fragment/board/form/file :: register}"></div>
+              <div th:replace="~{admin/fragment/board/form/file :: register}"></div>
 
               <!-- 파일수정 폼 -->
-              <div th:replace="~{/admin/fragment/board/form/file :: update}"></div>
+              <div th:replace="~{admin/fragment/board/form/file :: update}"></div>
 
               <!-- 파일에러 -->
               <span class="form-file-error field-error"></span>
@@ -109,10 +109,10 @@
           </div>
 
           <!-- 공지사항 알림글 체크 -->
-          <div th:replace="~{/admin/fragment/board/form/notice :: alarm}"></div>
+          <div th:replace="~{admin/fragment/board/form/notice :: alarm}"></div>
 
           <!-- 자유게시판 수정폼 댓글  -->
-          <div th:replace="~{/admin/fragment/board/form/free :: reply}" ></div>
+          <div th:replace="~{admin/fragment/board/form/free :: reply}" ></div>
 
           <!-- 폼 버튼 -->
           <div class="form-main-btn-container">

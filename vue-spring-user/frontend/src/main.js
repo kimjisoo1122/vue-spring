@@ -5,9 +5,9 @@ import router from "@/router/router";
 
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {library} from "@fortawesome/fontawesome-svg-core";
-import {fas} from "@fortawesome/free-solid-svg-icons";
+import {faPaperclip, faLock} from "@fortawesome/free-solid-svg-icons";
 
-library.add(fas)
+library.add(faPaperclip, faLock)
 
 createApp(App)
     .use(router)

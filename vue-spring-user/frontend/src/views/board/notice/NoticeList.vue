@@ -80,7 +80,6 @@ watch(route, initNoticeList); /* 컴포넌트 URL 변경을 감지합니다.(페
  */
 async function initNoticeList() {
   condition.value = createCondition(route.query);
-  console.log(condition.value);
 
   try {
     const [categoryListResult, noticeListResult, alarmListResult] = await Promise.all([
