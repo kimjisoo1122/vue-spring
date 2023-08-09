@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/vue_spring
+    url: jdbc:mysql://vuespringdb.cxn4x5ihfbpb.ap-northeast-2.rds.amazonaws.com:3306/vue_spring
     username: vuespring
     password: vuespring
   servlet:
@@ -28,5 +28,5 @@ file:
 jwt:
   secret-key: kjs
 #  access-token-expiration: 1800000 # 30분
-  access-token-expiration: 604800000 # 30분
+  access-token-expiration: 604800000 # 7일
 #  refresh-token-expiration: 604800000 #7일
