@@ -16,23 +16,25 @@
 - **ORM** : Mybatis
 
 ## 📌 ERD
-![vue_spring](https://github.com/kimjisoo1122/vue-spring/assets/101982291/115fbe0c-7e8f-4e4a-afa5-9cc947b0fb7f)
+![vue-spring-erd](https://github.com/kimjisoo1122/vue-spring/assets/101982291/b0f5c762-fb1f-40e0-82e0-6cb81e258d5b)
+
 
 
 ## 📌 주요 기능
-#### 로그인 - <a href="#" >상세보기</a>
+#### 로그인 - <a href="https://github.com/kimjisoo1122/vue-spring/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C-(%EB%A1%9C%EA%B7%B8%EC%9D%B8)" >상세보기</a>
 - 관리자 페이지 - 스프링 시큐리티 세션 기반 인증 진행
 - 사용자 페이지 - 스프링 시큐리티 인증 후 JWT 엑세스토큰 발급 
-#### 회원가입 - <a href="#" >상세보기</a>
-- ID 중복 체크
-#### 공지사항 - <a href="" >상세보기</a>
-- 관리자 페이지 - 공지사항 알림 등록
-#### 자유게시판 - <a href="" >상세보기</a>
-- 파일 관리, 다운로드
-#### 갤러리 - <a href="" >상세보기</a>
-- 파일 관리
-#### 문의게시판 - <a href="" >상세보기</a>
-- 관리자 페이지 - 답변 등록
+#### 회원가입 - <a href="https://github.com/kimjisoo1122/vue-spring/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C-(%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85)" >상세보기</a>
+- 회원가입
+#### 인증 - <a href="https://github.com/kimjisoo1122/vue-spring/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C-(%EC%9D%B8%EC%A6%9D)" >상세보기</a>
+- 사용자 JWT 인증
+- 뷰 라우터 네비게이션 가드
+#### 멀티게시판 - <a href="https://github.com/kimjisoo1122/vue-spring/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C-(%EB%A9%80%ED%8B%B0%EA%B2%8C%EC%8B%9C%ED%8C%90)" >상세보기</a>
+- 자유게시글 등록, 수정 (파일첨부)
+- 갤러리 등록, 조회 (파일첨부, 썸네일 조회)
+- 관리자 통합게시판 템플릿
+- 사용자 Vue
+
  
 
 
