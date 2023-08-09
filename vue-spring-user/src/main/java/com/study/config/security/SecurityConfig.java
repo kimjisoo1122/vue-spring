@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import java.util.Collections;
 
 /**
- * 스프링 시큐리티 설정
+ * 스프링 시큐리티 설정 Config
  */
 @Configuration
 @EnableWebSecurity
@@ -33,11 +33,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .anyRequest()
-                .permitAll()
+                .anyRequest().permitAll()
                 .and()
 
-                .addFilterBefore(new JwtAuthenticationFilter(jwtAuthenticationProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthenticationFilter(jwtAuthenticationProvider),
+                        UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -84,5 +84,4 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager() {
         return new ProviderManager(Collections.singletonList(authenticationProvider()));
     }
-
 }

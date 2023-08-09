@@ -1,7 +1,6 @@
 package com.study.dto.api;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +23,10 @@ public class ResponseValidFormDto extends ResponseDto {
 
     public ResponseValidFormDto(ResponseApiStatus status) {
         super(status);
+    }
+
+    public ResponseValidFormDto(ResponseApiStatus status, Object data) {
+        super(status, data);
     }
 
     private Map<String, String> errorFields = new HashMap<>(); // 에러필드

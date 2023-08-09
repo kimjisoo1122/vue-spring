@@ -2,6 +2,10 @@ package com.study.util;
 
 import com.study.dto.BoardDto;
 import com.study.dto.BoardForm;
+import com.study.dto.api.ResponseApiStatus;
+import com.study.dto.api.ResponseValidFormDto;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
 /**
  * 통합게시판 유틸
@@ -50,14 +54,20 @@ public interface BoardUtil {
     }
 
     /**
-     * 해당 게시글을 작성한 사용자인지 확인합니다.
-     * @param userId 게시글 작성자 아이디
-     * @return 해당 게시글을 작성한 사용자면 true
+     * 유효성검증에 실패한 Form데이터의 에러값을 저장해서 반환합니다.
+     *
+     * @param bindingResult 유효성검증객체
+     * @return ResponseValidFormDto
      */
-    static boolean isRegisteredUserId(String userId) {
-        if (SecurityUtil.getUserId() == null || userId == null) {
-            return false;
+    static ResponseValidFormDto createValidFormFailResponse(BindingResult bindingResult) {
+        ResponseValidFormDto response = new ResponseValidFormDto(ResponseApiStatus.FAIL);
+        response.setErrorMessage("잘못된 데이터입니다.");
+
+        // 에러필드이름과 에러메시지를 응답값에 담습니다.
+        for (FieldError fieldError : bindingResult.getFieldErrors()) {
+            response.getErrorFields().put(fieldError.getField(), fieldError.getDefaultMessage());
         }
-        return userId.equals(SecurityUtil.getUserId());
+
+        return response;
     }
 }

@@ -20,7 +20,7 @@ public class CustomFailureHandler implements AuthenticationFailureHandler {
             AuthenticationException exception) throws IOException, ServletException {
 
         // 로그인 Form에 입력했던 아이디 재전송
-        request.getSession().setAttribute("userId", request.getParameter("userId"));
+        request.getSession().setAttribute("adminId", request.getParameter("adminId"));
 
         response.sendRedirect("/admin/login");
     }

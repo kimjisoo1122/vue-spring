@@ -47,7 +47,7 @@ public class UserService {
      * @return 아이디가 존재하지 않으면 true
      */
     public boolean doubleCheckId(String userId) {
-        return userRepository.selectById(userId) == null;
+        return userRepository.selectById(userId).isEmpty();
     }
 
     /**
@@ -57,7 +57,7 @@ public class UserService {
      * @return 사용자 정보
      */
     public Optional<UserDto> findById(String userId) {
-        return Optional.ofNullable(userRepository.selectById(userId));
+        return userRepository.selectById(userId);
     }
 
     /**

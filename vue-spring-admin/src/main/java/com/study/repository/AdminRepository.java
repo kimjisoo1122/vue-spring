@@ -1,12 +1,10 @@
 package com.study.repository;
 
 import com.study.dto.AdminDto;
-import com.study.enums.Auth;
 import com.study.mapper.AdminMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -22,19 +20,9 @@ public class AdminRepository {
      * 관리자를 조회합니다.
      *
      * @param adminId 관리자 아이디
-     * @return 관리자 정보 or null
+     * @return 관리자 정보
      */
     public Optional<AdminDto> selectById(String adminId) {
         return Optional.ofNullable(adminMapper.selectById(adminId));
-    }
-
-    /**
-     * 관리자 권한목록을 조회합니다.
-     *
-     * @param adminId 관리자 아이디
-     * @return 관리자 권한목록
-     */
-    public List<Auth> selectAuthListById(String adminId) {
-        return adminMapper.selectAuthListById(adminId);
     }
 }

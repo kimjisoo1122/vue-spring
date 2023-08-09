@@ -1,6 +1,5 @@
 package com.study.mapper;
 
-import com.study.dto.UserDto;
 import com.study.enums.Auth;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -12,6 +11,5 @@ import java.util.List;
 @Mapper
 public interface AuthMapper {
 
-    void insertUserAuth(UserDto user);
-    List<Auth> selectUserAuthList(String userId);
+    List<Auth> selectAdminAuthList(String userId);
 }

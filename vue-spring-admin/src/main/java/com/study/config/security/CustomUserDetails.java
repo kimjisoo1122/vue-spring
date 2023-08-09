@@ -4,7 +4,6 @@ import com.study.dto.AdminDto;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -16,12 +15,13 @@ public class CustomUserDetails implements UserDetails {
     private final String userId; /* 관리자 아이디 */
     private final String userName; /* 관리자 이름 */
     private final String userPw;  /* 관리자 비밀번호 */
-    private final List<GrantedAuthority> authorities = new ArrayList<>(); /* 관리자 권한 목록 */
+    private final List<GrantedAuthority> authorities; /* 관리자 권한 목록 */
 
-    public CustomUserDetails(AdminDto adminDto) {
-        this.userId = adminDto.getAdminId();
-        this.userName = adminDto.getAdminName();
-        this.userPw = adminDto.getAdminPw();
+    public CustomUserDetails(AdminDto admin, List<GrantedAuthority> authorities) {
+        this.userId = admin.getAdminId();
+        this.userName = admin.getAdminName();
+        this.userPw = admin.getAdminPw();
+        this.authorities = authorities;
     }
 
     public String getUserId() {

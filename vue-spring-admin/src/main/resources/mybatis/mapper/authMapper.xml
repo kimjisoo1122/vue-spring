@@ -14,12 +14,12 @@
     </insert>
 
     <!-- 사용자의 권한을 조회합니다. -->
-    <select id="selectUserAuthList"
+    <select id="selectAdminAuthList"
             parameterType="string"
             resultType="com.study.enums.Auth">
         SELECT auth_name /* 사용자 권한 */
         FROM auth
-        WHERE user_id = #{userId}
+        WHERE admin_id = #{adminId}
     </select>
 
 

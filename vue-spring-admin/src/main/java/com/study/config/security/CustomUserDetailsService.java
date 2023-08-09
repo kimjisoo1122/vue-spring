@@ -1,6 +1,7 @@
 package com.study.config.security;
 
 import com.study.repository.AdminRepository;
+import com.study.repository.AuthRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 스프링시큐리티의 로그인 인증을 처리하는 서비스
+ * 스프링 시큐리티 로그인 인증을 처리하는 서비스
  */
 @Service
 @Slf4j
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final AdminRepository adminRepository;
+    private final AuthRepository authRepository;
 
     /**
      * 로그인폼에서 입력받은 ID로 회원정보를 조회합니다.
@@ -34,21 +36,18 @@ public class CustomUserDetailsService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String adminId) throws UsernameNotFoundException {
-        CustomUserDetails customUserDetails = adminRepository.selectById(adminId)
-                .map(CustomUserDetails::new)
+        return adminRepository.selectById(adminId)
+                .map(admin -> {
+                    List<GrantedAuthority> collect = authRepository.selectAdminAuthList(admin.getAdminId()).stream()
+                            .map(auth -> new SimpleGrantedAuthority(auth.getRole()))
+                            .collect(Collectors.toList());
+
+                    return new CustomUserDetails(admin, collect);
+                })
                 .orElseThrow(() -> {
-                    log.debug("해당 관리자를 찾을 수 없습니다. 입력한 아이디 : {}", adminId);
+                    log.info("해당 관리자를 찾을 수 없습니다. 입력 아이디 : {}" , adminId);
 
                     throw new UsernameNotFoundException("관리자를 찾을 수 없습니다.");
                 });
-
-        List<GrantedAuthority> authorities =
-                adminRepository.selectAuthListById(adminId).stream()
-                    .map(e -> new SimpleGrantedAuthority(e.getRole()))
-                    .collect(Collectors.toList());
-
-        customUserDetails.setAuthorities(authorities);
-
-        return customUserDetails;
     }
 }

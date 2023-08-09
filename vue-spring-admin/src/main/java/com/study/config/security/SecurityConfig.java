@@ -25,7 +25,7 @@ public class SecurityConfig {
 
                 .formLogin()
                     .loginPage("/admin/login")
-                    .usernameParameter("userId")
+                    .usernameParameter("adminId")
                     .successHandler(new CustomSuccessHandler())
                     .failureHandler(new CustomFailureHandler())
                     .permitAll()
@@ -44,7 +44,7 @@ public class SecurityConfig {
     }
 
     /**
-     * 정적리소스요청에 대해 스프링시큐리티 정책을 적용하지않는다.
+     * 정적리소스 필터
      */
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -54,7 +54,7 @@ public class SecurityConfig {
     }
 
     /**
-     * 비밀번호를 암호화하는 인코더 입니다.
+     * 비밀번호를 암호화하는 인코더
      * @return BCryptPasswordEncoder
      */
     @Bean

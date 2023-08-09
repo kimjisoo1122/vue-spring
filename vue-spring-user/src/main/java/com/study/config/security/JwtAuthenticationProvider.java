@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,9 +15,10 @@ import java.util.Base64;
 import java.util.Date;
 
 /**
- * Jwt 인증을 처리하는 커스텀 프로바이더
+ * Jwt 인증을 처리하는 프로바이더
  */
 @Component
+@Slf4j
 public class JwtAuthenticationProvider {
 
     private final String SECRET_KEY;
@@ -41,19 +43,23 @@ public class JwtAuthenticationProvider {
      * @return Jwt
      */
     public String createJwt(String userId, Long tokenExpiration) {
-        return Jwts.builder()
+        String jwt = Jwts.builder()
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + tokenExpiration))
                 .setSubject(userId)
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
+
+        log.info("JWT 생성 완료. 사용자 아이디: {}", userId);
+
+        return jwt;
     }
 
     /**
      * 토큰을 분석합니다.
      *
-     * @param jwt
-     * @return
+     * @param jwt jwt
+     * @return 분석한 jwt Claims 정보
      * @throws JwtException 유효기간 만료, 유효하지 않은 토큰 파싱예외
      */
     public Claims parseJwt(String jwt) throws JwtException {

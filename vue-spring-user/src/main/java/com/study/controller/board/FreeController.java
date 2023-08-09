@@ -17,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,7 +50,7 @@ public class FreeController {
         if (bindingResult.hasErrors()) {
             return ResponseEntity
                     .badRequest()
-                    .body(createValidFormResponse(bindingResult));
+                    .body(BoardUtil.createValidFormFailResponse(bindingResult));
         }
 
         SecurityUtil.setFormUser(form);
@@ -124,7 +123,7 @@ public class FreeController {
         if (bindingResult.hasErrors()) {
             return ResponseEntity
                     .badRequest()
-                    .body(createValidFormResponse(bindingResult));
+                    .body(BoardUtil.createValidFormFailResponse(bindingResult));
         }
 
         checkRegisteredUserId(boardId);
@@ -135,9 +134,7 @@ public class FreeController {
         ResponseValidFormDto response = new ResponseValidFormDto(ResponseApiStatus.SUCCESS);
         freeService.update(form);
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(response);
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -166,8 +163,8 @@ public class FreeController {
      */
     private void checkRegisteredUserId(Long boardId) {
         freeService.findFreeDetail(boardId)
-                .ifPresentOrElse(b -> {
-                    if (!BoardUtil.isRegisteredUserId(b.getUserId())) {
+                .ifPresentOrElse(board -> {
+                    if (!board.getUserId().equals(SecurityUtil.getUserId())) {
                         throw new NotAuthorisedToBoardException();
                     }
                 }, () -> {
@@ -175,20 +172,4 @@ public class FreeController {
                 });
     }
 
-    /**
-     * 유효성검증에 실패한 Form데이터의 에러값을 저장해서 반환합니다.
-     * @param bindingResult 유효성검증객체
-     * @return ResponseValidFormDto
-     */
-    private ResponseValidFormDto createValidFormResponse(BindingResult bindingResult) {
-        ResponseValidFormDto response = new ResponseValidFormDto(ResponseApiStatus.FAIL);
-        response.setErrorMessage("잘못된 데이터입니다.");
-
-        // 에러필드이름과 에러메시지를 응답값에 담습니다.
-        for (FieldError fieldError : bindingResult.getFieldErrors()) {
-            response.getErrorFields().put(fieldError.getField(), fieldError.getDefaultMessage());
-        }
-
-        return response;
-    }
 }

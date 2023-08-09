@@ -6,11 +6,11 @@ import com.study.dto.api.ResponseDto;
 import com.study.dto.api.ResponseValidFormDto;
 import com.study.exception.UserNotFoundException;
 import com.study.service.UserService;
+import com.study.util.BoardUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,7 +44,7 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return ResponseEntity
                     .badRequest()
-                    .body(createValidFormResponse(bindingResult));
+                    .body(BoardUtil.createValidFormFailResponse(bindingResult));
         }
 
         String signedId = userService.signUp(user);
@@ -72,7 +72,8 @@ public class UserController {
     }
 
     /**
-     * 사용자 아이디로 사용자정보를 조회합니다.
+     *
+     * 사용자정보를 조회합니다.
      *
      * @param userId 사용자 아이디
      */
@@ -86,22 +87,5 @@ public class UserController {
         ResponseDto response = new ResponseDto(ResponseApiStatus.SUCCESS, findUser);
 
         return ResponseEntity.ok(response);
-    }
-
-    /**
-     * 유효성검증에 실패한 Form데이터의 에러값을 저장해서 반환합니다.
-     * @param bindingResult 유효성검증객체
-     * @return ResponseValidFormDto
-     */
-    private ResponseValidFormDto createValidFormResponse(BindingResult bindingResult) {
-        ResponseValidFormDto response = new ResponseValidFormDto(ResponseApiStatus.FAIL);
-        response.setErrorMessage("잘못된 데이터입니다.");
-
-        // 에러필드이름과 에러메시지를 응답값에 담습니다.
-        for (FieldError fieldError : bindingResult.getFieldErrors()) {
-            response.getErrorFields().put(fieldError.getField(), fieldError.getDefaultMessage());
-        }
-
-        return response;
     }
 }

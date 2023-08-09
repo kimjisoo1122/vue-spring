@@ -29,8 +29,6 @@ public class BoardForm {
     private String userName; // 사용자 이름
     private BoardType boardType; // 게시글 타입
 
-
-
     /* 특정게시판 전용 */
 
     /* 문의게시판 */

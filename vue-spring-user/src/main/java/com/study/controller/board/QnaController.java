@@ -17,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,7 +49,7 @@ public class QnaController {
         if (bindingResult.hasErrors()) {
             return ResponseEntity
                     .badRequest()
-                    .body(createValidFormResponse(bindingResult));
+                    .body(BoardUtil.createValidFormFailResponse(bindingResult));
         }
 
         SecurityUtil.setFormUser(form);
@@ -124,7 +123,7 @@ public class QnaController {
         if (bindingResult.hasErrors()) {
             return ResponseEntity
                     .badRequest()
-                    .body(createValidFormResponse(bindingResult));
+                    .body(BoardUtil.createValidFormFailResponse(bindingResult));
         }
 
         checkRegisteredUserId(boardId);
@@ -142,6 +141,7 @@ public class QnaController {
 
     /**
      * 문의게시글을 삭제합니다.
+     *
      * @param boardId 게시글번호
      */
     @DeleteMapping("/{boardId}")
@@ -162,33 +162,17 @@ public class QnaController {
 
     /**
      * 해당 게시글에 대한 작성자와 현재 요청한 사용자가 동일한지 확인합니다.
+     *
      * @param boardId 게시글번호
      */
     private void checkRegisteredUserId(Long boardId) {
         qnaService.findQnaDetail(boardId)
-                .ifPresentOrElse(b -> {
-                    if (!BoardUtil.isRegisteredUserId(b.getUserId())) {
+                .ifPresentOrElse(board -> {
+                    if (!board.getUserId().equals(SecurityUtil.getUserId())) {
                         throw new NotAuthorisedToBoardException();
                     }
                 }, () -> {
                     throw new BoardNotFoundException();
                 });
-    }
-
-    /**
-     * 유효성검증에 실패한 Form데이터의 에러값을 저장해서 반환합니다.
-     * @param bindingResult 유효성검증객체
-     * @return ResponseValidFormDto
-     */
-    private ResponseValidFormDto createValidFormResponse(BindingResult bindingResult) {
-        ResponseValidFormDto response = new ResponseValidFormDto(ResponseApiStatus.FAIL);
-        response.setErrorMessage("잘못된 데이터입니다.");
-
-        // 에러필드이름과 에러메시지를 응답값에 담습니다.
-        for (FieldError fieldError : bindingResult.getFieldErrors()) {
-            response.getErrorFields().put(fieldError.getField(), fieldError.getDefaultMessage());
-        }
-
-        return response;
     }
 }

@@ -15,13 +15,4 @@
         WHERE admin_id = #{adminId}
     </select>
 
-    <!-- 관리자 권한 조회 -->
-    <select id="selectAuthListById"
-            parameterType="string"
-            resultType="com.study.enums.Auth">
-        SELECT auth_name
-        FROM auth
-        WHERE admin_id = #{adminId}
-    </select>
-
 </mapper>

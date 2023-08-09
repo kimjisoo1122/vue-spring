@@ -3,6 +3,9 @@ package com.study.enums;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * 권한 Enum
+ */
 @Getter
 @RequiredArgsConstructor
 public enum Auth {

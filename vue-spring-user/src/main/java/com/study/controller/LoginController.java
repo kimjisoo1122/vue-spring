@@ -1,5 +1,6 @@
 package com.study.controller;
 
+import com.study.config.security.CustomUserDetails;
 import com.study.config.security.JwtAuthenticationProvider;
 import com.study.dto.UserDto;
 import com.study.dto.api.ResponseApiStatus;
@@ -16,22 +17,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 /**
  * 로그인 API 컨트롤러
  */
 @RestController
 @RequestMapping("/api/login")
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 public class LoginController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
     /**
-     * 로그인에 성공시 jwt를 반환합니다.
-     * @param user
-     * @return
+     * 로그인에 성공시 JWT, 인증된 사용자 정보를 반환합니다.
+     *
+     * @param user 입력한 사용자 정보
      */
     @PostMapping()
     public ResponseEntity<ResponseDto> login(
@@ -41,13 +44,15 @@ public class LoginController {
                 new UsernamePasswordAuthenticationToken(user.getUserId(), user.getUserPw());
 
         try {
-            authenticationManager.authenticate(authenticationToken);
+            Authentication authenticate = authenticationManager.authenticate(authenticationToken);
+            CustomUserDetails customUserDetails = (CustomUserDetails) authenticate.getPrincipal();
+            user.setUserName(customUserDetails.getUsername());
 
             String accessJwt = jwtAuthenticationProvider.createJwt(user.getUserId(),
                     jwtAuthenticationProvider.ACCESS_TOKEN_EXPIRATION());
 
             ResponseDto response = new ResponseDto(ResponseApiStatus.SUCCESS);
-            response.setData(accessJwt);
+            response.setData(Map.of("jwt", accessJwt, "user", user));
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {

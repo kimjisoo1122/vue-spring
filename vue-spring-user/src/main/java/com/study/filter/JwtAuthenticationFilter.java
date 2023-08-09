@@ -22,8 +22,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * jwt 인증 필터
- * 스프링시큐리티 필터 앞단에 존재하여 jwt인증 후 인증객체를 세션에 주입합니다.
+ * JWT 인증 필터
+ * 스프링 시큐리티 필터 앞단에 존재하여 JWT인증 후 인증객체를 세션에 주입합니다.
  */
 @Component
 @RequiredArgsConstructor
@@ -33,28 +33,37 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
     /**
-     * 필터제외 요청
+     * 인증이 필요한 경로에 대한 JWT인증을 거칩니다.
+     * 인증에 실패한 경우 에러메시지를 반환 합니다.
      */
     private final List<String> AUTH_REQUIRED_PATHS =
             Arrays.asList("/api/replies", "/api/frees", "/api/galleries", "/api/qna");
+
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
 
+        log.info("처리 중인 요청 URI : {}", request.getRequestURI());
+
         if (isRequiredJwtAuth(request)) {
             String jwt = jwtAuthenticationProvider.getJwtFromHeader(request);
+            log.info("JWT 인증 토큰 : {}", jwt);
 
             try {
                 if (jwt == null) {
+                    log.warn("토큰이 요청 헤더에 존재하지 않습니다.");
                     throw new JwtException("토큰이 존재하지 않습니다.");
                 }
 
                 Authentication authentication = jwtAuthenticationProvider.createAuthentication(jwt);
+                log.info("JWT 인증 성공: {}", authentication.getPrincipal());
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (JwtException e) {
+                log.error("JWT 인증 실패: {}", e.getMessage());
+
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                 response.setCharacterEncoding("utf-8");
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -73,7 +82,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
     /**
      * Jwt필터가 필요한지 체크합니다.
-     * // todo 보안 필요 스프링 시큐리티 예외 url과 함께
+     *
      * @param request
      * @return
      */
@@ -85,5 +94,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         return isAuthPath && !isGet;
     }
-
 }

@@ -1,12 +1,11 @@
 package com.study.repository;
 
 import com.study.dto.UserDto;
-import com.study.enums.Auth;
 import com.study.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
 /**
  * 'user' 테이블 리포지토리
@@ -25,9 +24,9 @@ public class UserRepository {
      * 사용자를 조회합니다.
      *
      * @param userId 사용자 아이디
-     * @return UserDto 사용자정보 or null
+     * @return 사용자 정보
      */
-    public UserDto selectById(String userId) {
-        return userMapper.selectUserById(userId);
+    public Optional<UserDto> selectById(String userId) {
+        return Optional.ofNullable(userMapper.selectUserById(userId));
     }
 }
