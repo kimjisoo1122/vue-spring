@@ -13,7 +13,7 @@
     <!-- 이미지 슬라이더  -->
     <carousel ::mouseDrag="false" class="gallery-carousel-container">
       <slide v-for="file in fileList" :key="file.fileId">
-        <img class="gallery-slide" :src="`/api/file/image/${file.galleryImgName}`" alt="">
+        <img class="gallery-slide" :src="`${imgSrcDomain}/api/file/image/${file.galleryImgName}`" alt="">
       </slide>
 
       <template #addons>
@@ -63,7 +63,8 @@ const router = useRouter();
 
 const condition = ref({}); /* 검색조건 */
 const gallery = ref({}); /* 갤러리 */
-const fileList = ref({}); /* 파일 목록*/
+const fileList = ref({}); /* 파일 목록 */
+const imgSrcDomain = ref({}); /* 이미지 동적 도메인 */
 
 initGalleryDetail();
 
@@ -72,6 +73,7 @@ initGalleryDetail();
  */
 async function initGalleryDetail() {
   condition.value = createCondition(route.query);
+  imgSrcDomain.value = process.env.VUE_APP_API_ENDPOINT;
 
   try {
     const boardId = route.params.boardId;

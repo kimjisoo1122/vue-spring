@@ -159,7 +159,7 @@
               <div
                   @click="onDetailRouter('/galleries', gallery)"
                   class="galleries-img-container">
-                <img :src="`/api/file/image/${gallery.galleryThumbName}`" alt="갤러리 썸네일">
+                <img :src="`${imgSrcDomain}/api/file/image/${gallery.galleryThumbName}`" alt="갤러리 썸네일">
               </div>
 
               <!-- 갤러리 개수-->
@@ -262,14 +262,17 @@ const freeList = ref([]);
 const galleryList = ref([]);
 const qnaList = ref([]);
 
+const imgSrcDomain = ref();
+
+
 initHome();
 
 /**
  * 홈 화면 컴포넌트를 초기화합니다.
  */
 async function initHome() {
+  imgSrcDomain.value = process.env.VUE_APP_API_ENDPOINT;
   try {
-    console.log(process.env.VUE_APP_API_ENDPOINT)
     const homeBoard = await getHomeBoardList();
 
     noticeList.value = homeBoard.noticeList;

@@ -68,7 +68,7 @@
 
             <!-- 통합게시글 공통제목 -->
             <a th:text="${board.boardTitle}"
-               th:href="@{/${#httpServletRequest.getRequestURI()}/${board.boardId}${condition.getQueryParam()}|}"
+               th:href="|${#httpServletRequest.getRequestURI()}/${board.boardId}${condition.getQueryParam()}|"
                class="board-title-link">
             </a>
 
