@@ -76,7 +76,7 @@ import {getFreeList} from "@/api/board/freeService";
 import BaseButton from "@/components/base/BaseButton.vue";
 import {getQnaList} from "@/api/board/qnaService";
 import GNB from "@/components/GNB.vue";
-import {getCurrentUserId, isAuthenticated} from "@/util/authUtil";
+import {getCurrentUserId, isAuthenticated, isCurrentUserId} from "@/util/authUtil";
 import BaseInput from "@/components/base/BaseInput.vue";
 
 const router = useRouter();
@@ -149,11 +149,11 @@ function onPageRouter(page) {
  * @param board 문의글 정보
  */
 function onDetailRouter(board) {
-  if (board.qnaSecret && !isAuthenticated()) {
+  if (board.qnaSecret && !isCurrentUserId(board.userId)) {
     alert('해당 문의글은 작성자만 이용가능합니다.');
+
     return false;
   }
-
   router.push({
     path: `/qna/${board.boardId}`,
     query: condition.value

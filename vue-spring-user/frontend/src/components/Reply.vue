@@ -127,13 +127,12 @@ export default {
 
 .reply-container {
   background-color: antiquewhite;
-  padding: 10px;
   border-radius: 3px;
 }
 
 .reply {
   border-bottom: 1px solid black;
-  padding: 10px 0;
+  padding: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -163,6 +162,7 @@ export default {
 }
 
 .reply-register-container {
+  padding: 0 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;

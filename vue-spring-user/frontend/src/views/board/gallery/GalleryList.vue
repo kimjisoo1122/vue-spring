@@ -32,7 +32,7 @@
       <div class="gallery-img-container">
         <img
             @click="onDetailRouter(gallery)"
-            :src="`${imgSrcDomain}/api/file/image/${gallery.galleryImgName}`"
+            :src="`${dynamicDomain}/api/file/image/${gallery.galleryImgName}`"
             alt="갤러리 이미지"
             class="gallery-img">
       </div>
@@ -95,7 +95,7 @@ const categoryList = ref([]); /* 카테고리 목록 */
 const galleryList = ref([]); /* 갤러리 목록 */
 const totalCnt = ref(0); /* 게시글 총 개수 */
 const condition = ref({}); /* 게시글 검색조건 */
-const imgSrcDomain = ref(); /* 동적 이미지 도메인 */
+const dynamicDomain = ref(process.env.VUE_APP_API_ENDPOINT); /* 갤러리 동적 도메인 */
 
 initGalleryList(); /* 컴포넌트 초기화 */
 watch(route, initGalleryList); /* 컴포넌트 URL 변경을 감지합니다.(페이징 처리) */
@@ -105,7 +105,6 @@ watch(route, initGalleryList); /* 컴포넌트 URL 변경을 감지합니다.(�
  */
 async function initGalleryList() {
   condition.value = createCondition(route.query, 3);
-  imgSrcDomain.value = process.env.VUE_APP_API_ENDPOINT;
 
   try {
     const [categoryListResult, galleryListResult] = await Promise.all([

@@ -44,7 +44,7 @@ export default {
      * @return {boolean} 인증상태
      */
     isAuthenticated(state) {
-      return state.authState && state.currentUser !== null && localStorage.getItem(AUTHORIZATION);
+      return state.authState && state.currentUser !== null && localStorage.getItem(AUTHORIZATION) != null;
     },
     /**
      * 현재 스테이트에 등록된 사용자 정보를 반환합니다.

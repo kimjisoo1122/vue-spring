@@ -67,7 +67,6 @@ export default {
   width: 50px;
   font-weight: bold;
   text-align: left;
-  padding-left: 10px;
 }
 
 .board-detail-title-container {

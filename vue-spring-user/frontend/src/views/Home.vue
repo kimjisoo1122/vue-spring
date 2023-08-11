@@ -159,7 +159,7 @@
               <div
                   @click="onDetailRouter('/galleries', gallery)"
                   class="galleries-img-container">
-                <img :src="`${imgSrcDomain}/api/file/image/${gallery.galleryThumbName}`" alt="갤러리 썸네일">
+                <img :src="`${dynamicDomain}/api/file/image/${gallery.galleryThumbName}`" alt="갤러리 썸네일">
               </div>
 
               <!-- 갤러리 개수-->
@@ -250,20 +250,18 @@ import {ref} from "vue";
 import {getHomeBoardList} from "@/api/homeService";
 import {useRoute, useRouter} from "vue-router";
 import {useStore} from "vuex";
-import {getCurrentUserId, isAuthenticated, isCurrentUserId} from "@/util/authUtil";
+import {isAuthenticated, isCurrentUserId} from "@/util/authUtil";
 import GNB from "@/components/GNB.vue";
 
 const router = useRouter();
 const route = useRoute();
 const store = useStore();
 
-const noticeList = ref([]);
-const freeList = ref([]);
-const galleryList = ref([]);
-const qnaList = ref([]);
-
-const imgSrcDomain = ref();
-
+const noticeList = ref([]); /* 공지사항 */
+const freeList = ref([]); /* 자유게시판 */
+const galleryList = ref([]); /* 갤러리 */
+const qnaList = ref([]); /* 문의게시판 */
+const dynamicDomain = ref(process.env.VUE_APP_API_ENDPOINT); /* 갤러리 동적 도메인 */
 
 initHome();
 
@@ -271,7 +269,6 @@ initHome();
  * 홈 화면 컴포넌트를 초기화합니다.
  */
 async function initHome() {
-  imgSrcDomain.value = process.env.VUE_APP_API_ENDPOINT;
   try {
     const homeBoard = await getHomeBoardList();
 
@@ -292,9 +289,11 @@ async function initHome() {
  * @param board 해당게시글
  */
 function onDetailRouter(path, board) {
-  if (path === '/qna' && !isCurrentUserId(board.userId)) {
-    alert('해당 문의글은 작성자만 이용가능합니다.');
-    return false;
+  if (path === '/qna' && board.qnaSecret) {
+    if (!isCurrentUserId(board.userId)) {
+      alert('해당 문의글은 작성자만 이용가능합니다.');
+      return false;
+    }
   }
 
   router.push(`${path}/${board.boardId}`);

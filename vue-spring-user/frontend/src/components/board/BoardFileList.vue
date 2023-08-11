@@ -13,6 +13,7 @@
     <!-- 새로 첨부할 수 있는 베이스 파일 타입 인풋 -->
     <base-file-input
         v-for="num in addInputSize"
+        v-model="uploadFiles[num]"
         :key="num"
         :file-id="num"
         :allowed-extensions="allowedExtensions"
@@ -35,8 +36,7 @@ export default {
   components: {FileList, BaseFileInput},
   data() {
     return {
-      allowedExtensions: ['jpg', 'gif', 'png', 'zip'], /* 허용된 파일 확장자 */
-      allowedFileSize: 1000 * 1000 * 2, /* 허용된 파일 최대 크기 */
+      uploadFiles: {}, /* 인풋 업로드 파일 목록 */
     }
   },
   props: {
@@ -57,7 +57,29 @@ export default {
       default: false,
       required: false,
       description: '업데이트의 경우 삭제버튼 등장'
+    },
+    allowedExtensions: {
+      type: Array,
+      default: () => ['jpg', 'gif', 'png', 'zip'],
+      required: false,
+      description: '허용된 파일 확장자'
+    },
+    allowedFileSize: {
+      type: Number,
+      default: 1000 * 1000 * 2,
+      required: false,
+      description: '허용된 파일 최대 크기'
+    },
+  },
+  watch: {
+    /* 상위 컴포넌트에 업로드 파일 목록을 전송합니다. */
+    uploadFiles: {
+      handler: function (uploadFiles) {
+        this.$emit('upload-file', uploadFiles);
+      },
+      deep: true
     }
+
   },
 
   computed: {
@@ -69,15 +91,10 @@ export default {
     /* 허용 가능한 파일 공지 메시지*/
     allowedFileMsg() {
       return `
-        ${this.allowedExtensions.join(', ')}파일만
+        ${this.allowedExtensions.join(', ')} 파일만
         파일사이즈 ${this.allowedFileSize / (1000 * 1000)}MB 까지 업로드 가능합니다.`;
     },
   },
-  methods: {
-    onUpload(file) {
-      console.log(file);
-    },
-  }
 }
 </script>
 

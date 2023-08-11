@@ -8,3 +8,27 @@ export function initFormValue(form, board) {
     form[field] = board[field];
   }
 }
+
+export function createFormData(form, saveFiles, deleteFiles) {
+  const formData = new FormData();
+
+  for (const field in form) {
+    formData.append(field, form[field]);
+  }
+
+  /* 첨부파일 추가 */
+  for (const file of Object.values(saveFiles)) {
+    if (file) {
+      formData.append('saveFiles', file);
+    }
+  }
+
+  if (deleteFiles) {
+    /* 삭제파일 추가 */
+    for (const deleteFileId of deleteFiles) {
+      formData.append('deleteFiles', deleteFileId);
+    }
+  }
+
+  return formData;
+}

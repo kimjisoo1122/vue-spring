@@ -64,7 +64,10 @@
       </board-form-title>
 
       <div class="register-file-input-container">
-        <board-file-list></board-file-list>
+        <board-file-list
+            @upload-file="onUploadFile"
+            :allowed-extensions="allowedExtension">
+        </board-file-list>
         <input-error :error-msg="errorFields.saveFiles"></input-error>
       </div>
 
@@ -104,6 +107,7 @@ import {registerGallery} from "@/api/board/galleryService";
 import GNB from "@/components/GNB.vue";
 import BoardFormBtnContainer from "@/components/board/BoardFormBtnContainer.vue";
 import {isAuthenticated} from "@/util/authUtil";
+import {createFormData} from "@/util/boardUtil";
 
 const route = useRoute();
 const router = useRouter();
@@ -122,8 +126,11 @@ const errorFields = ref({
   boardContent: '', /* 게시글 내용 */
   saveFiles: '', /* 첨부파일 */
 })
+
 const categoryList = ref([]); // 카테고리 목록
 const condition = ref({}); // 검색조건
+const saveFiles = ref({}); /* 저장 파일 목록 */
+const allowedExtension = ref(['jpg', 'png']); /* 허용된 파일 확장자 */
 
 initGalleryRegister();
 
@@ -149,7 +156,7 @@ async function onRegister() {
   }
 
   try {
-    const formData = createFormData();
+    const formData = createFormData(registerForm.value, saveFiles.value);
 
     if (formData.get('saveFiles') === null) {
       alert('이미지를 첨부해주세요.');
@@ -158,8 +165,6 @@ async function onRegister() {
     }
 
     const freeId = await registerGallery(formData);
-
-    store.commit('boardFileStore/clearFile');
 
     router.push({
       path: `/galleries/${freeId}`,
@@ -172,26 +177,6 @@ async function onRegister() {
     }
     console.error(message);
   }
-}
-
-/**
- * FormData를 생성합니다
- * @return formData
- */
-function createFormData() {
-  const formData = new FormData();
-
-  for (const field in registerForm.value) {
-    formData.append(field, registerForm.value[field]);
-  }
-
-  /* 첨부파일 추가 */
-  store.getters['boardFileStore/getSaveFiles']
-      .forEach(file => {
-        formData.append('saveFiles', file);
-      })
-
-  return formData;
 }
 
 /**
@@ -212,8 +197,13 @@ function validateRegisterForm() {
   return true;
 }
 
-function validateGalleryFile() {
-
+/**
+ * 파일 인풋 컴포넌트에서 전송된 파일들을 저장합니다.
+ *
+ * @param uploadFiles
+ */
+function onUploadFile(uploadFiles) {
+  saveFiles.value = uploadFiles
 }
 
 </script>

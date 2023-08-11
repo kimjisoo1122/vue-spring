@@ -3,7 +3,6 @@ import {formatJwt} from "@/util/formatUtil";
 import {AUTHORIZATION} from "@/constants";
 
 const instance = axios.create({
-
   /* 요청 URL 설정 */
   baseURL: process.env.VUE_APP_API_ENDPOINT,
 
@@ -11,7 +10,6 @@ const instance = axios.create({
 
 /* axios의 모든 api통신에 헤더를 자동으로 설정합니다. */
 instance.interceptors.request.use(config => {
-  console.log('Starting Request:', config);
   config.headers.Authorization = getJwt();
   return config;
 })

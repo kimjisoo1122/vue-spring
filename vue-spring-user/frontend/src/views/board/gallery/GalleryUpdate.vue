@@ -68,6 +68,7 @@
 
       <div class="update-file-input-container">
         <board-file-list
+            @upload-file="onUploadFile"
             @delete-file="onDeleteFile"
             :is-update="true"
             :file-list="fileList"></board-file-list>
@@ -107,7 +108,7 @@ import {getGalleryDetail, updateGallery} from "@/api/board/galleryService";
 import {isCurrentUserId} from "@/util/authUtil";
 import GNB from "@/components/GNB.vue";
 import BoardFormBtnContainer from "@/components/board/BoardFormBtnContainer.vue";
-import {initFormValue} from "@/util/boardUtil";
+import {createFormData, initFormValue} from "@/util/boardUtil";
 import {createCondition} from "@/util/queryParamUtil";
 
 const store = useStore();
@@ -132,7 +133,8 @@ const gallery = ref({}); // 해당게시글
 const categoryList = ref([]); // 카테고리 목록
 const fileList = ref([]); // 첨부파일 목록
 const condition = ref({}); // 검색조건
-const deleteFiles = ref([]); // 삭제파일 목록
+const deleteFiles = ref([]); // 삭제 파일 목록
+const saveFiles = ref({}); /* 저장 파일 목록 */
 
 initGalleryUpdate();
 
@@ -159,7 +161,6 @@ async function initGalleryUpdate() {
   }
 }
 
-
 /**
  * 갤러리를 수정합니다.
  */
@@ -169,7 +170,7 @@ async function onUpdate() {
   }
 
   try {
-    const formData = createFormData();
+    const formData = createFormData(updateForm.value, saveFiles.value, deleteFiles.value);
 
     const boardId = await updateGallery(route.params.boardId, formData);
 
@@ -197,31 +198,6 @@ function onDeleteFile(fileId) {
 }
 
 /**
- * FormData를 생성합니다
- * @returns FormData 게시글form정보
- */
-function createFormData() {
-  const formData = new FormData();
-
-  for (const field in updateForm.value) {
-    formData.append(field, updateForm.value[field]);
-  }
-
-  /* 첨부파일 추가 */
-  store.getters['boardFileStore/getSaveFiles']
-      .forEach(file => {
-        formData.append('saveFiles', file);
-      })
-
-  /* 삭제파일 추가 */
-  for (const deleteFileId of deleteFiles.value) {
-    formData.append('deleteFiles', deleteFileId);
-  }
-
-  return formData;
-}
-
-/**
  * 수정폼을 검증합니다.
  * @returns {boolean}
  */
@@ -237,6 +213,15 @@ function validateUpdateForm() {
   }
 
   return true;
+}
+
+/**
+ * 파일 인풋 컴포넌트에서 전송된 파일들을 저장합니다.
+ *
+ * @param uploadFiles
+ */
+function onUploadFile(uploadFiles) {
+  saveFiles.value = uploadFiles
 }
 
 </script>

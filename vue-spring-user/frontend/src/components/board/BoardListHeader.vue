@@ -37,7 +37,6 @@ export default {
   height: 30px;
   display: flex;
   align-items: center;
-
 }
 
 .board-list-header-container > div {

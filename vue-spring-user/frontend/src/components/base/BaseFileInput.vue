@@ -46,7 +46,8 @@ export default {
     return {
       fileName: '', /* 파일 이름 */
       fileError: '', /* 파일 에러메시지 */
-      fileThumbSrc: '' /* 이미지 파일의 썸네일 소스 */
+      fileThumbSrc: '', /* 이미지 파일의 썸네일 소스 */
+      fileValue: {}, /* 파일 */
     }
   },
 
@@ -78,25 +79,16 @@ export default {
     onUpload(event) {
       const file = event.target.files[0];
 
-      if (file === undefined) {
-        this.$store.commit('boardFileStore/cancelFile', this.fileId);
-        this.fileName = '';
-
-        return false;
-      }
-
-      if (!this.validateFile(file)) {
-        this.$store.commit('boardFileStore/cancelFile', this.fileId);
+      if (!file || !this.validateFile(file)) {
+        this.resetFileData();
         return false;
       }
 
       this.showThumb(file, event.target.result);
 
       this.fileError = '';
-      file.fileId = this.fileId;
       this.fileName = file.name;
-
-      this.$store.commit('boardFileStore/uploadFile', {fileId: this.fileId, file: file});
+      this.$emit('update:modelValue', file);
     },
 
     /**
@@ -106,17 +98,17 @@ export default {
      * @returns {boolean}
      */
     validateFile(file) {
-      if (file.size > this.allowedFileSize) {
-        const formattedMaxSize = this.allowedFileSize / (1000 * 1000) + 'MB';
-        alert(`파일사이즈는 ${formattedMaxSize}를 넘길수 없습니다.`);
-
-        return false;
-      }
-
       const dotIdx = file.name.lastIndexOf('.')
       const fileExt = file.name.substring(dotIdx + 1);
       if (!this.allowedExtensions.includes(fileExt)) {
         alert('허용된 확장자가 아닙니다.');
+
+        return false;
+      }
+
+      if (file.size > this.allowedFileSize) {
+        const formattedMaxSize = this.allowedFileSize / (1000 * 1000) + 'MB';
+        alert(`파일사이즈는 ${formattedMaxSize}를 넘길수 없습니다.`);
 
         return false;
       }
@@ -141,8 +133,19 @@ export default {
 
         fileReader.readAsDataURL(file);
       }
-    }
+    },
+    /**
+     * 파일 정보가 유효하지 않은 경우 리셋합니다.
+     */
+    resetFileData() {
+      this.fileName = '';
+      this.fileThumbSrc = '';
+      this.$emit('update:modelValue', undefined);
+    },
   },
+
+
+
 
 
 }

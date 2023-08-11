@@ -10,7 +10,7 @@
       <!-- 썸네일이 존재하는 경우 썸네일을 표시합니다. (갤러리) -->
       <img
           v-if="file.galleryThumbName != null"
-          :src="`/api/file/image/${file.galleryThumbName}`"
+          :src="`${dynamicDomain}/api/file/image/${file.galleryThumbName}`"
           alt="썸네일 이미지"
           class="file-thumb">
 
@@ -18,7 +18,7 @@
       <font-awesome-icon v-else icon="paperclip" class="file-icon" />
 
       <!-- 첨부파일 다운로드 링크 -->
-      <a :href="`/api/file/${file.fileId}`" class="file-link">{{ file.fileOrgName }}</a>
+      <a :href="`${dynamicDomain}/api/file/${file.fileId}`" class="file-link">{{ file.fileOrgName }}</a>
 
       <!-- 첨부파일 삭제 핸들러 버튼 -->
       <base-button
@@ -43,6 +43,12 @@ import BaseButton from "@/components/base/BaseButton.vue";
 export default {
   name: "FileList",
   components: {BaseButton},
+  data() {
+    return {
+      dynamicDomain: (process.env.VUE_APP_API_ENDPOINT) /* URL 동적 도메인 */
+    }
+  },
+
   props: {
     fileList: {
       type: Array,

@@ -67,7 +67,7 @@
       </board-form-title>
 
       <div class="register-file-input-container">
-        <board-file-list></board-file-list>
+        <board-file-list @upload-file="onUploadFile"></board-file-list>
         <base-input-error :error-msg="errorFields.saveFiles"></base-input-error>
       </div>
 
@@ -107,6 +107,7 @@ import {registerFree} from "@/api/board/freeService";
 import GNB from "@/components/GNB.vue";
 import BoardFormBtnContainer from "@/components/board/BoardFormBtnContainer.vue";
 import {isAuthenticated} from "@/util/authUtil";
+import {createFormData} from "@/util/boardUtil";
 
 const route = useRoute();
 const router = useRouter();
@@ -127,6 +128,7 @@ const errorFields = ref({
 })
 const categoryList = ref([]); // 카테고리 목록
 const condition = ref({}); // 검색조건
+const saveFiles = ref({}); /* 저장 파일 목록 */
 
 initFreeRegister();
 
@@ -152,11 +154,9 @@ async function onRegister() {
   }
 
   try {
-    const formData = createFormData();
+    const formData = createFormData(registerForm.value, saveFiles.value);
 
     const freeId = await registerFree(formData);
-
-    store.commit('boardFileStore/clearFile');
 
     router.push({
       path: `/frees/${freeId}`,
@@ -172,27 +172,8 @@ async function onRegister() {
 }
 
 /**
- * FormData를 생성합니다
- * @return formData
- */
-function createFormData() {
-  const formData = new FormData();
-
-  for (const field in registerForm.value) {
-    formData.append(field, registerForm.value[field]);
-  }
-
-  /* 첨부파일 추가 */
-  store.getters['boardFileStore/getSaveFiles']
-      .forEach(file => {
-        formData.append('saveFiles', file);
-      })
-
-  return formData;
-}
-
-/**
  * 등록폼을 검증합니다.
+ *
  * @returns {boolean} 유효하면 true
  */
 function validateRegisterForm() {
@@ -207,6 +188,15 @@ function validateRegisterForm() {
   }
 
   return true;
+}
+
+/**
+ * 파일 인풋 컴포넌트에서 전송된 파일들을 저장합니다.
+ *
+ * @param uploadFiles
+ */
+function onUploadFile(uploadFiles) {
+  saveFiles.value = uploadFiles
 }
 </script>
 
