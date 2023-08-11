@@ -26,6 +26,9 @@ file:
   allowed-extensions: jpg,png,gif,zip
 
 jwt:
+  auth:
+    paths: /api/replies,/api/frees,/api/galleries,/api/qna
+    methods: POST,DELETE,PUT,PATCH
   secret-key: kjs
 #  access-token-expiration: 1800000 # 30분
   access-token-expiration: 604800000 # 7일

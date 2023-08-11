@@ -7,6 +7,7 @@ import com.study.dto.api.ResponseDto;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,7 +19,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,15 +31,18 @@ import java.util.List;
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    @Value("#{'${jwt.auth.paths}' .split(',')}")
+    private List<String> AUTH_REQUIRED_PATHS = new ArrayList<>();
+    @Value("#{'${jwt.auth.methods}' .split(',')}")
+    private List<String> AUTH_REQUIRED_METHODS = new ArrayList<>();
+
+
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
     /**
      * 인증이 필요한 경로에 대한 JWT인증을 거칩니다.
      * 인증에 실패한 경우 에러메시지를 반환 합니다.
      */
-    private final List<String> AUTH_REQUIRED_PATHS =
-            Arrays.asList("/api/replies", "/api/frees", "/api/galleries", "/api/qna");
-
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
@@ -81,19 +85,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
     /**
-     * Jwt필터가 필요한지 체크합니다.
+     * Jwt 인증이 필요한지 체크합니다.
      *
      * @param request
      * @return
      */
     private boolean isRequiredJwtAuth(HttpServletRequest request) {
         boolean isAuthPath = AUTH_REQUIRED_PATHS.stream()
-                .anyMatch(e -> request.getRequestURI().startsWith(e));
+                .anyMatch(path -> request.getRequestURI().startsWith(path));
 
-        boolean isGet = "GET".equalsIgnoreCase(request.getMethod());
+        if (isAuthPath) {
+            String requestMethod = request.getMethod().toUpperCase();
+            log.info("처리 중인 HTTP METHOD : {}", requestMethod);
 
-        log.info("처리 중인 HTTP METHOD : {}", request.getMethod());
+            return AUTH_REQUIRED_METHODS.contains(requestMethod);
+        }
 
-        return isAuthPath && !isGet;
+        return false;
     }
 }
