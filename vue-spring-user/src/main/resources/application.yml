@@ -22,7 +22,7 @@ mybatis:
 
 
 file:
-  upload-folder: C:/Temp/upload/
+  upload-folder: /home/ec2-user/uploads
   allowed-extensions: jpg,png,gif,zip
 
 jwt:
