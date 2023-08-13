@@ -63,6 +63,7 @@ export default {
     onLogout() {
       if (confirm('로그아웃 하시겠습니까?')) {
         this.$store.commit('loginStore/logout');
+        this.$router.go(0);
       }
     }
   }

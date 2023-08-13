@@ -1,6 +1,7 @@
 import axios from "axios";
 import {formatJwt} from "@/util/formatUtil";
 import {AUTHORIZATION} from "@/constants";
+import store from "@/store/store";
 
 const instance = axios.create({
   /* 요청 URL 설정 */
@@ -21,6 +22,6 @@ export default instance;
  * @returns {string} jwt
  */
 function getJwt() {
-  const jwt = localStorage.getItem(AUTHORIZATION);
+  const jwt = store.getters['loginStore/jwt'];
   return jwt ? formatJwt(jwt) : null;
 }
