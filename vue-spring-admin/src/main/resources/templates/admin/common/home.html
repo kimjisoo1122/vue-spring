@@ -114,7 +114,11 @@
                     <img class="index-gallery-list-thumbnail" th:src="|/file/image/${gallery.galleryThumbName}|" alt="갤러리 썸네일">
                   </a>
                 </div>
-                <span th:text="|+${gallery.galleryCnt}|" class="index-gallery-list-size">+4</span>
+                <span
+                  th:if="${gallery.galleryCnt > 1}"
+                  th:text="|+${gallery.galleryCnt - 1}|"
+                  class="index-gallery-list-size">
+                </span>
                 <span th:if="${gallery.newStatus}" class="index-new">new</span>
               </div>
             </div>

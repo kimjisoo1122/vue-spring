@@ -164,7 +164,7 @@
 
               <!-- 갤러리 개수-->
               <div
-                  v-if="gallery.galleryCnt !== 1"
+                  v-if="gallery.galleryCnt > 1"
                   class="galleries-img-cnt">+{{ gallery.galleryCnt - 1 }}</div>
 
               <!-- 갤러리 new -->
@@ -471,11 +471,11 @@ article {
 
 .galleries-img-container {
   cursor: pointer;
-  margin: 0 20px;
+  margin: 0 10px;
 }
 
 .galleries-img-cnt {
-  margin-right: 20px;
+  margin-right: 10px;
   font-weight: bold;
 }
 

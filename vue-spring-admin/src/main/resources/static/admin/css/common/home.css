@@ -5,6 +5,7 @@ header {
   height: 50px;
   padding: 20px;
 }
+
 .index-main-container {
   height: 600px;
   display: flex;
@@ -170,7 +171,12 @@ header {
 }
 
 .index-gallery-list-img {
-  margin: 0 15px;
+  margin: 0 10px;
+}
+
+.index-gallery-list-size {
+  margin-right: 5px;
+  font-weight: bold;
 }
 
 .index-qna-header-no {
