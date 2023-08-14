@@ -46,13 +46,15 @@ public class LoginController {
         try {
             Authentication authenticate = authenticationManager.authenticate(authenticationToken);
             CustomUserDetails customUserDetails = (CustomUserDetails) authenticate.getPrincipal();
-            user.setUserName(customUserDetails.getUsername());
 
             String accessJwt = jwtAuthenticationProvider.createJwt(user.getUserId(),
                     jwtAuthenticationProvider.ACCESS_TOKEN_EXPIRATION());
 
             ResponseDto response = new ResponseDto(ResponseApiStatus.SUCCESS);
-            response.setData(Map.of("jwt", accessJwt, "user", user));
+            response.setData(Map.of("jwt", accessJwt,
+                    "user", Map.of(
+                            "userId", customUserDetails.getUserId(),
+                            "userName", customUserDetails.getUsername())));
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {
