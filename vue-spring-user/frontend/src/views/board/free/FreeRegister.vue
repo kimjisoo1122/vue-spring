@@ -50,7 +50,7 @@
       <div class="register-content-input-container">
         <base-textarea
             v-model="registerForm.boardContent"
-            @change="errorFields.boardContent = validateTitle(registerForm.boardContent)"
+            @change="errorFields.boardContent = validateContent(registerForm.boardContent)"
             class="register-content">
         </base-textarea>
         <base-input-error :error-msg="errorFields.boardContent"></base-input-error>
@@ -149,7 +149,7 @@ async function initFreeRegister() {
  * 자유게시글을 등록합니다.
  */
 async function onRegister() {
-  if (!validateRegisterForm() && !isAuthenticated()) {
+  if (!validateRegisterForm() || !isAuthenticated()) {
     return false;
   }
 

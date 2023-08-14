@@ -47,7 +47,7 @@
       <div class="register-content-input-container">
         <base-textarea
             v-model="registerForm.boardContent"
-            @change="errorFields.boardContent = validateTitle(registerForm.boardContent)"
+            @change="errorFields.boardContent = validateContent(registerForm.boardContent)"
             class="register-content">
         </base-textarea>
         <input-error :error-msg="errorFields.boardContent"></input-error>
@@ -151,9 +151,11 @@ async function initGalleryRegister() {
  * 갤러리를 등록합니다.
  */
 async function onRegister() {
-  if (!validateRegisterForm() && isAuthenticated()) {
+  if (!validateRegisterForm() || !isAuthenticated()) {
     return false;
   }
+
+
 
   try {
     const formData = createFormData(registerForm.value, saveFiles.value);

@@ -4,8 +4,8 @@ export default {
   namespaced: true,
   state: {
     authState: false, /* 전역 인증 상태 */
-    currentUser: null, /* 로그인중인 현재 사용자 정보 */
-    jwt: null /* jwt 인증 토큰 */
+    currentUser: {}, /* 로그인중인 현재 사용자 정보 */
+    jwt: '' /* jwt 인증 토큰 */
   },
   mutations: {
     /**
@@ -18,24 +18,19 @@ export default {
      * @param jwt 발급된 jwt
      */
     login(state, {user, jwt}) {
-      localStorage.removeItem(AUTHORIZATION);
-
       state.authState = true;
       state.currentUser = user;
       state.jwt = jwt;
     },
     /**
-     * 로컬스토리지에서 jwt를 지웁니다.
      * 인증상태를 변경합니다.
-     * 사용자 정보를 빈 값으로 초기화합니다.
      *
      * @param state
      */
     logout(state) {
-      localStorage.removeItem(AUTHORIZATION);
       state.authState = false;
-      state.currentUser = null;
-      state.jwt = null;
+      state.currentUser = {};
+      state.jwt = '';
     }
   },
   getters: {
@@ -45,9 +40,7 @@ export default {
      * @return {boolean} 인증상태
      */
     isAuthenticated(state) {
-      return state.authState
-          && state.currentUser !== null
-          && state.jwt != null;
+      return state.authState;
     },
     /**
      * 사용자 정보를 반환합니다.

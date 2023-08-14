@@ -1,6 +1,6 @@
 <template>
 
-  <div class="board-detail-content">{{ board.boardContent }}</div>
+  <div class="board-detail-content"><pre>{{ board.boardContent }}</pre></div>
 
 </template>
 
@@ -28,6 +28,11 @@ export default {
   border-radius: 3px;
   min-height: 150px;
   font-size: var(--middle-font-size);
+}
+
+pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 </style>

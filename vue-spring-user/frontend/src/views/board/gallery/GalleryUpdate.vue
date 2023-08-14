@@ -49,7 +49,7 @@
       <div class="update-content-input-container">
         <base-textarea
             v-model="updateForm.boardContent"
-            @change="errorFields.boardContent = validateTitle(updateForm.boardContent)"
+            @change="errorFields.boardContent = validateContent(updateForm.boardContent)"
             class="update-content">
         </base-textarea>
         <input-error :error-msg="errorFields.boardContent"></input-error>
@@ -165,7 +165,7 @@ async function initGalleryUpdate() {
  * 갤러리를 수정합니다.
  */
 async function onUpdate() {
-  if (!validateUpdateForm() && !isCurrentUserId(gallery.value.userId)) {
+  if (!validateUpdateForm() || !isCurrentUserId(gallery.value.userId)) {
     return false;
   }
 

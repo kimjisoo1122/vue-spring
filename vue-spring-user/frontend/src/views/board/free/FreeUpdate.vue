@@ -50,7 +50,7 @@
       <div class="update-content-input-container">
         <base-textarea
             v-model="updateForm.boardContent"
-            @change="errorFields.boardContent = validateTitle(updateForm.boardContent)"
+            @change="errorFields.boardContent = validateContent(updateForm.boardContent)"
             class="update-content">
         </base-textarea>
         <input-error :error-msg="errorFields.boardContent"></input-error>
@@ -169,7 +169,7 @@ async function initFreeUpdate() {
  * 자유게시글을 수정합니다.
  */
 async function onUpdate() {
-    if (!validateUpdateForm() && !isCurrentUserId(free.value.userId)) {
+    if (!validateUpdateForm() || !isCurrentUserId(free.value.userId)) {
       return false;
     }
 
