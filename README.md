@@ -27,7 +27,10 @@
 - **FrontEnd** : Vue 3.2
 - **Database** : MySql
 - **DB Framework** : Mybatis
-- **Library** : Vuex, Jwt, Spring Security 
+- **Library** : Vuex, Jwt, Spring Security
+
+### ⚙️ Infra
+- AWS EC2, RDS
 
 ## 📌 ERD
 ![vue_spring-erd](https://github.com/kimjisoo1122/vue-spring/assets/101982291/d855d045-f6fb-4c59-986a-36a9733694ac)
