@@ -33,6 +33,12 @@
 ### ⚙️ Infra
 - AWS EC2, RDS
 
+
+### ⚙ System Architecture
+![image](https://github.com/kimjisoo1122/vue-spring/assets/101982291/47ca7589-26d5-47a5-9f13-688f1c3118e0)
+
+
+
 ## 📌 ERD
 ![vue_spring-erd](https://github.com/kimjisoo1122/vue-spring/assets/101982291/d855d045-f6fb-4c59-986a-36a9733694ac)
 
