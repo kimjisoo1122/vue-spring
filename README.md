@@ -19,7 +19,7 @@
 - **Template** : Thymeleaf
 - **Database** : MySql
 - **DB Framework** : Mybatis
-- **Library** : Spring Security 
+- **Framework** : Spring Security 
 
 ### ⚙️ 사용자 개발 환경
 - `Java 11`
@@ -27,7 +27,8 @@
 - **FrontEnd** : Vue 3.2
 - **Database** : MySql
 - **DB Framework** : Mybatis
-- **Library** : Vuex, Jwt, Spring Security
+- **Framework** : Spring Security
+- **Library** : Vuex, Jwt
 
 ### ⚙️ Infra
 - AWS EC2, RDS
@@ -51,7 +52,7 @@
 - 관리자 통합게시판 템플릿
 - 사용자 Vue
 
- 
+## 📄 [JavaDoc](http://portfoilo-vue-spring.s3-website.ap-northeast-2.amazonaws.com/)
 
 
 
